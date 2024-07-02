@@ -30,12 +30,12 @@
         {
             this.Text = "Select Circuits";
             this.ClientSize = new System.Drawing.Size(200, 300);
-
-            for (int i = 1; i <= 15; i++)
+            List<string> circuitNames = new List<string> { "circuit_1", "circuit_2", "circuit_3", "circuit_4", "circuit_5", "circuit_6", "circuit_7", "circuit_8", "circuit_9", "circuit_10", "circuit_11", "circuit_12", "circuit_13", "circuit_14", "circuit_15" };
+            for (int i = 0; i < circuitNames.Count; i++)
             {
                 CheckBox checkBox = new CheckBox();
-                checkBox.Text = $"circuit_{i}";
-                checkBox.Location = new System.Drawing.Point(10, 20 * i);
+                checkBox.Text = circuitNames[i];
+                checkBox.Location = new System.Drawing.Point(10, 20 * (i + 1));
                 this.Controls.Add(checkBox);
             }
         }
