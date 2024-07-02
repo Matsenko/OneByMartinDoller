@@ -3,20 +3,28 @@
   "WorkspaceRootPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\checkboxform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\checkboxform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|C:\\CodeLuxSolutions\\OneByMartinDoller\\onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\checkboxform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|C:\\CodeLuxSolutions\\OneByMartinDoller\\onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|C:\\CodeLuxSolutions\\OneByMartinDoller\\onebymartindoller\\checkboxform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\checkboxform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\checkboxform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\checkboxform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -25,14 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\checkboxform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\checkboxform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -78,7 +78,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "OneByMartinDoller.csproj",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj",
               "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.csproj",
@@ -86,25 +86,24 @@
               "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-07-02T07:20:46.369Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-02T07:20:46.369Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "CheckBoxForm.Designer.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CheckBoxForm.Designer.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\CheckBoxForm.Designer.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CheckBoxForm.Designer.cs",
               "RelativeToolTip": "OneByMartinDoller\\CheckBoxForm.Designer.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAQwB4AAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAQwCcAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-02T04:49:42.857Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "CheckBoxForm.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CheckBoxForm.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\CheckBoxForm.cs",
@@ -117,33 +116,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "OneByMartinDoller.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
               "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAADQAAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-02T04:39:00.507Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "OneByMartinDoller.Designer.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Designer.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.Designer.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Designer.cs",
               "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.Designer.cs",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAQwFoAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAABwAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-02T04:38:58.105Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\Program.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\Program.cs",
@@ -151,11 +150,12 @@
               "RelativeToolTip": "OneByMartinDoller\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T04:12:23.78Z"
+              "WhenOpened": "2024-07-02T04:12:23.78Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "CheckBoxForm.cs [Design]",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CheckBoxForm.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\CheckBoxForm.cs",
@@ -167,7 +167,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "OneByMartinDoller.cs [Design]",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.cs",

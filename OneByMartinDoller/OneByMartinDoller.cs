@@ -16,7 +16,7 @@ namespace OneByMartinDoller
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "DMG files (*.dmg)|*.dmg";
+            openFileDialog.Filter = "DWG files (*.dwg)|*.dwg";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
