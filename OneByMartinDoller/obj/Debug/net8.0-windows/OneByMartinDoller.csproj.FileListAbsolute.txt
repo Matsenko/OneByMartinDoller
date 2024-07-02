@@ -12,3 +12,7 @@ C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.pdb
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.genruntimeconfig.cache
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\ref\OneByMartinDoller.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.OneByMartinDoller.resources
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.csproj.GenerateResource.cache
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.sourcelink.json
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.CheckBoxForm.resources

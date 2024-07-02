@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OneByMartinDoller")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+45686c710104bc9be50149136dc85ba8249e7db0")]
 [assembly: System.Reflection.AssemblyProductAttribute("OneByMartinDoller")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OneByMartinDoller")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
