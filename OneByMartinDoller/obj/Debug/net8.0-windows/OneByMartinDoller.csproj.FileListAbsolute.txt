@@ -1,0 +1,14 @@
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.exe
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.deps.json
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.runtimeconfig.json
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.pdb
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.GeneratedMSBuildEditorConfig.editorconfig
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.AssemblyInfoInputs.cache
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.AssemblyInfo.cs
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.csproj.CoreCompileInputs.cache
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\refint\OneByMartinDoller.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.pdb
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.genruntimeconfig.cache
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\ref\OneByMartinDoller.dll
