@@ -25,18 +25,41 @@ namespace OneByMartinDoller
         private void FillDataGridView1()
         {
 
-            dataGridView1.Rows.Add(false, "Ground Floor", "Landscape", "FX1", 4, "EX.A1", "Yes", "");
-            dataGridView1.Rows.Add(false, "", "B1", "", 3, "EX.A2", "No", "");
-            dataGridView1.Rows.Add(false, "", "GB1", "", 6, "EX.A3", "No", "");
-            dataGridView1.Rows.Add(false, "Restroom", "AX1", "", 1, "GF.A1", "No", "");
-            dataGridView1.Rows.Add(false, "Kitchenette", "AX1", "", 1, "GF.A2", "No", "");
-            dataGridView1.Rows.Add(false, "Zoom Room", "A1", "", 2, "GF.A3", "No", "");
-            dataGridView1.Rows.Add(false, "Exhibition Room", "B1", "", 2, "GF.B1", "No", "");
-            dataGridView1.Rows.Add(false, "", "A1", "", 7, "GF.B2", "No", "");
-            dataGridView1.Rows.Add(false, "Entrance", "W1", "", 2, "GF.C1", "Yes", "");
-            dataGridView1.Rows.Add(false, "", "A1", "", 2, "GF.C2", "No", "");
-            dataGridView1.Rows.Add(false, "First Floor", "Boardroom", "W1", "", 2, "FF.A1", "Yes", "");
-            dataGridView1.Rows.Add(false, "", "A1", "", 5, "FF.A2", "No", "");
+            Random random = new Random();
+            for (int i = 0; i < 5; i++)
+            {
+                dataGridView1.Rows.Add(
+                    false,                  // CheckBox
+                    $"Area {i + 1}",        // Area
+                    $"Room {random.Next(1, 10)}",    // Room (random room number)
+                    $"Fixture {random.Next(100, 200)}",  // Fixture (random fixture number)
+                    random.Next(1, 10),     // Quantity (random quantity)
+                    $"Circuit {i + 1}",     // CircuitNo
+                    random.Next(2) == 0 ? "Yes" : "No", // FirstFix (random "Yes" or "No")
+                    $"Notes for row {i + 1}" // Notes
+                );
+            }
+            dataGridView1.EditingControlShowing += DataGridView1_EditingControlShowing;
+        }
+        private void DataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (dataGridView1.CurrentCell.ColumnIndex == dataGridView1.Columns["Quantity"].Index)
+            {
+                e.Control.KeyPress += new KeyPressEventHandler(QuantityColumn_KeyPress);
+            }
+            else
+            {
+                e.Control.KeyPress -= new KeyPressEventHandler(QuantityColumn_KeyPress);
+            }
+
+        }
+        private void QuantityColumn_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
 
         private void BOk_Click(object sender, EventArgs e)
@@ -47,6 +70,11 @@ namespace OneByMartinDoller
         private void BCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

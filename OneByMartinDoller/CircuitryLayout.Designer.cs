@@ -29,29 +29,50 @@
         private void InitializeComponent()
         {
             dataGridView1 = new DataGridView();
+            BOk = new Button();
+            BCancel = new Button();
             CheckBox = new DataGridViewCheckBoxColumn();
             Area = new DataGridViewTextBoxColumn();
             Room = new DataGridViewTextBoxColumn();
             Fixture = new DataGridViewTextBoxColumn();
             Quantity = new DataGridViewTextBoxColumn();
             CircuitNo = new DataGridViewTextBoxColumn();
-            FirstFix = new DataGridViewTextBoxColumn();
+            FirstFIx = new DataGridViewComboBoxColumn();
             Notes = new DataGridViewTextBoxColumn();
-            BOk = new Button();
-            BCancel = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { CheckBox, Area, Room, Fixture, Quantity, CircuitNo, FirstFix, Notes });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { CheckBox, Area, Room, Fixture, Quantity, CircuitNo, FirstFIx, Notes });
             dataGridView1.Location = new Point(1, 12);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(1003, 426);
             dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            // 
+            // BOk
+            // 
+            BOk.Location = new Point(385, 444);
+            BOk.Name = "BOk";
+            BOk.Size = new Size(94, 29);
+            BOk.TabIndex = 1;
+            BOk.Text = "Ok";
+            BOk.UseVisualStyleBackColor = true;
+            BOk.Click += BOk_Click;
+            // 
+            // BCancel
+            // 
+            BCancel.Location = new Point(512, 444);
+            BCancel.Name = "BCancel";
+            BCancel.Size = new Size(94, 29);
+            BCancel.TabIndex = 2;
+            BCancel.Text = "Cancel";
+            BCancel.UseVisualStyleBackColor = true;
+            BCancel.Click += BCancel_Click;
             // 
             // CheckBox
             // 
@@ -95,12 +116,13 @@
             CircuitNo.Name = "CircuitNo";
             CircuitNo.Width = 125;
             // 
-            // FirstFix
+            // FirstFIx
             // 
-            FirstFix.HeaderText = "First Fix";
-            FirstFix.MinimumWidth = 6;
-            FirstFix.Name = "FirstFix";
-            FirstFix.Width = 125;
+            FirstFIx.HeaderText = "FirstFIx";
+            FirstFIx.Items.AddRange(new object[] { "Yes", "No" });
+            FirstFIx.MinimumWidth = 6;
+            FirstFIx.Name = "FirstFIx";
+            FirstFIx.Width = 125;
             // 
             // Notes
             // 
@@ -108,26 +130,6 @@
             Notes.MinimumWidth = 6;
             Notes.Name = "Notes";
             Notes.Width = 125;
-            // 
-            // BOk
-            // 
-            BOk.Location = new Point(385, 444);
-            BOk.Name = "BOk";
-            BOk.Size = new Size(94, 29);
-            BOk.TabIndex = 1;
-            BOk.Text = "Ok";
-            BOk.UseVisualStyleBackColor = true;
-            BOk.Click += BOk_Click;
-            // 
-            // BCancel
-            // 
-            BCancel.Location = new Point(512, 444);
-            BCancel.Name = "BCancel";
-            BCancel.Size = new Size(94, 29);
-            BCancel.TabIndex = 2;
-            BCancel.Text = "Cancel";
-            BCancel.UseVisualStyleBackColor = true;
-            BCancel.Click += BCancel_Click;
             // 
             // CircuitryLayout
             // 
@@ -146,15 +148,15 @@
         #endregion
 
         private DataGridView dataGridView1;
+        private Button BOk;
+        private Button BCancel;
         private DataGridViewCheckBoxColumn CheckBox;
         private DataGridViewTextBoxColumn Area;
         private DataGridViewTextBoxColumn Room;
         private DataGridViewTextBoxColumn Fixture;
         private DataGridViewTextBoxColumn Quantity;
         private DataGridViewTextBoxColumn CircuitNo;
-        private DataGridViewTextBoxColumn FirstFix;
+        private DataGridViewComboBoxColumn FirstFIx;
         private DataGridViewTextBoxColumn Notes;
-        private Button BOk;
-        private Button BCancel;
     }
 }

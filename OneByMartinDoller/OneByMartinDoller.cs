@@ -23,11 +23,13 @@ namespace OneByMartinDoller
                 filesListBox.Items.Clear();
                 foreach (string file in openFileDialog.FileNames)
                 {
-                    filesListBox.Items.Add(file);
+                    string fileName = Path.GetFileName(file);
+                    filesListBox.Items.Add(fileName);
                 }
                 syncButton.Enabled = true;
             }
         }
+
 
         private void filesListBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
