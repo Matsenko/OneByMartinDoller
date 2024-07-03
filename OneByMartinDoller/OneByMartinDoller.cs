@@ -33,8 +33,9 @@ namespace OneByMartinDoller
         {
             if (filesListBox.SelectedItem != null)
             {
-                CheckBoxForm checkBoxForm = new CheckBoxForm();
-                checkBoxForm.ShowDialog();
+
+                CircuitryLayout circuitryLayout = new CircuitryLayout();
+                circuitryLayout.ShowDialog();
             }
         }
 
