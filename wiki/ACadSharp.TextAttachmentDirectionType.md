@@ -1,0 +1,4 @@
+# TextAttachmentDirectionType Class
+
+
+

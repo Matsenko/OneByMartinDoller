@@ -1,0 +1,4 @@
+# ViewModeType Class
+
+
+

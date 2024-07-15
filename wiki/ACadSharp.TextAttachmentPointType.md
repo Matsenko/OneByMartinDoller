@@ -1,0 +1,4 @@
+# TextAttachmentPointType Class
+
+
+

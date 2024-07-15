@@ -3,46 +3,34 @@
   "WorkspaceRootPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\circuitrylayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\circuitrylayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|c:\\codeluxsolutions\\onebymartindoller\\acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\circuitrylayout.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\circuitrylayout.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{153A5997-381F-42F3-9A92-19E624BBEBBB}|ACadSharp\\ACadSharp.csproj|c:\\codeluxsolutions\\onebymartindoller\\acadsharp\\cadobjectcollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{153A5997-381F-42F3-9A92-19E624BBEBBB}|ACadSharp\\ACadSharp.csproj|solutionrelative:acadsharp\\cadobjectcollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\circuitrylayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\circuitrylayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{7FAC736D-0FA9-42CA-9DAE-CE66DA571A0A}|NewFolder1{7FAC736D-0FA9-42CA-9DAE-CE66DA571A0A}|C:\\CodeLuxSolutions\\OneByMartinDoller\\dotnet-tools.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7FAC736D-0FA9-42CA-9DAE-CE66DA571A0A}|NewFolder1{7FAC736D-0FA9-42CA-9DAE-CE66DA571A0A}|solutionrelative:dotnet-tools.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|C:\\CodeLuxSolutions\\OneByMartinDoller\\onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{153A5997-381F-42F3-9A92-19E624BBEBBB}|ACadSharp\\ACadSharp.csproj|c:\\codeluxsolutions\\onebymartindoller\\acadsharp\\acadsharp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{153A5997-381F-42F3-9A92-19E624BBEBBB}|ACadSharp\\ACadSharp.csproj|solutionrelative:acadsharp\\acadsharp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 257,
+      "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -55,10 +43,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
             },
             {
               "$type": "Bookmark",
@@ -82,103 +66,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CircuitryLayout.Designer.cs",
-              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CircuitryLayout.Designer.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller\\CircuitryLayout.Designer.cs",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CircuitryLayout.Designer.cs",
-              "RelativeToolTip": "OneByMartinDoller\\CircuitryLayout.Designer.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAAAJEAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
+              "RelativeDocumentMoniker": "ACadSharp.Examples\\Program.cs",
+              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
+              "RelativeToolTip": "ACadSharp.Examples\\Program.cs",
+              "ViewState": "AgIAAMsAAAAAAAAAAAAwwNcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-03T07:19:52.79Z",
+              "WhenOpened": "2024-07-15T09:59:55.687Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CircuitryLayout.cs",
-              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CircuitryLayout.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller\\CircuitryLayout.cs",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CircuitryLayout.cs",
-              "RelativeToolTip": "OneByMartinDoller\\CircuitryLayout.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAwB8AAAA3AAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "CadObjectCollection.cs",
+              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\CadObjectCollection.cs",
+              "RelativeDocumentMoniker": "ACadSharp\\CadObjectCollection.cs",
+              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\CadObjectCollection.cs",
+              "RelativeToolTip": "ACadSharp\\CadObjectCollection.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-03T07:19:56.231Z",
+              "WhenOpened": "2024-07-15T09:56:50.302Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "CircuitryLayout.cs [Design]",
-              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CircuitryLayout.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller\\CircuitryLayout.cs",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\CircuitryLayout.cs [Design]",
-              "RelativeToolTip": "OneByMartinDoller\\CircuitryLayout.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-03T07:15:40.823Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "OneByMartinDoller.csproj",
-              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj",
-              "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.csproj",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj",
-              "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-07-02T07:20:46.369Z"
+              "Title": "dotnet-tools.json",
+              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\dotnet-tools.json",
+              "RelativeDocumentMoniker": "dotnet-tools.json",
+              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\dotnet-tools.json",
+              "RelativeToolTip": "dotnet-tools.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-07-15T09:34:46.777Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "OneByMartinDoller.cs",
-              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.cs",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
-              "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABkAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T04:39:00.507Z",
+              "Title": "ACadSharp",
+              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\ACadSharp.csproj",
+              "RelativeDocumentMoniker": "ACadSharp\\ACadSharp.csproj",
+              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\ACadSharp.csproj",
+              "RelativeToolTip": "ACadSharp\\ACadSharp.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-15T09:29:56.363Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "OneByMartinDoller.Designer.cs",
-              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Designer.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.Designer.cs",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Designer.cs",
-              "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.Designer.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAABwAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T04:38:58.105Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\Program.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\Program.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\Program.cs",
               "RelativeToolTip": "OneByMartinDoller\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T04:12:23.78Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "OneByMartinDoller.cs [Design]",
-              "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.cs",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs [Design]",
-              "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T04:12:11.977Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2024-07-15T09:29:53.446Z",
+              "EditorCaption": ""
             }
           ]
         }

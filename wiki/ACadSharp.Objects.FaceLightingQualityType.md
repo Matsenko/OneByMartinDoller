@@ -1,0 +1,4 @@
+# FaceLightingQualityType Class
+
+
+

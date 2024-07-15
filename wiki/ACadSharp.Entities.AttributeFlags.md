@@ -1,0 +1,4 @@
+# AttributeFlags Class
+
+Attribute flags.
+

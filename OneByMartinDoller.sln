@@ -3,23 +3,76 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34804.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneByMartinDoller", "OneByMartinDoller\OneByMartinDoller.csproj", "{FA48321F-063D-4E7E-BC46-39880DA9A8D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneByMartinDoller", "OneByMartinDoller\OneByMartinDoller.csproj", "{FA48321F-063D-4E7E-BC46-39880DA9A8D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACadSharp", "ACadSharp\ACadSharp.csproj", "{153A5997-381F-42F3-9A92-19E624BBEBBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACadSharp.Examples", "ACadSharp.Examples\ACadSharp.Examples.csproj", "{1EA9183B-60BB-4E31-89F9-1494DB04F123}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ACadSharp.Tests", "ACadSharp.Tests\ACadSharp.Tests.csproj", "{CC59F689-F42B-487D-A723-E46DA97DCF54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{DCFE00D7-B927-4269-8647-DB8FA4EAC7E8}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CSMath", "CSUtilities\CSMath\CSMath.shproj", "{411B6122-5EF6-46DB-A8F2-43E9C1841E4A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CSUtilities", "CSUtilities\CSUtilities\CSUtilities.shproj", "{AB3467D9-DD47-42DF-88AA-7BA1F9BC9187}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7FAC736D-0FA9-42CA-9DAE-CE66DA571A0A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
+		Directory.Build.props = Directory.Build.props
+		dotnet-tools.json = dotnet-tools.json
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FA48321F-063D-4E7E-BC46-39880DA9A8D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA48321F-063D-4E7E-BC46-39880DA9A8D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA48321F-063D-4E7E-BC46-39880DA9A8D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA48321F-063D-4E7E-BC46-39880DA9A8D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA48321F-063D-4E7E-BC46-39880DA9A8D5}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{FA48321F-063D-4E7E-BC46-39880DA9A8D5}.Test|Any CPU.Build.0 = Release|Any CPU
+		{153A5997-381F-42F3-9A92-19E624BBEBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{153A5997-381F-42F3-9A92-19E624BBEBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{153A5997-381F-42F3-9A92-19E624BBEBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{153A5997-381F-42F3-9A92-19E624BBEBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{153A5997-381F-42F3-9A92-19E624BBEBBB}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{153A5997-381F-42F3-9A92-19E624BBEBBB}.Test|Any CPU.Build.0 = Test|Any CPU
+		{1EA9183B-60BB-4E31-89F9-1494DB04F123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EA9183B-60BB-4E31-89F9-1494DB04F123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EA9183B-60BB-4E31-89F9-1494DB04F123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EA9183B-60BB-4E31-89F9-1494DB04F123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EA9183B-60BB-4E31-89F9-1494DB04F123}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{1EA9183B-60BB-4E31-89F9-1494DB04F123}.Test|Any CPU.Build.0 = Test|Any CPU
+		{CC59F689-F42B-487D-A723-E46DA97DCF54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC59F689-F42B-487D-A723-E46DA97DCF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC59F689-F42B-487D-A723-E46DA97DCF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC59F689-F42B-487D-A723-E46DA97DCF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC59F689-F42B-487D-A723-E46DA97DCF54}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{CC59F689-F42B-487D-A723-E46DA97DCF54}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{411B6122-5EF6-46DB-A8F2-43E9C1841E4A} = {DCFE00D7-B927-4269-8647-DB8FA4EAC7E8}
+		{AB3467D9-DD47-42DF-88AA-7BA1F9BC9187} = {DCFE00D7-B927-4269-8647-DB8FA4EAC7E8}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA63EAF4-CCF5-411D-91D8-64F25DFBC9E9}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		CSUtilities\CSMath\CSMath.projitems*{153a5997-381f-42f3-9a92-19e624bbebbb}*SharedItemsImports = 5
+		CSUtilities\CSUtilities\CSUtilities.projitems*{153a5997-381f-42f3-9a92-19e624bbebbb}*SharedItemsImports = 5
+		CSUtilities\CSMath\CSMath.projitems*{411b6122-5ef6-46db-a8f2-43e9c1841e4a}*SharedItemsImports = 13
+		CSUtilities\CSUtilities\CSUtilities.projitems*{ab3467d9-dd47-42df-88aa-7ba1f9bc9187}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

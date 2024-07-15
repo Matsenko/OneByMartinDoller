@@ -1,0 +1,4 @@
+# ScaledType Class
+
+
+

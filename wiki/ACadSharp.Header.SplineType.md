@@ -1,0 +1,4 @@
+# SplineType Class
+
+Spline type
+

@@ -1,0 +1,4 @@
+# BlockContentConnectionType Class
+
+
+
