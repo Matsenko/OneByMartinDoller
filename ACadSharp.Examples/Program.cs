@@ -147,7 +147,8 @@ namespace ACadSharp.Examples
 
 			foreach (var room in pBlockCountInRooms)
 			{
-				Console.WriteLine($"Room: {room.Key}");
+				var cleanedRoomName = CleanRoomName(room.Key);
+				Console.WriteLine($"Room: {cleanedRoomName}");
 				foreach (var pBlock in room.Value)
 				{
 					var cleanedKey = ExtractLastValue(pBlock.Key);
@@ -266,13 +267,38 @@ namespace ACadSharp.Examples
 			
 				if (char.IsLetter(firstChar))
 				{
-					return $"{firstChar}{secondChar}{result}";
+					if(secondChar == char.MinValue) {
+						return $"{firstChar}{result}";
+					}
+					else
+					{
+						return $"{firstChar}{secondChar}{result}";
+					}
+					
 				}
 			}
 
 			return input;
 		}
+	
+		public static string CleanRoomName(string input)
+		{
+			if (input == null)
+			{
+				throw new ArgumentNullException(nameof(input), "Input cannot be null.");
+			}
 
+			// Check if the input contains "\pxqc;"
+			if (input.Contains(@"\pxqc;"))
+			{
+				// Replace all occurrences of "\pxqc;" with an empty string
+				string result = input.Replace(@"\pxqc;", string.Empty);
+				return result;
+			}
+
+			// If "\pxqc;" is not found, return the original input
+			return input;
+		}
 
 
 

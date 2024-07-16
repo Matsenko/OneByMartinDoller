@@ -78,9 +78,10 @@ namespace WebApplication1.Controllers
 								var cleanedPBlockKey = ACadSharp.Examples.Program.ExtractLastValue(pBlock.Key);
 								cleanedValue.Add(cleanedPBlockKey, pBlock.Value);
 							}
+							var cleanedRoomName = ACadSharp.Examples.Program.CleanRoomName(room.Key);
 							var viewModel = new DwgProcessingViewModel
 							{
-								RoomName =room.Key,
+								RoomName = cleanedRoomName,
 								PBlocks = cleanedValue
 							};
 					
