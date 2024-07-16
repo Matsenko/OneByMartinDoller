@@ -12,7 +12,7 @@ namespace ACadSharp.Examples
 {
 	class Program
 	{
-		const string _file = "C:\\Users\\vovam\\Downloads\\Showroom Drafting1.dwg";
+		const string _file = "C:\\Users\\vovam\\Downloads\\Showroom Drafting (1).dwg";
 
 		static void Main(string[] args)
 		{
@@ -169,32 +169,56 @@ namespace ACadSharp.Examples
 				Console.WriteLine($"Room: {room.Key}");
 				foreach (var pBlock in room.Value)
 				{
-					Console.WriteLine($"\tP-BLOCK {pBlock.Key}: {pBlock.Value}");
+					var cleanedKey = ExtractLastValue(pBlock.Key);
+					Console.WriteLine($"\tP-BLOCK {cleanedKey}: {pBlock.Value}");
 				}
 			}
+
 			var r = textL.OrderBy(x => x.Value.Count()).ToList();
 		}
 		static Dictionary<string, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
 			var result = new Dictionary<string, List<LwPolyline.Vertex>>();
-			var lines = layEntiTypeEntity["0-CountArea"].Values.First();
-			var labels = layEntiTypeEntity["A-LABEL-GF"].Values.First();
-			labels.AddRange(layEntiTypeEntity["A-LABEL-FF"].Values.First());
-			foreach (var label in labels.OfType<MText>())
+
+			var polygons = layEntiTypeEntity.ContainsKey("0-CountArea")
+							? layEntiTypeEntity["0-CountArea"].Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
+							: new List<LwPolyline>();
+
+			var labels = new List<MText>();
+			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
+			{
+				labels.AddRange(layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>()));
+			}
+			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
+			{
+				labels.AddRange(layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>()));
+			}
+
+			foreach (var label in labels)
 			{
 				var labelPoint = label.InsertPoint;
-				foreach (var line in lines.OfType<LwPolyline>())
+				bool found = false;
+
+				foreach (var polygon in polygons)
 				{
-					if (IsPointInPolyline(labelPoint, line))
+			
+					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.RectangleWidth / 2), labelPoint.Y, labelPoint.Z), polygon))
 					{
-						result[label.Value] = line.Vertices;
+						result[label.Value] = polygon.Vertices;
+						found = true;
 						break;
 					}
+				}
+
+				if (!found)
+				{
+					Console.WriteLine($"Label '{label.Value}' at {labelPoint} does not fall inside any polygon.");
 				}
 			}
 
 			return result;
 		}
+
 		static Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
 		   Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
 		   Dictionary<string, List<LwPolyline.Vertex>> roomVertices)
@@ -234,6 +258,51 @@ namespace ACadSharp.Examples
 
 			return result;
 		}
+		static string ExtractLastValue(string input)
+		{
+			int startBracketIndex = input.IndexOf('{');
+			int startBracketIndex2 = input.IndexOf('}');
+			int semicolonIndex = input.IndexOf(';');
+			int closingBracketIndex = input.IndexOf('}');
+
+			if (startBracketIndex >= 0 && semicolonIndex >= 0 && closingBracketIndex > semicolonIndex)
+			{
+				char firstChar = char.MinValue;
+				char secondChar = char.MinValue;
+				if (startBracketIndex > 0 && startBracketIndex <2)
+				{
+					 firstChar = input[startBracketIndex - 1];
+				}
+				else if (startBracketIndex == 2)
+				{
+					firstChar = input[startBracketIndex - 2];
+					secondChar = input[startBracketIndex - 1];
+				}
+				else if (startBracketIndex == 0)
+				{
+					firstChar = input[startBracketIndex2+1];
+
+				} //TODO:FIX THIS  
+
+				string result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+
+			
+				if (char.IsLetter(firstChar))
+				{
+					return $"{firstChar}{secondChar}{result}";
+				}
+			}
+
+			return input;
+		}
+
+
+
+
+
+
+
+
 		static bool IsPointInPolyline(XYZ point, LwPolyline polyline)
 		{
 			var vertices = polyline.Vertices;
