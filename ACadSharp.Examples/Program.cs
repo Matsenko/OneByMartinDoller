@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace ACadSharp.Examples
 {
-	class Program
+	public static class Program
 	{
 		const string _file = "C:\\Users\\vovam\\Downloads\\Showroom Drafting (1).dwg";
 
@@ -122,25 +122,6 @@ namespace ACadSharp.Examples
 					roomLabelEntities.Add(entity);
 				}
 			}
-			/*var lines = layEntiTypeEntity["0-CountArea"].Values.First();
-			var pLines = new List<List<LwPolyline.Vertex>>();
-			foreach (var line in lines)
-			{
-				pLines.Add(((ACadSharp.Entities.LwPolyline)line).Vertices);
-			}
-
-			var roomVertices = GetRoomVertices(layEntiTypeEntity);
-			var nRI=new Dictionary<string, int>();
-			var pointV = (MText)layEntiTypeEntity["A-LABEL-GF"].Values.First().First();
-			foreach (MText room in layEntiTypeEntity["A-LABEL-GF"].Values.First())
-			{
-			//	pLines, new CSMath.XYZ(point1.InsertPoint.X + (point1.RectangleWidth / 2), point1.InsertPoint.Y, point1.InsertPoint.Z
-
-				nRI.Add(room.Value, EnterInRoomIndexes(roomVertices, new XYZ(room.InsertPoint.X+(room.RectangleWidth/2),room.InsertPoint.Y,room.InsertPoint.Z)));
-			}
-			var point = pointV.InsertPoint;
-			var indexOfRoom = EnterInRoomIndexes(roomVertices, point);
-			var r = textL.OrderBy(x => x.Value.Count()).ToList();*/
 			var lines = layEntiTypeEntity["0-CountArea"].Values.First();
 			var pLines = new List<List<LwPolyline.Vertex>>();
 			foreach (var line in lines)
@@ -176,7 +157,7 @@ namespace ACadSharp.Examples
 
 			var r = textL.OrderBy(x => x.Value.Count()).ToList();
 		}
-		static Dictionary<string, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		public static Dictionary<string, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
 			var result = new Dictionary<string, List<LwPolyline.Vertex>>();
 
@@ -210,16 +191,12 @@ namespace ACadSharp.Examples
 					}
 				}
 
-				if (!found)
-				{
-					Console.WriteLine($"Label '{label.Value}' at {labelPoint} does not fall inside any polygon.");
-				}
 			}
 
 			return result;
 		}
 
-		static Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
+		public static Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
 		   Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
 		   Dictionary<string, List<LwPolyline.Vertex>> roomVertices)
 		{
@@ -258,7 +235,7 @@ namespace ACadSharp.Examples
 
 			return result;
 		}
-		static string ExtractLastValue(string input)
+		public static string ExtractLastValue(string input)
 		{
 			int startBracketIndex = input.IndexOf('{');
 			int startBracketIndex2 = input.IndexOf('}');
@@ -303,7 +280,7 @@ namespace ACadSharp.Examples
 
 
 
-		static bool IsPointInPolyline(XYZ point, LwPolyline polyline)
+		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline)
 		{
 			var vertices = polyline.Vertices;
 			bool isInside = false;
@@ -313,11 +290,11 @@ namespace ACadSharp.Examples
 			double yMin = vertices.Min(v => v.Location.Y);
 			double yMax = vertices.Max(v => v.Location.Y);
 
-			Console.WriteLine($"Checking point: ({point.X}, {point.Y}) against polyline with {vertices.Count} vertices.");
+
 
 			if (point.X < xMin || point.X > xMax || point.Y < yMin || point.Y > yMax)
 			{
-				Console.WriteLine($"Point ({point.X}, {point.Y}) is outside bounding box of polyline.");
+
 				return false;
 			}
 
@@ -328,7 +305,7 @@ namespace ACadSharp.Examples
 				var xj = vertices[j].Location.X;
 				var yj = vertices[j].Location.Y;
 
-				Console.WriteLine($"Vertex {i}: ({xi}, {yi}) - Vertex {j}: ({xj}, {yj})");
+
 
 				if ((yi > point.Y) != (yj > point.Y) && (point.X < (xj - xi) * (point.Y - yi) / (yj - yi) + xi))
 				{
@@ -336,30 +313,9 @@ namespace ACadSharp.Examples
 				}
 			}
 
-			Console.WriteLine($"Point ({point.X}, {point.Y}) is inside polyline: {isInside}");
 			return isInside;
 		}
-
-
-		/*static int EnterInRoomIndexes(Dictionary<string, List<LwPolyline.Vertex>> roomVertices, XYZ point)
-		{
-			foreach (var room in roomVertices)
-			{
-				var vertices = room.Value;
-				var xMin = vertices.Min(v => v.Location.X);
-				var xMax = vertices.Max(v => v.Location.X);
-				var yMin = vertices.Min(v => v.Location.Y);
-				var yMax = vertices.Max(v => v.Location.Y);
-
-				if (xMin <= point.X && xMax >= point.X && yMin <= point.Y && yMax >= point.Y)
-				{
-					return roomVertices.Keys.ToList().IndexOf(room.Key);
-				}
-			}
-
-			return -1;
-		}*/
-		static int EnterInRoomIndexes(List<List<LwPolyline.Vertex>> vertexs, CSMath.XYZ point)
+		public static int EnterInRoomIndexes(List<List<LwPolyline.Vertex>> vertexs, CSMath.XYZ point)
 		{
 			int result = -1;
 			for (int i = 0; i < vertexs.Count; i++)
@@ -382,7 +338,7 @@ namespace ACadSharp.Examples
 
 			return result;
 		}
-		static void exploreTable<T>(Table<T> table)
+		public static void exploreTable<T>(Table<T> table)
 			where T : TableEntry
 		{
 			Console.WriteLine($"{table.ObjectName}");

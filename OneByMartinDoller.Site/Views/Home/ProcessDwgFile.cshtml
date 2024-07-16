@@ -1,0 +1,36 @@
+﻿
+@model List<OneByMartinDollerSite.Models.DwgProcessingViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Room Name</th>
+            <th>P-Block</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.RoomName</td>
+                <td>
+                    <ul>
+                        @foreach (var pBlock in item.PBlocks)
+                        {
+                            <li>@pBlock.Key</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var pBlock in item.PBlocks)
+                        {
+                            <li>@pBlock.Value</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
