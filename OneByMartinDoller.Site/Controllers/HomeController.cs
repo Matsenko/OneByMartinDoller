@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
 
 			var file = Request.Form.Files["file"];
 
-			if (file != null && file.Length > 0 && _failLoadLimitsService.AmountOfUpLoadFiles < 5)
+			if (file != null && file.Length > 0 && _failLoadLimitsService.CanUploadFile)
 			{
 				_failLoadLimitsService.UploadFile();
 				var fileExtension = Path.GetExtension(file.FileName);

@@ -7,7 +7,7 @@ namespace OneByMartinDoller.Site.Services
 
 	public class FailLoadLimits:IFailLoadLimitsService
 	{
-		private const string FileName = "C:\\Users\\vovam\\Downloads\\upload_limits.txt";
+		private const string FileName = "upload_limits.txt";
 		public static readonly string USER_MESSAGE = "You have reached the file upload limit.";
 
 		public int AmountOfUpLoadFiles { get; private set; }
