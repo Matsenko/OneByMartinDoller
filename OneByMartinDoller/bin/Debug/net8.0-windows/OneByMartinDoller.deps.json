@@ -7,14 +7,47 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {
       "OneByMartinDoller/1.0.0": {
+        "dependencies": {
+          "ACadSharp": "2.3.2-beta",
+          "ACadSharp.Examples": "1.0.0"
+        },
         "runtime": {
           "OneByMartinDoller.dll": {}
+        }
+      },
+      "ACadSharp/2.3.2-beta": {
+        "runtime": {
+          "ACadSharp.dll": {
+            "assemblyVersion": "2.3.2-beta",
+            "fileVersion": "2.3.2.0"
+          }
+        }
+      },
+      "ACadSharp.Examples/1.0.0": {
+        "dependencies": {
+          "ACadSharp": "2.3.2-beta"
+        },
+        "runtime": {
+          "ACadSharp.Examples.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
   },
   "libraries": {
     "OneByMartinDoller/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ACadSharp/2.3.2-beta": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ACadSharp.Examples/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

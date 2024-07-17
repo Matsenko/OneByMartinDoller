@@ -16,3 +16,13 @@ C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.pdb
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.genruntimeconfig.cache
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\ref\OneByMartinDoller.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.Examples.deps.json
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.Examples.runtimeconfig.json
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.Examples.exe
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.Examples.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.Examples.pdb
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.pdb
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.xml
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.csproj.AssemblyReference.cache
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMar.FAEC7A7E.Up2Date

@@ -1,11 +1,49 @@
 {
   "version": 3,
   "targets": {
-    "net8.0-windows7.0": {}
+    "net8.0-windows7.0": {
+      "ACadSharp/2.3.2-beta": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/ACadSharp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ACadSharp.dll": {}
+        }
+      },
+      "ACadSharp.Examples/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "ACadSharp": "2.3.2-beta"
+        },
+        "compile": {
+          "bin/placeholder/ACadSharp.Examples.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ACadSharp.Examples.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "ACadSharp/2.3.2-beta": {
+      "type": "project",
+      "path": "../ACadSharp/ACadSharp.csproj",
+      "msbuildProject": "../ACadSharp/ACadSharp.csproj"
+    },
+    "ACadSharp.Examples/1.0.0": {
+      "type": "project",
+      "path": "../ACadSharp.Examples/ACadSharp.Examples.csproj",
+      "msbuildProject": "../ACadSharp.Examples/ACadSharp.Examples.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0-windows7.0": []
+    "net8.0-windows7.0": [
+      "ACadSharp >= 2.3.2-beta",
+      "ACadSharp.Examples >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\vovam\\.nuget\\packages\\": {},
@@ -39,7 +77,14 @@
       "frameworks": {
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\ACadSharp.Examples.csproj": {
+              "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\ACadSharp.Examples.csproj"
+            },
+            "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\ACadSharp.csproj": {
+              "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\ACadSharp.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
