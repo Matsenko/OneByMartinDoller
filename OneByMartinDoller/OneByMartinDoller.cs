@@ -1,5 +1,6 @@
-using ACadSharp;
-using OneByMartinDoller.Models;
+﻿using ACadSharp;
+using OneByMartinDoller.GoogleSheet;
+using OneByMartinDoller.GoogleSheet.Shared;
 using OneByMartinDoller.Services;
 
 namespace OneByMartinDoller
@@ -12,7 +13,12 @@ namespace OneByMartinDoller
         }
 		private List<string> selectedFilePaths = new List<string>();
 		private DwgProccesingService dwgProccesingService = new DwgProccesingService();
-		private List<DwgProcessingModel> DwgProcessingModels = new List<DwgProcessingModel>();
+		private static List<DwgProcessingModel> DwgProcessingModels = new List<DwgProcessingModel>();
+		private  static string _spreadSheetId = "1sN5bDFOgsRCdrjanHu5ob1l-vBcSlE9XHABhxFGVLtY";
+		private static string _sheetName = "Лист2";
+		private  static string _credentialsPath = "credentials.json";
+		private  static  string _projectName = "My Project 39375";
+		private GoogleSheetInit _googleSheetInit = new GoogleSheetInit(_spreadSheetId, _sheetName, _credentialsPath, _projectName, DwgProcessingModels);
 		private void OneByMartinDoller_Load(object sender, EventArgs e)
         {
 
@@ -84,7 +90,7 @@ namespace OneByMartinDoller
 
 							DwgProcessingModels.Add(viewModel);
 						}
-					
+						
 
 						for (int i = 0; i < 100; i += 10)
 						{
@@ -93,15 +99,19 @@ namespace OneByMartinDoller
 							progressBar.Value += 10;
 							this.Text = $"Processing: {Path.GetFileName(file)}";
 						}
+
 					}
 					catch (Exception ex)
 					{
 						MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
+				
 
 				}
-		
-            }
+				_googleSheetInit._processingModels=DwgProcessingModels;
+				_googleSheetInit.WriteToGoogleSheet();
+
+			}
 
             progressBar.Value = 0;
             this.Text = "One by Martin Doller";

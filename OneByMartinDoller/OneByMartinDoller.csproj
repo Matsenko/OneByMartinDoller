@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ACadSharp.Examples\ACadSharp.Examples.csproj" />
     <ProjectReference Include="..\ACadSharp\ACadSharp.csproj" />
+    <ProjectReference Include="..\OneByMartinDoller.GoogleSheet\OneByMartinDoller.GoogleSheet.csproj" />
   </ItemGroup>
 
 </Project>

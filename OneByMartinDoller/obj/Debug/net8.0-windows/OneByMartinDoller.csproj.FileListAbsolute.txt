@@ -26,3 +26,15 @@ C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\ACadSharp.xml
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMartinDoller.csproj.AssemblyReference.cache
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\obj\Debug\net8.0-windows\OneByMar.FAEC7A7E.Up2Date
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\CsvHelper.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\Google.Apis.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\Google.Apis.Auth.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\Google.Apis.Core.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\Google.Apis.Drive.v3.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\Google.Apis.Oauth2.v2.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\Google.Apis.Sheets.v4.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\System.Management.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\runtimes\win\lib\net7.0\System.Management.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.GoogleSheet.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.GoogleSheet.pdb
