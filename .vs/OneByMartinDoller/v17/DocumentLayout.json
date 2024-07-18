@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|c:\\codeluxsolutions\\onebymartindoller\\acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|solutionrelative:onebymartindoller\\onebymartindoller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -37,10 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\models\\dwgprocessingviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\models\\dwgprocessingviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|c:\\codeluxsolutions\\onebymartindoller\\acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FA48321F-063D-4E7E-BC46-39880DA9A8D5}|OneByMartinDoller\\OneByMartinDoller.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller\\models\\dwgprocessingmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -210,7 +210,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 26,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -254,7 +254,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "DwgProccesingService.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
@@ -267,7 +267,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "IDwgProccessingService.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\IServices\\IDwgProccessingService.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Shared\\Services\\IServices\\IDwgProccessingService.cs",
@@ -280,20 +280,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
               "RelativeDocumentMoniker": "ACadSharp.Examples\\Program.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
               "RelativeToolTip": "ACadSharp.Examples\\Program.cs",
-              "ViewState": "AgIAAOgAAAAAAAAAAAAAAO8AAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAPkAAAAAAAAAAAAwwAABAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-18T06:43:19.626Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "DwgProcessingModel.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.GoogleSheet\\Shared\\DwgProcessingModel.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.GoogleSheet\\Shared\\DwgProcessingModel.cs",
@@ -306,12 +306,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "OneByMartinDoller",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj",
               "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.csproj",
-              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj \u2B24",
-              "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.csproj \u2B24",
+              "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj",
+              "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2024-07-17T10:15:13.424Z",
@@ -319,7 +319,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "HomeController.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Controllers\\HomeController.cs",
@@ -345,7 +345,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "CsvConverter.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.GoogleSheet\\CsvConverter.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.GoogleSheet\\CsvConverter.cs",
@@ -459,13 +459,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "OneByMartinDoller.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller\\OneByMartinDoller.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.cs",
               "RelativeToolTip": "OneByMartinDoller\\OneByMartinDoller.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAAAA8AAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-17T07:50:57.664Z",
               "EditorCaption": ""
@@ -523,7 +523,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "IFailLoadLimitsService.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Services\\IServices\\IFailLoadLimitsService.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Services\\IServices\\IFailLoadLimitsService.cs",
@@ -665,7 +665,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "DwgProcessingViewModel.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Models\\DwgProcessingViewModel.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Models\\DwgProcessingViewModel.cs",

@@ -239,48 +239,51 @@ namespace ACadSharp.Examples
 		public static string ExtractLastValue(string input)
 		{
 			int startBracketIndex = input.IndexOf('{');
-			int startBracketIndex2 = input.IndexOf('}');
 			int semicolonIndex = input.IndexOf(';');
 			int closingBracketIndex = input.IndexOf('}');
+			string result = string.Empty;
 
 			if (startBracketIndex >= 0 && semicolonIndex >= 0 && closingBracketIndex > semicolonIndex)
 			{
 				char firstChar = char.MinValue;
 				char secondChar = char.MinValue;
-				if (startBracketIndex > 0 && startBracketIndex <2)
+
+				if (startBracketIndex > 0 && startBracketIndex < 2)
 				{
-					 firstChar = input[startBracketIndex - 1];
+					firstChar = input[startBracketIndex - 1];
+					result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
 				}
 				else if (startBracketIndex == 2)
 				{
 					firstChar = input[startBracketIndex - 2];
 					secondChar = input[startBracketIndex - 1];
+					result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
 				}
 				else if (startBracketIndex == 0)
 				{
-					firstChar = input[startBracketIndex2+1];
+					firstChar = input[semicolonIndex + 1];
+					secondChar = input[closingBracketIndex + 1];
+					int lastSemicolonIndex = input.LastIndexOf(';');
+					result = input[lastSemicolonIndex + 1].ToString();
+				}
 
-				} //TODO:FIX THIS  
-
-				string result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
-
-			
 				if (char.IsLetter(firstChar))
 				{
-					if(secondChar == char.MinValue) {
+					if (secondChar == char.MinValue)
+					{
 						return $"{firstChar}{result}";
 					}
 					else
 					{
 						return $"{firstChar}{secondChar}{result}";
 					}
-					
 				}
 			}
 
 			return input;
 		}
-	
+
+
 		public static string CleanRoomName(string input)
 		{
 			if (input == null)
