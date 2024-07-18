@@ -156,6 +156,8 @@ namespace ACadSharp.Examples
 				}
 			}
 
+			Console.WriteLine(ExtractLastValue("{\fYu Gothic UI Semibold|b1|i0|c128|p34;BB}X{\fYu Gothic UI Semibold|b1|i0|c128|p34;13}"));
+
 			var r = textL.OrderBy(x => x.Value.Count()).ToList();
 		}
 		public static Dictionary<string, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
@@ -245,31 +247,29 @@ namespace ACadSharp.Examples
 
 			if (startBracketIndex >= 0 && semicolonIndex >= 0 && closingBracketIndex > semicolonIndex)
 			{
-				char firstChar = char.MinValue;
-				char secondChar = char.MinValue;
+				string firstChar = string.Empty;
+				string secondChar = string.Empty;
 
-				if (startBracketIndex > 0 && startBracketIndex < 2)
+				if (startBracketIndex > 0)
 				{
-					firstChar = input[startBracketIndex - 1];
+					firstChar = input.Substring(0,startBracketIndex);
+
 					result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
 				}
-				else if (startBracketIndex == 2)
+				else if(startBracketIndex == 0)
 				{
-					firstChar = input[startBracketIndex - 2];
-					secondChar = input[startBracketIndex - 1];
+					firstChar = input.Substring(semicolonIndex+1, closingBracketIndex - semicolonIndex - 1);
+					input = input.Remove(0, closingBracketIndex+1);
+					startBracketIndex= input.IndexOf('{');
+					closingBracketIndex =  input.IndexOf('}');
+					semicolonIndex=input.IndexOf(';');
+					secondChar = input.Substring(0, startBracketIndex);
 					result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
-				}
-				else if (startBracketIndex == 0)
-				{
-					firstChar = input[semicolonIndex + 1];
-					secondChar = input[closingBracketIndex + 1];
-					int lastSemicolonIndex = input.LastIndexOf(';');
-					result = input[lastSemicolonIndex + 1].ToString();
-				}
 
-				if (char.IsLetter(firstChar))
+				}
+				if (firstChar!=string.Empty)
 				{
-					if (secondChar == char.MinValue)
+					if (secondChar == string.Empty)
 					{
 						return $"{firstChar}{result}";
 					}
@@ -291,15 +291,14 @@ namespace ACadSharp.Examples
 				throw new ArgumentNullException(nameof(input), "Input cannot be null.");
 			}
 
-			// Check if the input contains "\pxqc;"
+	
 			if (input.Contains(@"\pxqc;"))
 			{
-				// Replace all occurrences of "\pxqc;" with an empty string
+			
 				string result = input.Replace(@"\pxqc;", string.Empty);
 				return result;
 			}
 
-			// If "\pxqc;" is not found, return the original input
 			return input;
 		}
 
