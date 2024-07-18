@@ -10,7 +10,8 @@
         "dependencies": {
           "ACadSharp": "2.3.2-beta",
           "ACadSharp.Examples": "1.0.0",
-          "OneByMartinDoller.GoogleSheet": "1.0.0"
+          "OneByMartinDoller.GoogleSheet": "1.0.0",
+          "OneByMartinDoller.Shared": "1.0.0"
         },
         "runtime": {
           "OneByMartinDoller.dll": {}
@@ -157,6 +158,18 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "OneByMartinDoller.Shared/1.0.0": {
+        "dependencies": {
+          "ACadSharp": "2.3.2-beta",
+          "ACadSharp.Examples": "1.0.0"
+        },
+        "runtime": {
+          "OneByMartinDoller.Shared.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -247,6 +260,11 @@
       "sha512": ""
     },
     "OneByMartinDoller.GoogleSheet/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "OneByMartinDoller.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

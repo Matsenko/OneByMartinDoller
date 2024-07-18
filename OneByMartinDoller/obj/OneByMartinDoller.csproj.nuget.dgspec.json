@@ -330,6 +330,78 @@
         }
       }
     },
+    "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj",
+        "projectName": "OneByMartinDoller.Shared",
+        "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj",
+        "packagesPath": "C:\\Users\\vovam\\.nuget\\packages\\",
+        "outputPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\vovam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\ACadSharp.Examples.csproj": {
+                "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\ACadSharp.Examples.csproj"
+              },
+              "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\ACadSharp.csproj": {
+                "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp\\ACadSharp.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400-preview.0.24324.5/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -367,6 +439,9 @@
               },
               "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.GoogleSheet\\OneByMartinDoller.GoogleSheet.csproj": {
                 "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.GoogleSheet\\OneByMartinDoller.GoogleSheet.csproj"
+              },
+              "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj": {
+                "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj"
               }
             }
           }

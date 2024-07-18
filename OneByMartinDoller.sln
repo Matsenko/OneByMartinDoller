@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneByMartinDoller.Site", "O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneByMartinDoller.GoogleSheet", "OneByMartinDoller.GoogleSheet\OneByMartinDoller.GoogleSheet.csproj", "{DACEB515-43AC-4F40-B1CB-9743AAE81A63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneByMartinDoller.Shared", "OneByMartinDoller.Shared\OneByMartinDoller.Shared.csproj", "{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,12 @@ Global
 		{DACEB515-43AC-4F40-B1CB-9743AAE81A63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DACEB515-43AC-4F40-B1CB-9743AAE81A63}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{DACEB515-43AC-4F40-B1CB-9743AAE81A63}.Test|Any CPU.Build.0 = Test|Any CPU
+		{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

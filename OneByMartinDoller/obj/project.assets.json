@@ -210,6 +210,20 @@
         "runtime": {
           "bin/placeholder/OneByMartinDoller.GoogleSheet.dll": {}
         }
+      },
+      "OneByMartinDoller.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ACadSharp": "2.3.2-beta",
+          "ACadSharp.Examples": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OneByMartinDoller.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OneByMartinDoller.Shared.dll": {}
+        }
       }
     }
   },
@@ -473,13 +487,19 @@
       "type": "project",
       "path": "../OneByMartinDoller.GoogleSheet/OneByMartinDoller.GoogleSheet.csproj",
       "msbuildProject": "../OneByMartinDoller.GoogleSheet/OneByMartinDoller.GoogleSheet.csproj"
+    },
+    "OneByMartinDoller.Shared/1.0.0": {
+      "type": "project",
+      "path": "../OneByMartinDoller.Shared/OneByMartinDoller.Shared.csproj",
+      "msbuildProject": "../OneByMartinDoller.Shared/OneByMartinDoller.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
       "ACadSharp >= 2.3.2-beta",
       "ACadSharp.Examples >= 1.0.0",
-      "OneByMartinDoller.GoogleSheet >= 1.0.0"
+      "OneByMartinDoller.GoogleSheet >= 1.0.0",
+      "OneByMartinDoller.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -523,6 +543,9 @@
             },
             "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.GoogleSheet\\OneByMartinDoller.GoogleSheet.csproj": {
               "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.GoogleSheet\\OneByMartinDoller.GoogleSheet.csproj"
+            },
+            "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj": {
+              "projectPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj"
             }
           }
         }

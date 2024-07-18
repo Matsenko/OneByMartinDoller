@@ -1,16 +1,20 @@
 ﻿using ACadSharp;
 using ACadSharp.Entities;
-using OneByMartinDollerSite.Services.IServices;
+using OneByMartinDoller.Shared.Services.IServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace OneByMartinDollerSite.Services
+namespace OneByMartinDoller.Shared.Services
 {
-	public class DwgProccesingService: IDwgProccessingService
+	public class DwgProccesingService : IDwgProccessingService
 	{
-		
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc)
 		{
-			var lE = new Dictionary<string, Entity>();
-			var l = new List<Entity>();
+		
+			
 			var textL = new Dictionary<string, List<Entity>>();
 			var textM = new Dictionary<string, List<MText>>();
 
@@ -18,7 +22,7 @@ namespace OneByMartinDollerSite.Services
 			var roomLabelEntities = new List<Entity>();
 			var eTypeValueEntity = new Dictionary<ObjectType, List<Entity>>();
 			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>();
-			var cEntite = doc.Entities.Where(x => x.Layer.Name == "Circuitry");
+		
 
 			foreach (var entity in doc.Entities)
 			{
@@ -66,29 +70,8 @@ namespace OneByMartinDollerSite.Services
 					roomLabelEntities.Add(entity);
 				}
 			}
-			var lines = layEntiTypeEntity["0-CountArea"].Values.First();
-			var pLines = new List<List<LwPolyline.Vertex>>();
-			foreach (var line in lines)
-			{
-				pLines.Add(((LwPolyline)line).Vertices);
-			}
-
-			var pointV = (MText)layEntiTypeEntity["A-LABEL-GF"].Values.First().First();
-			var point = pointV.InsertPoint;
-			var indexOfRoom = ACadSharp.Examples.Program.EnterInRoomIndexes(pLines, point);
-
-			var findRoom = new Dictionary<string, int>();
-
-			var allRooms = layEntiTypeEntity["A-LABEL-GF"].Values.First().ToList();
-			allRooms.AddRange(layEntiTypeEntity["A-LABEL-FF"].Values.First().ToList());
-
-			foreach (MText point1 in allRooms)
-			{
-				findRoom.Add(point1.Value, ACadSharp.Examples.Program.EnterInRoomIndexes(pLines, new CSMath.XYZ(point1.InsertPoint.X + (point1.RectangleWidth / 2), point1.InsertPoint.Y, point1.InsertPoint.Z)));
-			}
 			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
 			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
-			var r = textL.OrderBy(x => x.Value.Count()).ToList();
 			return pBlockCountInRooms;
 		}
 	}

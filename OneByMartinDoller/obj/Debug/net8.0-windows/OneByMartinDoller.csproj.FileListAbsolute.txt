@@ -38,3 +38,5 @@ C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\runtimes\win\lib\net7.0\System.Management.dll
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.GoogleSheet.dll
 C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.GoogleSheet.pdb
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.Shared.dll
+C:\CodeLuxSolutions\OneByMartinDoller\OneByMartinDoller\bin\Debug\net8.0-windows\OneByMartinDoller.Shared.pdb

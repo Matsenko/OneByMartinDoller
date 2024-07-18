@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OneByMartinDoller.Services.IServices
+namespace OneByMartinDoller.Shared.Services.IServices
 {
 	public interface IDwgProccessingService
 	{
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc);
 	}
 }
+
