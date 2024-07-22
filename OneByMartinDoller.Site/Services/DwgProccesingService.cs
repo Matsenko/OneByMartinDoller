@@ -84,10 +84,13 @@ namespace OneByMartinDollerSite.Services
 
 			foreach (MText point1 in allRooms)
 			{
-				findRoom.Add(point1.Value, ACadSharp.Examples.Program.EnterInRoomIndexes(pLines, new CSMath.XYZ(point1.InsertPoint.X + (point1.RectangleWidth / 2), point1.InsertPoint.Y, point1.InsertPoint.Z)));
+				findRoom.Add(point1.Value, ACadSharp.Examples.Program.EnterInRoomIndexes(pLines, 
+					new CSMath.XYZ(point1.InsertPoint.X + (point1.RectangleWidth / 2),
+					point1.InsertPoint.Y, point1.InsertPoint.Z)));
 			}
 			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
-			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
+			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, 
+				roomVertices);
 			var r = textL.OrderBy(x => x.Value.Count()).ToList();
 			return pBlockCountInRooms;
 		}

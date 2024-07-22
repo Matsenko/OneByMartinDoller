@@ -13,7 +13,7 @@ namespace OneByMartinDoller.Site.Services
 		public int AmountOfUpLoadFiles { get; private set; }
 		public bool CanUploadFile => AmountOfUpLoadFiles < AvaliableUploadFileCount;
 
-		public int AvaliableUploadFileCount = 5;
+		public int AvaliableUploadFileCount = 7;
 
 		public FailLoadLimits()
 		{

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace ACadSharp.Examples
 {
@@ -238,47 +239,35 @@ namespace ACadSharp.Examples
 		}
 		public static string ExtractLastValue(string input)
 		{
-			int startBracketIndex = input.IndexOf('{');
-			int startBracketIndex2 = input.IndexOf('}');
-			int semicolonIndex = input.IndexOf(';');
-			int closingBracketIndex = input.IndexOf('}');
-
-			if (startBracketIndex >= 0 && semicolonIndex >= 0 && closingBracketIndex > semicolonIndex)
+			if (string.IsNullOrWhiteSpace(input))
+				return input;
+			var result = string.Empty;
+			if (input.Contains(';') && input.Contains('{'))
 			{
-				char firstChar = char.MinValue;
-				char secondChar = char.MinValue;
-				if (startBracketIndex > 0 && startBracketIndex <2)
-				{
-					 firstChar = input[startBracketIndex - 1];
-				}
-				else if (startBracketIndex == 2)
-				{
-					firstChar = input[startBracketIndex - 2];
-					secondChar = input[startBracketIndex - 1];
-				}
-				else if (startBracketIndex == 0)
-				{
-					firstChar = input[startBracketIndex2+1];
 
-				} //TODO:FIX THIS  
-
-				string result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
-
-			
-				if (char.IsLetter(firstChar))
+				for (int i = 0; i < input.Length; i++)
 				{
-					if(secondChar == char.MinValue) {
-						return $"{firstChar}{result}";
-					}
-					else
+					if (input[i] == '{')
 					{
-						return $"{firstChar}{secondChar}{result}";
+						var closeIndex = input.IndexOf('}', i);
+						result += input.Substring(i, closeIndex - i)
+							.Split(';')[1];
+						i = closeIndex;
+						continue;
 					}
-					
+					result += input[i];
 				}
 			}
+			else if (input.Contains(';'))
+			{
+				result = input.Split(';')[1];
+			}
+			else
+			{
+				result = input;
+			}
+			return result;
 
-			return input;
 		}
 	
 		public static string CleanRoomName(string input)
