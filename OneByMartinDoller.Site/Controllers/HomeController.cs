@@ -40,8 +40,6 @@ namespace WebApplication1.Controllers
 		[HttpPost]
 		public IActionResult UploadFile()
 		{
-
-
 			var file = Request.Form.Files["file"];
 
 			if (file != null && file.Length > 0 && _failLoadLimitsService.CanUploadFile)
@@ -71,12 +69,21 @@ namespace WebApplication1.Controllers
 						var processingResult = _dwgProccessingService.GetProccessing(cadDocument);
 						foreach (var room in processingResult)
 						{
-							var cleanedKey = ACadSharp.Examples.Program.ExtractLastValue(room.Key);
+							var cleanedKey = _dwgProccessingService.ExtractLastValue(room.Key);
 							Dictionary<string, int> cleanedValue = new Dictionary<string, int>();
-							foreach(var pBlock in room.Value)
+							foreach (var pBlock in room.Value)
 							{
-								var cleanedPBlockKey = ACadSharp.Examples.Program.ExtractLastValue(pBlock.Key);
-								cleanedValue.Add(cleanedPBlockKey, pBlock.Value);
+								var cleanedPBlockKey = _dwgProccessingService.ExtractLastValue(pBlock.Key);
+								if (!cleanedValue.ContainsKey(cleanedPBlockKey))
+								{
+									cleanedValue.Add(cleanedPBlockKey, pBlock.Value);
+								}
+								else
+								{
+									// Skip the duplicate key
+									_logger.LogWarning($"Duplicate key found: {cleanedPBlockKey} - Skipping");
+									continue;
+								}
 							}
 							var cleanedRoomName = ACadSharp.Examples.Program.CleanRoomName(room.Key);
 							var viewModel = new DwgProcessingViewModel
@@ -84,15 +91,13 @@ namespace WebApplication1.Controllers
 								RoomName = cleanedRoomName,
 								PBlocks = cleanedValue
 							};
-					
+
 							viewModelList.Add(viewModel);
 						}
 
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
 						return View("ProcessDwgFile", viewModelList);
-
 					}
-
 				}
 				catch (Exception ex)
 				{
@@ -104,7 +109,7 @@ namespace WebApplication1.Controllers
 			ViewBag.Message = "No file uploaded.";
 			return View("Index");
 		}
-		
+
 
 
 	}

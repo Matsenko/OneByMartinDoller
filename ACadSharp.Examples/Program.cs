@@ -13,7 +13,7 @@ namespace ACadSharp.Examples
 {
 	public static class Program
 	{
-		const string _file = "C:\\Users\\vovam\\Downloads\\Drawing1.dwg";
+		const string _file = "C:\\Users\\vovam\\Downloads\\House Van Niekerk.dwg";
 
 		static void Main(string[] args)
 		{
