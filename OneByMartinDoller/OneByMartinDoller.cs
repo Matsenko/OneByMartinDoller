@@ -15,8 +15,8 @@ namespace OneByMartinDoller
 		private List<string> selectedFilePaths = new List<string>();
 		private DwgProccesingService dwgProccesingService = new DwgProccesingService();
 		private static List<DwgProcessingModel> DwgProcessingModels = new List<DwgProcessingModel>();
-		private  static string _spreadSheetId = "1sN5bDFOgsRCdrjanHu5ob1l-vBcSlE9XHABhxFGVLtY";
-		private static string _sheetName = "Лист2";
+		private  static string _spreadSheetId = "1iZJhM7jzW5cY60JQpOG4YAAadLCbelkus5ebTnxSiVQ";
+		private static string _sheetName = "Лист1";
 		private  static string _credentialsPath = "credentials.json";
 		private  static  string _projectName = "My Project 39375";
 		private GoogleSheetInit _googleSheetInit = new GoogleSheetInit(_spreadSheetId, _sheetName, _credentialsPath, _projectName, DwgProcessingModels);
