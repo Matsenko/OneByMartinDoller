@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\CodeLuxSolutions\\OneByMartinDoller\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|c:\\codeluxsolutions\\onebymartindoller\\acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\services\\failloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\services\\failloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\services\\iservices\\ifailloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\services\\iservices\\ifailloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.shared\\services\\dwgproccesingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|solutionrelative:onebymartindoller.shared\\services\\dwgproccesingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.shared\\services\\dwgproccesingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|solutionrelative:onebymartindoller.shared\\services\\dwgproccesingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|c:\\codeluxsolutions\\onebymartindoller\\acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.shared\\services\\iservices\\idwgproccessingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,14 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\models\\dwgprocessingviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\models\\dwgprocessingviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\services\\failloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\services\\failloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\services\\iservices\\ifailloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\services\\iservices\\ifailloadlimitsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|c:\\codeluxsolutions\\onebymartindoller\\onebymartindoller.site\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -206,7 +206,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 29,
           "Children": [
             {
               "$type": "Bookmark",
@@ -246,7 +246,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
               "RelativeDocumentMoniker": "ACadSharp.Examples\\Program.cs",
@@ -265,14 +265,14 @@
               "RelativeDocumentMoniker": "OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
               "RelativeToolTip": "OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAAAIYAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAALcAAAAAAAAAAAAAAIYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-18T07:22:59.187Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "IDwgProccessingService.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\IServices\\IDwgProccessingService.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Shared\\Services\\IServices\\IDwgProccessingService.cs",
@@ -309,13 +309,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "HomeController.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Controllers\\HomeController.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Controllers\\HomeController.cs",
               "RelativeToolTip": "OneByMartinDoller.Site\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEcAAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAEsAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-17T10:12:58.68Z",
               "EditorCaption": ""
@@ -441,7 +441,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "upload_limits.txt",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\upload_limits.txt",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\upload_limits.txt",
@@ -466,7 +466,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Program.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Program.cs",
@@ -479,26 +479,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 1,
               "Title": "IFailLoadLimitsService.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Services\\IServices\\IFailLoadLimitsService.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Services\\IServices\\IFailLoadLimitsService.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Services\\IServices\\IFailLoadLimitsService.cs",
               "RelativeToolTip": "OneByMartinDoller.Site\\Services\\IServices\\IFailLoadLimitsService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-16T11:16:32.686Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 0,
               "Title": "FailLoadLimitsService.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Services\\FailLoadLimitsService.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Services\\FailLoadLimitsService.cs",
               "ToolTip": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Services\\FailLoadLimitsService.cs",
               "RelativeToolTip": "OneByMartinDoller.Site\\Services\\FailLoadLimitsService.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAADYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-16T11:15:44.178Z",
               "EditorCaption": ""
@@ -600,7 +600,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "ReaderExamples.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\ReaderExamples.cs",
               "RelativeDocumentMoniker": "ACadSharp.Examples\\ReaderExamples.cs",
@@ -613,7 +613,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "DwgProcessingViewModel.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\Models\\DwgProcessingViewModel.cs",
               "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Models\\DwgProcessingViewModel.cs",
@@ -670,7 +670,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "DocumentExamples.cs",
               "DocumentMoniker": "C:\\CodeLuxSolutions\\OneByMartinDoller\\ACadSharp.Examples\\DocumentExamples.cs",
               "RelativeDocumentMoniker": "ACadSharp.Examples\\DocumentExamples.cs",
