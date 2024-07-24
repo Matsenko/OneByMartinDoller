@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using WebApplication1.Models;
 using ACadSharp;
 
 using OneByMartinDollerSite.Models;
 using OneByMartinDoller.Site.Services;
 using OneByMartinDoller.Shared.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
 {
@@ -13,11 +13,11 @@ namespace WebApplication1.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly FailLoadLimits _failLoadLimitsService;
+
 		public HomeController(ILogger<HomeController> logger, FailLoadLimits failLoadLimitsService)
 		{
 			_logger = logger;
 			_failLoadLimitsService = failLoadLimitsService;
-
 		}
 
 		public IActionResult Index()
@@ -27,6 +27,7 @@ namespace WebApplication1.Controllers
 			FailLoadLimits.USER_MESSAGE;
 			return View();
 		}
+
 		public IActionResult Privacy()
 		{
 			return View();
@@ -37,6 +38,7 @@ namespace WebApplication1.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
+
 		[HttpPost]
 		public IActionResult UploadFile()
 		{
@@ -69,20 +71,19 @@ namespace WebApplication1.Controllers
 						var processingResult = _dwgProccessingService.GetProccessing(cadDocument);
 						foreach (var room in processingResult)
 						{
-							var cleanedKey = _dwgProccessingService.ExtractLastValue(room.Key);
+							var cleanedKey = ACadSharp.Examples.Program.ExtractLastValue(room.Key);
 							Dictionary<string, int> cleanedValue = new Dictionary<string, int>();
 							foreach (var pBlock in room.Value)
 							{
-								var cleanedPBlockKey = _dwgProccessingService.ExtractLastValue(pBlock.Key);
-								if (!cleanedValue.ContainsKey(cleanedPBlockKey))
+								var cleanedPBlockKey = ACadSharp.Examples.Program.ExtractLastValue(pBlock.Key);
+
+								if (cleanedValue.ContainsKey(cleanedPBlockKey))
 								{
-									cleanedValue.Add(cleanedPBlockKey, pBlock.Value);
+									cleanedValue[cleanedPBlockKey] += pBlock.Value; 
 								}
 								else
 								{
-									// Skip the duplicate key
-									_logger.LogWarning($"Duplicate key found: {cleanedPBlockKey} - Skipping");
-									continue;
+									cleanedValue.Add(cleanedPBlockKey, pBlock.Value);
 								}
 							}
 							var cleanedRoomName = ACadSharp.Examples.Program.CleanRoomName(room.Key);
@@ -109,8 +110,5 @@ namespace WebApplication1.Controllers
 			ViewBag.Message = "No file uploaded.";
 			return View("Index");
 		}
-
-
-
 	}
 }

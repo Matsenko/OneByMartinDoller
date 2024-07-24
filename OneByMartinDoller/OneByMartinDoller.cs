@@ -55,7 +55,8 @@ namespace OneByMartinDoller
             }
         }
 
-        private async void syncButton_Click(object sender, EventArgs e)
+       
+ private async void syncButton_Click(object sender, EventArgs e)
         {
             syncButton.Enabled = false;
             selectFilesButton.Enabled = false;
@@ -113,7 +114,6 @@ namespace OneByMartinDoller
 				_googleSheetInit.WriteToGoogleSheet();
 
 			}
-
             progressBar.Value = 0;
             this.Text = "One by Martin Doller";
             MessageBox.Show("All files synced with Google Sheet", "Sync Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
