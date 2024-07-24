@@ -1,5 +1,12 @@
-﻿
-@model List<OneByMartinDollerSite.Models.DwgProcessingViewModel>
+﻿@model List<OneByMartinDoller.GoogleSheet.Shared.DwgProcessingModel>
+
+@{
+    string spreadSheetId = ViewBag.SpreadSheetId as string;
+    string googleSheetUrl = $"https://docs.google.com/spreadsheets/d/{spreadSheetId}";
+}
+<p>
+    <a href="@googleSheetUrl" target="_blank">Open Google Sheet </a>
+</p>
 
 <table class="table">
     <thead>
@@ -34,3 +41,4 @@
         }
     </tbody>
 </table>
+

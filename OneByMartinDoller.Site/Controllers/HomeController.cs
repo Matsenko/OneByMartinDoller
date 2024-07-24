@@ -2,10 +2,11 @@
 using WebApplication1.Models;
 using ACadSharp;
 
-using OneByMartinDollerSite.Models;
+using OneByMartinDoller.GoogleSheet.Shared;
 using OneByMartinDoller.Site.Services;
 using OneByMartinDoller.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
+using OneByMartinDoller.GoogleSheet;
 
 namespace WebApplication1.Controllers
 {
@@ -13,7 +14,11 @@ namespace WebApplication1.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly FailLoadLimits _failLoadLimitsService;
-
+		private static string _spreadSheetId = "1ICVAFk-VP90By7OZrrykMqql0pdQ0FWT5aCbKYDZMSo";
+		private static string _sheetName = "Лист1";
+		private static string _credentialsPath = "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\bin\\Debug\\net8.0\\credentials.json";
+		private static string _projectName = "My Project 39375";
+		private GoogleSheetInit _googleSheetInit = new GoogleSheetInit(_spreadSheetId, _sheetName, _credentialsPath, _projectName,null);
 		public HomeController(ILogger<HomeController> logger, FailLoadLimits failLoadLimitsService)
 		{
 			_logger = logger;
@@ -25,6 +30,7 @@ namespace WebApplication1.Controllers
 			ViewBag.Message = _failLoadLimitsService.CanUploadFile ?
 			$"You have uploaded {_failLoadLimitsService.AmountOfUpLoadFiles} files. You have {_failLoadLimitsService.AvaliableUploadFileCount - _failLoadLimitsService.AmountOfUpLoadFiles} files remaining." :
 			FailLoadLimits.USER_MESSAGE;
+
 			return View();
 		}
 
@@ -32,6 +38,7 @@ namespace WebApplication1.Controllers
 		{
 			return View();
 		}
+
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
@@ -67,7 +74,7 @@ namespace WebApplication1.Controllers
 							cadDocument = reader.Read();
 						}
 						DwgProccesingService _dwgProccessingService = new DwgProccesingService();
-						var viewModelList = new List<DwgProcessingViewModel>();
+						var viewModelList = new List<DwgProcessingModel>();
 						var processingResult = _dwgProccessingService.GetProccessing(cadDocument);
 						foreach (var room in processingResult)
 						{
@@ -87,7 +94,7 @@ namespace WebApplication1.Controllers
 								}
 							}
 							var cleanedRoomName = ACadSharp.Examples.Program.CleanRoomName(room.Key);
-							var viewModel = new DwgProcessingViewModel
+							var viewModel = new DwgProcessingModel
 							{
 								RoomName = cleanedRoomName,
 								PBlocks = cleanedValue
@@ -95,8 +102,10 @@ namespace WebApplication1.Controllers
 
 							viewModelList.Add(viewModel);
 						}
-
+						_googleSheetInit._processingModels = viewModelList;
+						_googleSheetInit.WriteToGoogleSheet();
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
+						ViewBag.SpreadSheetId = _spreadSheetId;
 						return View("ProcessDwgFile", viewModelList);
 					}
 				}
