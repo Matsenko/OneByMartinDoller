@@ -11,7 +11,7 @@ namespace OneByMartinDoller.Shared.Services
 {
 	public class DwgProccesingService : IDwgProccessingService
 	{
-		public  string ExtractLastValue(string input)
+		public string ExtractLastValue(string input)
 		{
 			int startBracketIndex = input.IndexOf('{');
 			int semicolonIndex = input.IndexOf(';');
@@ -78,7 +78,7 @@ namespace OneByMartinDoller.Shared.Services
 			return input;
 		}
 
-		public  string ConvertToSuperscript(string input)
+		public string ConvertToSuperscript(string input)
 		{
 			StringBuilder result = new StringBuilder();
 			foreach (char c in input)
@@ -88,7 +88,7 @@ namespace OneByMartinDoller.Shared.Services
 			return result.ToString();
 		}
 
-		public  string CharToSuperscript(char c)
+		public string CharToSuperscript(char c)
 		{
 			switch (c)
 			{
@@ -132,7 +132,7 @@ namespace OneByMartinDoller.Shared.Services
 			}
 		}
 
-		public  string CleanRoomName(string input)
+		public string CleanRoomName(string input)
 		{
 			if (input == null)
 			{
@@ -149,16 +149,12 @@ namespace OneByMartinDoller.Shared.Services
 		}
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc)
 		{
-		
-			
-			var textL = new Dictionary<string, List<Entity>>();
-			var textM = new Dictionary<string, List<MText>>();
 
-			var roomLabel = doc.Layers.FirstOrDefault(l => l.Name == "Room Lable");
-			var roomLabelEntities = new List<Entity>();
-			var eTypeValueEntity = new Dictionary<ObjectType, List<Entity>>();
-			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>();
+
 		
+
+			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>();
+
 
 			foreach (var entity in doc.Entities)
 			{
@@ -175,36 +171,7 @@ namespace OneByMartinDoller.Shared.Services
 				}
 				dOE[entity.ObjectType].Add(entity);
 
-				if (!eTypeValueEntity.ContainsKey(entity.ObjectType))
-				{
-					eTypeValueEntity.Add(entity.ObjectType, new List<Entity>());
-				}
-				eTypeValueEntity[entity.ObjectType].Add(entity);
-				if (entity is TextEntity)
-				{
-					var text = (TextEntity)entity;
-
-					if (!textL.ContainsKey(text.Value))
-					{
-						textL.Add(text.Value, new List<Entity>());
-					}
-					textL[text.Value].Add(entity);
-				}
-				if (entity is MText)
-				{
-					var text = (MText)entity;
-
-					if (!textM.ContainsKey(text.Value))
-					{
-						textM.Add(text.Value, new List<MText>());
-					}
-					textM[text.Value].Add((text));
-				}
-
-				if (entity.Layer == roomLabel)
-				{
-					roomLabelEntities.Add(entity);
-				}
+				
 			}
 			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
 			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
