@@ -73,26 +73,31 @@ namespace WebApplication1.Controllers
 						{
 							cadDocument = reader.Read();
 						}
+
 						DwgProccesingService _dwgProccessingService = new DwgProccesingService();
 						var viewModelList = new List<DwgProcessingModel>();
 						var processingResult = _dwgProccessingService.GetProccessing(cadDocument);
+
 						foreach (var room in processingResult)
 						{
 							var cleanedKey = ACadSharp.Examples.Program.ExtractLastValue(room.Key);
-							Dictionary<string, int> cleanedValue = new Dictionary<string, int>();
+							var cleanedValue = new Dictionary<string, int>();
+
 							foreach (var pBlock in room.Value)
 							{
 								var cleanedPBlockKey = ACadSharp.Examples.Program.ExtractLastValue(pBlock.Key);
 
-								if (cleanedValue.ContainsKey(cleanedPBlockKey))
+							
+								if (cleanedValue.TryGetValue(cleanedPBlockKey, out int existingValue))
 								{
-									cleanedValue[cleanedPBlockKey] += pBlock.Value; 
+									cleanedValue[cleanedPBlockKey] = existingValue + pBlock.Value; 
 								}
 								else
 								{
-									cleanedValue.Add(cleanedPBlockKey, pBlock.Value);
+									cleanedValue[cleanedPBlockKey] = pBlock.Value;
 								}
 							}
+
 							var cleanedRoomName = ACadSharp.Examples.Program.CleanRoomName(room.Key);
 							var viewModel = new DwgProcessingModel
 							{
@@ -102,8 +107,11 @@ namespace WebApplication1.Controllers
 
 							viewModelList.Add(viewModel);
 						}
+
+						// Assuming _googleSheetInit is properly initialized somewhere in your class
 						_googleSheetInit._processingModels = viewModelList;
 						_googleSheetInit.WriteToGoogleSheet();
+
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
 						ViewBag.SpreadSheetId = _spreadSheetId;
 						return View("ProcessDwgFile", viewModelList);
@@ -119,5 +127,6 @@ namespace WebApplication1.Controllers
 			ViewBag.Message = "No file uploaded.";
 			return View("Index");
 		}
+
 	}
 }
