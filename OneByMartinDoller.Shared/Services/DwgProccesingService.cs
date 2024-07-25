@@ -28,7 +28,7 @@ namespace OneByMartinDoller.Shared.Services
 					firstChar = input.Substring(0, startBracketIndex);
 					if (firstChar.Contains('\\'))
 					{
-						if(startBracketIndex- semicolonIndex > 1)
+						if (startBracketIndex - semicolonIndex > 1)
 						{
 							firstChar = input.Substring(semicolonIndex + 1, startBracketIndex - semicolonIndex - 1);
 							input = input.Remove(0, startBracketIndex);
@@ -44,17 +44,42 @@ namespace OneByMartinDoller.Shared.Services
 						}
 						else
 						{
-							input = input.Remove(0, startBracketIndex);
-							semicolonIndex = input.IndexOf(';');
-							input = input.Remove(0, semicolonIndex + 1);
-							int backSlashIndex = input.IndexOf('\\');
-							firstChar = input.Substring(0, backSlashIndex);
-							backSlashIndex = input.IndexOf("\\S");
-							input = input.Remove(0, backSlashIndex + 2);
-							int squareIndex = input.IndexOf("^");
-							result = input.Substring(0, squareIndex);
+							try
+							{
+					
+								if (input.Remove(0, closingBracketIndex+1) != "")
+								{
+									input = input.Remove(0, closingBracketIndex + 1);
+									startBracketIndex = input.IndexOf("{");
+									firstChar = input.Substring(0, startBracketIndex);
+									int backSlashIndex = input.IndexOf("\\S");
+									input = input.Remove(0, backSlashIndex + 2);
+									int squareIndex = input.IndexOf("^");
+									result = input.Substring(0, squareIndex);
 
-							result = ConvertToSuperscript(result);
+									result = ConvertToSuperscript(result);
+								}
+								else
+								{
+									input = input.Remove(0, startBracketIndex);
+									semicolonIndex = input.IndexOf(';');
+									input = input.Remove(0, semicolonIndex + 1);
+									int backSlashIndex = input.IndexOf('\\');
+									firstChar = input.Substring(0, backSlashIndex);
+									backSlashIndex = input.IndexOf("\\S");
+									input = input.Remove(0, backSlashIndex + 2);
+									int squareIndex = input.IndexOf("^");
+									result = input.Substring(0, squareIndex);
+
+									result = ConvertToSuperscript(result);
+								}
+
+							}
+							catch(Exception e)
+							{
+								Console.WriteLine(e);
+							}
+
 						}
 
 					}
