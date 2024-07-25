@@ -28,17 +28,35 @@ namespace OneByMartinDoller.Shared.Services
 					firstChar = input.Substring(0, startBracketIndex);
 					if (firstChar.Contains('\\'))
 					{
-						input = input.Remove(0, startBracketIndex);
-						semicolonIndex = input.IndexOf(';');
-						input = input.Remove(0, semicolonIndex + 1);
-						int backSlashIndex = input.IndexOf('\\');
-						firstChar = input.Substring(0, backSlashIndex);
-						backSlashIndex = input.IndexOf("\\S");
-						input = input.Remove(0, backSlashIndex + 2);
-						int squareIndex = input.IndexOf("^");
-						result = input.Substring(0, squareIndex);
+						if(startBracketIndex- semicolonIndex > 1)
+						{
+							firstChar = input.Substring(semicolonIndex + 1, startBracketIndex - semicolonIndex - 1);
+							input = input.Remove(0, startBracketIndex);
+							semicolonIndex = input.IndexOf(';');
+							input = input.Remove(0, semicolonIndex + 1);
+							int backSlashIndex = input.IndexOf('\\');
+							backSlashIndex = input.IndexOf("\\S");
+							input = input.Remove(0, backSlashIndex + 2);
+							int squareIndex = input.IndexOf("^");
+							result = input.Substring(0, squareIndex);
 
-						result = ConvertToSuperscript(result);
+							result = ConvertToSuperscript(result);
+						}
+						else
+						{
+							input = input.Remove(0, startBracketIndex);
+							semicolonIndex = input.IndexOf(';');
+							input = input.Remove(0, semicolonIndex + 1);
+							int backSlashIndex = input.IndexOf('\\');
+							firstChar = input.Substring(0, backSlashIndex);
+							backSlashIndex = input.IndexOf("\\S");
+							input = input.Remove(0, backSlashIndex + 2);
+							int squareIndex = input.IndexOf("^");
+							result = input.Substring(0, squareIndex);
+
+							result = ConvertToSuperscript(result);
+						}
+
 					}
 					else
 					{
@@ -47,20 +65,35 @@ namespace OneByMartinDoller.Shared.Services
 				}
 				else if (startBracketIndex == 0)
 				{
-					firstChar = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1);
-					input = input.Remove(0, closingBracketIndex + 1);
-					if (input.Length > 1)
+					if (input.Contains("{["))
 					{
-						startBracketIndex = input.IndexOf('{');
-						closingBracketIndex = input.IndexOf('}');
-						semicolonIndex = input.IndexOf(';');
-						secondChar = input.Substring(0, startBracketIndex);
-						result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+						input = input.Remove(0, semicolonIndex + 1);
+						firstChar = input[0].ToString();
+						int backSlashIndex = input.IndexOf("\\S");
+						input = input.Remove(0, backSlashIndex + 2);
+						int squareIndex = input.IndexOf("^");
+						result = ConvertToSuperscript(input.Substring(0, squareIndex));
+
 					}
 					else
 					{
-						result = input;
+						firstChar = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1);
+						input = input.Remove(0, closingBracketIndex + 1);
+						if (input.Length > 1)
+						{
+							startBracketIndex = input.IndexOf('{');
+							closingBracketIndex = input.IndexOf('}');
+							semicolonIndex = input.IndexOf(';');
+							secondChar = input.Substring(0, startBracketIndex);
+							result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+						}
+						else
+						{
+							result = input;
+						}
 					}
+
+
 				}
 				if (firstChar != string.Empty)
 				{
@@ -77,6 +110,7 @@ namespace OneByMartinDoller.Shared.Services
 
 			return input;
 		}
+
 
 		public string ConvertToSuperscript(string input)
 		{

@@ -80,12 +80,12 @@ namespace WebApplication1.Controllers
 
 						foreach (var room in processingResult)
 						{
-							var cleanedKey = ACadSharp.Examples.Program.ExtractLastValue(room.Key);
+							var cleanedKey = _dwgProccessingService.ExtractLastValue(room.Key);
 							var cleanedValue = new Dictionary<string, int>();
 
 							foreach (var pBlock in room.Value)
 							{
-								var cleanedPBlockKey = ACadSharp.Examples.Program.ExtractLastValue(pBlock.Key);
+								var cleanedPBlockKey = _dwgProccessingService.ExtractLastValue(pBlock.Key);
 
 							
 								if (cleanedValue.TryGetValue(cleanedPBlockKey, out int existingValue))
@@ -98,7 +98,7 @@ namespace WebApplication1.Controllers
 								}
 							}
 
-							var cleanedRoomName = ACadSharp.Examples.Program.CleanRoomName(room.Key);
+							var cleanedRoomName = _dwgProccessingService.CleanRoomName(room.Key);
 							var viewModel = new DwgProcessingModel
 							{
 								RoomName = cleanedRoomName,
