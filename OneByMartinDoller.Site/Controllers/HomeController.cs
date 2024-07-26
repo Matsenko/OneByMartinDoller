@@ -14,15 +14,13 @@ namespace WebApplication1.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly FailLoadLimits _failLoadLimitsService;
-		private static string _spreadSheetId = "1ICVAFk-VP90By7OZrrykMqql0pdQ0FWT5aCbKYDZMSo";
-		private static string _sheetName = "Лист1";
-		private static string _credentialsPath = "C:\\CodeLuxSolutions\\OneByMartinDoller\\OneByMartinDoller.Site\\bin\\Debug\\net8.0\\credentials.json";
-		private static string _projectName = "My Project 39375";
-		private GoogleSheetInit _googleSheetInit = new GoogleSheetInit(_spreadSheetId, _sheetName, _credentialsPath, _projectName,null);
-		public HomeController(ILogger<HomeController> logger, FailLoadLimits failLoadLimitsService)
+		private GoogleSheetInit _googleSheetInit;
+		public HomeController(ILogger<HomeController> logger, FailLoadLimits failLoadLimitsService,GoogleSheetInit googleSheet)
 		{
 			_logger = logger;
 			_failLoadLimitsService = failLoadLimitsService;
+			_googleSheetInit = googleSheet;
+
 		}
 
 		public IActionResult Index()
@@ -113,7 +111,7 @@ namespace WebApplication1.Controllers
 						_googleSheetInit.WriteToGoogleSheet();
 
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
-						ViewBag.SpreadSheetId = _spreadSheetId;
+						ViewBag.SpreadSheetId = GoogleSheetSettings.SpreadSheetId;
 						return View("ProcessDwgFile", viewModelList);
 					}
 				}
