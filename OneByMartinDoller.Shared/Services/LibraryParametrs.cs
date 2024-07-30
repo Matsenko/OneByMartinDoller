@@ -32,7 +32,14 @@ namespace OneByMartinDoller.Shared.Services
 
 		public static readonly string _csvPath = "inputCsvFile.csv";
 		public static readonly string _outputCsvPath = "outputCsvFile.csv";
-
+		public static readonly int _startRow = 1;
+		public static readonly int _endRow = 3;
+		public static readonly Dictionary<int, string> _rowValues = new Dictionary<int, string>
+		{
+			{ 1, "Value1" },
+			{ 2, "Value2" },
+			{ 3, "Value3" }
+		};
 		#endregion
 
 

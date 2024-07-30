@@ -17,14 +17,15 @@ namespace OneByMartinDoller.Shared
 		private readonly int _startRow;
 		private readonly int _endRow;
 		private List<List<string>> _records;
-
-		public CsvChanger(string inputFilePath, string outputFilePath, int startRow, int endRow)
+		private readonly Dictionary<int, string> _rowValues;
+		public CsvChanger(string inputFilePath, string outputFilePath, int startRow, int endRow, Dictionary<int, string> rowValues)
 		{
 			_inputFilePath = inputFilePath;
 			_outputFilePath = outputFilePath;
 			_startRow = startRow;
 			_records = new List<List<string>>();
 			_endRow = endRow;
+			_rowValues = rowValues;
 		}
 
 		public void LoadCsv()
@@ -49,11 +50,11 @@ namespace OneByMartinDoller.Shared
 
 		public void ModifyRecords()
 		{
-			for (int i = _startRow; i <=_endRow && i < _records.Count; i++)
+			for (int i = _startRow; i <= _endRow && i < _records.Count; i++)
 			{
-				if (_records[i].Count > 1)
+				if (_records[i].Count > 1 && _rowValues.ContainsKey(i))
 				{
-					_records[i][1] = $"Новое значение{i + 1}";
+					_records[i][1] = _rowValues[i];
 				}
 			}
 		}
