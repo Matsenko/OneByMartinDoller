@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace OneByMartinDoller.Shared.Services
 {
-	public static class GoogleSheetSettings
+	public static class LibraryParametrs
 	{
+		#region GoogleSheetInit
 		// Google Sheet ID
 		private static readonly string _spreadSheetId = "1ICVAFk-VP90By7OZrrykMqql0pdQ0FWT5aCbKYDZMSo";
 
@@ -25,5 +26,15 @@ namespace OneByMartinDoller.Shared.Services
 		public static string SheetName => _sheetName;
 		public static string CredentialsPath => _credentialsPath;
 		public static string ProjectName => _projectName;
+		#endregion
+
+		#region CsvChanger
+
+		public static readonly string _csvPath = "inputCsvFile.csv";
+		public static readonly string _outputCsvPath = "outputCsvFile.csv";
+
+		#endregion
+
+
 	}
 }

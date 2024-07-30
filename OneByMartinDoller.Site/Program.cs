@@ -9,10 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<FailLoadLimits>();
 builder.Services.AddSingleton< GoogleSheetInit>(provider => new GoogleSheetInit(
-	GoogleSheetSettings.SpreadSheetId,
-	GoogleSheetSettings.SheetName,
-	GoogleSheetSettings.CredentialsPath,
-	GoogleSheetSettings.ProjectName,
+	LibraryParametrs.SpreadSheetId,
+	LibraryParametrs.SheetName,
+	LibraryParametrs.CredentialsPath,
+	LibraryParametrs.ProjectName,
 	null));
 
 

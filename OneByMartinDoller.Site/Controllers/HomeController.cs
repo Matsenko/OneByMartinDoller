@@ -111,7 +111,7 @@ namespace WebApplication1.Controllers
 						_googleSheetInit.WriteToGoogleSheet();
 
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
-						ViewBag.SpreadSheetId = GoogleSheetSettings.SpreadSheetId;
+						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
 						return View("ProcessDwgFile", viewModelList);
 					}
 				}
