@@ -201,15 +201,26 @@ namespace ACadSharp.Examples
 		}
 
 		public static Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
-		   Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
-		   Dictionary<string, List<LwPolyline.Vertex>> roomVertices)
+	Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
+	Dictionary<string, List<LwPolyline.Vertex>> roomVertices)
 		{
 			var result = new Dictionary<string, Dictionary<string, int>>();
-			var pBlocks = layEntiTypeEntity["P-BLOCK"].Values.First().OfType<MText>().ToList();
 
+		
+			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			}
+
+	
+			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
+
+			var outRooms = new List<MText>();
 			foreach (var pBlock in pBlocks)
 			{
 				var pBlockPoint = pBlock.InsertPoint;
+				var isInRoom = false;
+
 
 				foreach (var room in roomVertices)
 				{
@@ -218,6 +229,7 @@ namespace ACadSharp.Examples
 
 					if (IsPointInPolyline(pBlockPoint, new LwPolyline { Vertices = vertices }))
 					{
+						isInRoom = true;
 						if (!result.ContainsKey(roomName))
 						{
 							result[roomName] = new Dictionary<string, int>();
@@ -233,12 +245,83 @@ namespace ACadSharp.Examples
 						{
 							result[roomName][pBlockValue] = 1;
 						}
+						break;
+					}
+				}
+
+				if (!isInRoom)
+				{
+					outRooms.Add(pBlock);
+				}
+			}
+
+			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
+			{
+				var lumCircEntities = layEntiTypeEntity["E-LUM-CIRC"];
+				foreach (var outRoom in outRooms)
+				{
+					var pBlockValue = outRoom.Value;
+					var point = outRoom.InsertPoint;
+					LwPolyline containingRectangle = null;
+
+		
+					foreach (var entity in lumCircEntities.Values.ElementAt(1))
+					{
+						if (entity is LwPolyline rectangle && IsPointInPolyline(point, rectangle))
+						{
+							containingRectangle = rectangle;
+							break;
+						}
+					}
+
+					if (containingRectangle != null)
+					{
+			
+						foreach (var entity in lumCircEntities.Values.ElementAt(0))
+						{
+							if (entity is Line line)
+							{
+					
+								var startPoint = new CSMath.XYZ(line.StartPoint.X, line.StartPoint.Y, line.StartPoint.Z);
+								var endPoint = new CSMath.XYZ(line.EndPoint.X, line.EndPoint.Y, line.EndPoint.Z);
+
+								foreach (var room in roomVertices)
+								{
+									var roomName = room.Key;
+									var vertices = room.Value;
+
+									if (IsPointInPolyline(startPoint, new LwPolyline { Vertices = vertices }) ||
+										IsPointInPolyline(endPoint, new LwPolyline { Vertices = vertices }))
+									{
+										if (!result.ContainsKey(roomName))
+										{
+											result[roomName] = new Dictionary<string, int>();
+										}
+
+										if (result[roomName].ContainsKey(pBlockValue))
+										{
+											result[roomName][pBlockValue]++;
+										}
+										else
+										{
+											result[roomName][pBlockValue] = 1;
+										}
+
+										break;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 
 			return result;
 		}
+
+
+
+
 		public static string ExtractLastValue(string input)
 		{
 			int startBracketIndex = input.IndexOf('{');
