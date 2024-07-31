@@ -12,23 +12,18 @@ namespace WebApplication1.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
-		private readonly FailLoadLimits _failLoadLimitsService;
+		private readonly ILogger<HomeController> _logger; 
 		private GoogleSheetInit _googleSheetInit;
-		public HomeController(ILogger<HomeController> logger, FailLoadLimits failLoadLimitsService,GoogleSheetInit googleSheet)
+		public HomeController(ILogger<HomeController> logger, GoogleSheetInit googleSheet)
 		{
-			_logger = logger;
-			_failLoadLimitsService = failLoadLimitsService;
+			_logger = logger; 
 			_googleSheetInit = googleSheet;
 
 		}
 
 		public IActionResult Index()
 		{
-			ViewBag.Message = _failLoadLimitsService.CanUploadFile ?
-			$"You have uploaded {_failLoadLimitsService.AmountOfUpLoadFiles} files. You have {_failLoadLimitsService.AvaliableUploadFileCount - _failLoadLimitsService.AmountOfUpLoadFiles} files remaining." :
-			FailLoadLimits.USER_MESSAGE;
-
+   
 			return View();
 		}
 
@@ -49,9 +44,8 @@ namespace WebApplication1.Controllers
 		{
 			var file = Request.Form.Files["file"];
 
-			if (file != null && file.Length > 0 && _failLoadLimitsService.CanUploadFile)
+			if (file != null && file.Length > 0)
 			{
-				_failLoadLimitsService.UploadFile();
 				var fileExtension = Path.GetExtension(file.FileName);
 
 				if (fileExtension.ToLower() != ".dwg")
