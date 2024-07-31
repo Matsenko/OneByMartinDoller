@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CSMath;
+using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
 
 namespace OneByMartinDoller.Shared.Services
 {
@@ -207,8 +210,181 @@ namespace OneByMartinDoller.Shared.Services
 			return input;
 		}
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc)
-		{ 
-			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>(); 
+		{
+			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity = GetlayEntiTypeEntity(doc);
+			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
+			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
+			return pBlockCountInRooms;
+		}
+
+
+		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
+		{
+			var layouts = GetlayEntiTypeEntity(doc);
+			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layouts);
+			var circLayout = layouts["E-LUM-CIRC"];
+			var lines = new List<Line>();
+			foreach (var arc in circLayout[ObjectType.ARC])
+			{
+				lines.Add(ArcToLine(arc as Arc));
+			}
+
+			return null;
+		}
+
+		public List<string> GetBlocksForLines(List<Line> lines,
+			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		{
+			var result = new List<string>();
+
+			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			}
+
+
+			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
+
+			foreach(var line in lines)
+			{
+				var item = pBlocks.FirstOrDefault(b =>
+				CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 700)
+				|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 700));
+				if (item != null)
+				{
+					result.Add(ExtractLastValue(item.Value));
+				}
+				else
+				{
+					var inserPoint=pBlocks.Select(x=>x.InsertPoint).OrderBy(p=>p.X).ToList();
+					 
+				}
+			}
+
+			return result;
+		}
+
+		public List<List<Line>> GetLinesListsFromsArcList(IEnumerable<Arc> arcList)
+		{
+			const double SPACE_BETWEEN_LINES = 0.05;
+			
+			var result =new List<List<Line>>();
+			var lines = arcList.Select(x => ArcToLine(x)).ToList();
+
+			//move foward
+			int i = 0;
+
+			while (i < lines.Count)
+			{
+				var mainLine = lines[i];
+				int j = 0;
+				var linesForMain = new List<Line>();
+				
+				if (!result.Any(x => x.Contains(mainLine)))
+					linesForMain.Add(mainLine);
+
+				while (j < lines.Count)
+				{
+					var secondLine = lines[j];
+					if (
+
+						((CompareToPointsWithStep(mainLine.EndPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES)
+						&& !mainLine.Equals(secondLine))
+						|| (CompareToPointsWithStep(mainLine.StartPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
+						&& !mainLine.Equals(secondLine))
+						|| CompareToPointsWithStep(mainLine.EndPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
+						|| CompareToPointsWithStep(mainLine.StartPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES))
+						&& !linesForMain.Contains(secondLine))
+					{
+						if (!result.Any(x => x.Contains(secondLine)))
+						{
+							linesForMain.Add(secondLine);
+							mainLine = secondLine;
+							j = 0;
+						}
+					}
+					j++;
+				}
+				if(linesForMain.Count > 0)
+				{
+					result.Add(linesForMain);
+				}
+				i++;
+			}
+
+			var itemCount=result.Sum(x=>x.Count);
+			var temp=result.OrderBy(x=>x.Count);
+			return result;
+
+
+			//while(i<lines.Count())
+			//{
+			//	var line = lines[i];
+			//	var forwarLines = new List<Line>();
+			//	forwarLines.Add(line);
+
+			//	var stepLine = line;
+			//	foreach (var lineF in lines)
+			//	{
+			//		//if (stepLine.EndPoint.IsEqual(lineF.StartPoint))
+			//		if (CompareToPointsWithStep(stepLine.StartPoint, lineF.EndPoint, SPACE_BETWEEN_LINES)) 
+			//		{
+			//			forwarLines.Add(lineF);
+			//			stepLine = lineF;
+			//		}
+			//	}
+			//	//lines.RemoveAll(l=>forwarLines.Contains(l));
+
+			//	stepLine = line;
+			//	foreach (var lineF in lines)
+			//	{
+			//		//if (stepLine.StartPoint.IsEqual(lineF.EndPoint))
+			//		if (CompareToPointsWithStep(stepLine.EndPoint, lineF.StartPoint, SPACE_BETWEEN_LINES))
+			//		{
+			//			forwarLines.Add(lineF);
+			//			stepLine = lineF;
+			//		}
+			//	}
+			//	//lines.RemoveAll(l => forwarLines.Contains(l));
+			//	result.Add(forwarLines);
+			//	i++;
+			//}
+
+
+			//move back
+
+		}
+
+		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace )
+		{
+			var result = false;
+			result = (point2.X - allowedSpace < point1.X) && (point1.X < point2.X + allowedSpace);
+			if(result )
+				return (point2.Y - allowedSpace < point1.Y) && (point1.Y < point2.Y + allowedSpace);
+			return result;
+
+		}
+
+		public Line ArcToLine(Arc arc)
+		{
+			XYZ startPoint = new XYZ();
+			startPoint.X = arc.Center.X + arc.Radius * Math.Cos(arc.StartAngle);
+			startPoint.Y = arc.Center.Y + arc.Radius * (Math.Sin(arc.StartAngle));
+
+			XYZ endPoint = new XYZ();
+			endPoint.X = arc.Center.X + arc.Radius * Math.Cos(arc.EndAngle);
+			endPoint.Y = arc.Center.Y + arc.Radius * (Math.Sin(arc.EndAngle));
+			return new Line(startPoint, endPoint);
+		}
+
+
+
+
+
+
+		public Dictionary<string, Dictionary<ObjectType, List<Entity>>> GetlayEntiTypeEntity(CadDocument doc)
+		{
+			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>();
 
 			foreach (var entity in doc.Entities)
 			{
@@ -225,11 +401,10 @@ namespace OneByMartinDoller.Shared.Services
 				}
 				dOE[entity.ObjectType].Add(entity);
 
-				
+
 			}
-			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
-			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
-			return pBlockCountInRooms;
+
+			return layEntiTypeEntity;
 		}
 	}
 }

@@ -13,8 +13,8 @@ using System.Text;
 namespace ACadSharp.Examples
 {
 	public static class Program
-	{
-		const string _file = "C:\\Users\\vovam\\Downloads\\House Van Niekerk.dwg";
+	{ 
+		const string _file = "C:\\Users\\belbo\\Downloads\\Showroom Drafting (4).dwg";
 
 		static void Main(string[] args)
 		{
@@ -23,10 +23,12 @@ namespace ACadSharp.Examples
 			{
 				doc = reader.Read();
 			}
-			exploreDocument(doc);
-			TestArtem(doc);
+			//exploreDocument(doc);
+			//TestArtem(doc);
+			//GeneratePolyLines(doc);
 			Console.ReadLine();
 		}
+ 
 
 		/// <summary>
 		/// Logs in the console the document information

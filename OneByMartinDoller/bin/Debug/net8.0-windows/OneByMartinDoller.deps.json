@@ -126,10 +126,7 @@
       },
       "ACadSharp/2.3.2-beta": {
         "runtime": {
-          "ACadSharp.dll": {
-            "assemblyVersion": "2.3.2-beta",
-            "fileVersion": "2.3.2.0"
-          }
+          "ACadSharp.dll": {}
         }
       },
       "ACadSharp.Examples/1.0.0": {
@@ -137,10 +134,7 @@
           "ACadSharp": "2.3.2-beta"
         },
         "runtime": {
-          "ACadSharp.Examples.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "ACadSharp.Examples.dll": {}
         }
       },
       "OneByMartinDoller.GoogleSheet/1.0.0": {
@@ -153,22 +147,17 @@
           "Google.Apis.Sheets.v4": "1.68.0.3476"
         },
         "runtime": {
-          "OneByMartinDoller.GoogleSheet.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "OneByMartinDoller.GoogleSheet.dll": {}
         }
       },
       "OneByMartinDoller.Shared/1.0.0": {
         "dependencies": {
           "ACadSharp": "2.3.2-beta",
-          "ACadSharp.Examples": "1.0.0"
+          "ACadSharp.Examples": "1.0.0",
+          "CsvHelper": "33.0.1"
         },
         "runtime": {
-          "OneByMartinDoller.Shared.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "OneByMartinDoller.Shared.dll": {}
         }
       }
     }
