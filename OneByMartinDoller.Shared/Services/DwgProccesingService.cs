@@ -207,13 +207,8 @@ namespace OneByMartinDoller.Shared.Services
 			return input;
 		}
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc)
-		{
-
-
-		
-
-			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>();
-
+		{ 
+			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>(); 
 
 			foreach (var entity in doc.Entities)
 			{

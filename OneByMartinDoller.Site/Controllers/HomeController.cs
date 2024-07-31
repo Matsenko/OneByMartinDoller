@@ -89,11 +89,10 @@ namespace WebApplication1.Controllers
 									cleanedValue[cleanedPBlockKey] = pBlock.Value;
 								}
 							}
-
-							var cleanedRoomName = _dwgProccessingService.CleanRoomName(room.Key);
+							 
 							var viewModel = new DwgProcessingModel
 							{
-								RoomName = cleanedRoomName,
+								RoomName = room.Key,
 								PBlocks = cleanedValue
 							};
 

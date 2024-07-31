@@ -1,4 +1,6 @@
-﻿namespace OneByMartinDoller.Shared.Model
+﻿using System.Collections.Generic;
+
+namespace OneByMartinDoller.Shared.Model
 {
 	public  class Circuit
 	{

@@ -3,6 +3,7 @@ using ACadSharp.IO;
 using ACadSharp.Tables;
 using ACadSharp.Tables.Collections;
 using CSMath;
+using OneByMartinDoller.Shared.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -161,9 +162,9 @@ namespace ACadSharp.Examples
 
 			var r = textL.OrderBy(x => x.Value.Count()).ToList();
 		}
-		public static Dictionary<string, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		public static Dictionary<DGWViewModel, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
-			var result = new Dictionary<string, List<LwPolyline.Vertex>>();
+			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
 
 			var polygons = layEntiTypeEntity.ContainsKey("0-CountArea")
 							? layEntiTypeEntity["0-CountArea"].Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
@@ -172,37 +173,48 @@ namespace ACadSharp.Examples
 			var labels = new List<MText>();
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
 			{
-				labels.AddRange(layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>()));
+				var groundFloor=layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor,FloorTypes.GroundFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
 			}
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
 			{
-				labels.AddRange(layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>()));
+				var firstFloor =layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
 			}
+			 
 
+			return result;
+		}
+
+		private static Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis( List<LwPolyline> polygons, IEnumerable<MText> labels, FloorTypes floorType)
+		{
+			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
 			foreach (var label in labels)
 			{
+				label.Value = CleanRoomName(label.Value);
 				var labelPoint = label.InsertPoint;
-				bool found = false;
-
 				foreach (var polygon in polygons)
 				{
-			
 					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.RectangleWidth / 2), labelPoint.Y, labelPoint.Z), polygon))
 					{
-						result[label.Value] = polygon.Vertices;
-						found = true;
+						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices) ;
 						break;
 					}
 				}
 
 			}
-
 			return result;
 		}
 
 		public static Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
 	Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
-	Dictionary<string, List<LwPolyline.Vertex>> roomVertices)
+	Dictionary<DGWViewModel, List<LwPolyline.Vertex>> roomVertices)
 		{
 			var result = new Dictionary<string, Dictionary<string, int>>();
 
@@ -224,7 +236,7 @@ namespace ACadSharp.Examples
 
 				foreach (var room in roomVertices)
 				{
-					var roomName = room.Key;
+					var roomName = room.Key.RoomName;
 					var vertices = room.Value;
 
 					if (IsPointInPolyline(pBlockPoint, new LwPolyline { Vertices = vertices }))
@@ -287,7 +299,7 @@ namespace ACadSharp.Examples
 
 								foreach (var room in roomVertices)
 								{
-									var roomName = room.Key;
+									var roomName = room.Key.RoomName;
 									var vertices = room.Value;
 
 									if (IsPointInPolyline(startPoint, new LwPolyline { Vertices = vertices }) ||
