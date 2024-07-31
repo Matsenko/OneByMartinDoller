@@ -101,8 +101,8 @@ namespace WebApplication1.Controllers
 						}
 
 						// Assuming _googleSheetInit is properly initialized somewhere in your class
-						_googleSheetInit._processingModels = viewModelList;
-						_googleSheetInit.WriteToGoogleSheet();
+						//_googleSheetInit._processingModels = viewModelList;
+						//_googleSheetInit.WriteToGoogleSheet();
 
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
 						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
