@@ -6,5 +6,7 @@ namespace OneByMartinDoller.Shared.Model
 	{
 		public string Name { get; set; }
 		public string Cuirts { get; set; }
+
+		public Dictionary<string, int> CuirtsItems { get; set; }
 	}
 }
