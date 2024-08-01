@@ -227,7 +227,87 @@ namespace OneByMartinDoller.Shared.Services
 			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
 			return pBlockCountInRooms;
 		}
- 
+
+		public List<DGWViewModel> ParseDGW(CadDocument doc)
+		{ 
+			var layouts = GetlayEntiTypeEntity(doc);
+			var circLayout = layouts["E-LUM-CIRC"];
+			var rectangles = circLayout[ObjectType.LWPOLYLINE]
+				.Select(x => x as LwPolyline)
+				.ToList();
+
+			var arcList = circLayout[ObjectType.ARC].Select(x => x as Arc).ToList();
+
+			//преобразовуем arc в линии
+			var lines = GetLinesListsFromsArcList(arcList);
+
+			//ключ это квадратик, значения это линии 
+			var squarLines = GetCuirtisWithRelations(lines, rectangles);
+
+			//Квадратики заполненные  
+			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);
+			var rooms = ACadSharp.Examples.Program.GetRoomVertices(layouts);
+
+			rooms = rooms
+				.OrderBy(l => CalculateArea(l.Value))
+				.ToDictionary(entry => entry.Key, entry => entry.Value);
+
+			foreach (var item in cuirtises)
+			{
+				var linesForSquar = squarLines[item.Key];
+				var blocks = GetBlocksForLines(linesForSquar, layouts);
+
+				if (item.Value.CuirtsItems == null)
+				{
+					item.Value.CuirtsItems = new Dictionary<string, int>();
+				}
+
+				foreach (var room in rooms)
+				{
+					var roomName = room.Key.RoomName;
+					var vertices = room.Value;
+
+					if (ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].StartPoint, new LwPolyline { Vertices = vertices })
+						|| ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].EndPoint, new LwPolyline { Vertices = vertices }))
+					{
+						if (room.Key.Circuits == null)
+						{
+							room.Key.Circuits = new List<Circuit>();
+						}
+						room.Key.Circuits.Add(item.Value);
+					}
+				}
+
+				foreach (var block in blocks)
+				{
+					if (!item.Value.CuirtsItems.ContainsKey(block))
+						item.Value.CuirtsItems.Add(block, 0);
+					item.Value.CuirtsItems[block]++;
+				}
+
+			}
+
+			return rooms.Keys.ToList();
+		}
+
+		public static double CalculateArea(List<LwPolyline.Vertex> vertices)
+		{
+			if (vertices.Count != 4)
+			{
+				throw new ArgumentException("Exactly 4 points are required.");
+			}
+
+			double area = 0;
+			for (int i = 0; i < vertices.Count; i++)
+			{
+				int nextIndex = (i + 1) % vertices.Count;
+				area += vertices[i].Location.X * vertices[nextIndex].Location.Y;
+				area -= vertices[i].Location.Y * vertices[nextIndex].Location.X;
+			}
+
+			area = Math.Abs(area) / 2.0;
+			return area;
+		}
 
 		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
 		{
@@ -255,21 +335,59 @@ namespace OneByMartinDoller.Shared.Services
 
 
 			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
-
-			foreach(var line in lines)
+			var endLine = layEntiTypeEntity["E-LUM-GFIT"]
+				.First()
+				.Value
+				.OfType<Insert>() 
+				.ToList();
+			var endLine1 = layEntiTypeEntity["E-LUM-FLMP"]
+				.First()
+				.Value
+				.OfType<Insert>()
+				.ToList();
+			endLine.AddRange(endLine1); 
+			foreach (var line in lines)
 			{
-				var item = pBlocks.FirstOrDefault(b =>
-				CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 700)
-				|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 700));
+				var item = endLine.FirstOrDefault(b =>
+			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 20)
+			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 20));
 				if (item != null)
 				{
-					result.Add(ExtractLastValue(item.Value));
+					var name = ExtractLastValue(item.Block.Name);
+					result.Add(name);
 				}
 				else
 				{
-					var inserPoint=pBlocks.Select(x=>x.InsertPoint).OrderBy(p=>p.X).ToList();
-					 
+					var light = endLine1.FirstOrDefault(b =>
+			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 100)
+			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 100));
+					if (light != null)
+					{
+						//сейчас это если про свет.
+						var item2 = pBlocks.FirstOrDefault(b =>
+						CompareToPointsWithStep(b.InsertPoint, light.InsertPoint, 200)
+						|| CompareToPointsWithStep(b.InsertPoint, light.InsertPoint, 200));
+						if (item != null)
+						{
+							result.Add(ExtractLastValue(item2.Value));
+						}
+
+						 
+					}
+					
 				}
+
+				//var item = pBlocks.FirstOrDefault(b =>
+				//CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 20)
+				//|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 20));
+				//if (item != null)
+				//{
+				//	result.Add(ExtractLastValue(item.Value));
+				//}
+				//else
+				//{
+				//	var inserPoint=pBlocks.Select(x=>x.InsertPoint).OrderBy(p=>p.X).ToList();
+				//}
 			}
 
 			return result;
@@ -456,10 +574,11 @@ namespace OneByMartinDoller.Shared.Services
 				foreach (var block in pBlocks)
 				{
 					if(ACadSharp.Examples.Program.IsPointInPolyline(block.InsertPoint,circ))
-					{
+					{ 
 						circBlcocksItems.Add(block);
 					}
 				}
+				
 				if(circBlcocksItems.Count > 1)
 				{
 					var t = circBlcocksItems

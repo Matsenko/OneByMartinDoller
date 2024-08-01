@@ -10,6 +10,6 @@ namespace OneByMartinDoller.Shared.Model
 	{
 		public FloorTypes FloorType { get; set; }
 		public string RoomName { get; set; }
-		List<Circuit> Circuits { get; set; }
+		public List<Circuit> Circuits { get; set; }
 	}
 }

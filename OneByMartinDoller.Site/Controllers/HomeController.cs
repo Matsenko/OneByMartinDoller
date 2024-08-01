@@ -7,6 +7,8 @@ using OneByMartinDoller.Site.Services;
 using OneByMartinDoller.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
 using OneByMartinDoller.GoogleSheet;
+using OneByMartinDoller.Shared.Model;
+using Google.Apis.Drive.v3;
 
 namespace WebApplication1.Controllers
 {
@@ -67,45 +69,55 @@ namespace WebApplication1.Controllers
 						}
 
 						DwgProccesingService _dwgProccessingService = new DwgProccesingService();
-						var viewModelList = new List<DwgProcessingModel>();
-						var processingResult = _dwgProccessingService.GetProccessing(cadDocument);
+						var extractedDoc = _dwgProccessingService.ParseDGW(cadDocument);
 
-						foreach (var room in processingResult)
+						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
+						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
+
+						var modelView = new Dictionary<FloorTypes, List<DGWViewModel>>();
+						foreach(var room in extractedDoc)
 						{
-							var cleanedKey = _dwgProccessingService.ExtractLastValue(room.Key);
-							var cleanedValue = new Dictionary<string, int>();
-
-							foreach (var pBlock in room.Value)
-							{
-								var cleanedPBlockKey = _dwgProccessingService.ExtractLastValue(pBlock.Key);
-
-							
-								if (cleanedValue.TryGetValue(cleanedPBlockKey, out int existingValue))
-								{
-									cleanedValue[cleanedPBlockKey] = existingValue + pBlock.Value; 
-								}
-								else
-								{
-									cleanedValue[cleanedPBlockKey] = pBlock.Value;
-								}
-							}
-							 
-							var viewModel = new DwgProcessingModel
-							{
-								RoomName = room.Key,
-								PBlocks = cleanedValue
-							};
-
-							viewModelList.Add(viewModel);
+							if(!modelView.ContainsKey(room.FloorType))
+								modelView.Add(room.FloorType, new List<DGWViewModel>());
+							modelView[room.FloorType].Add(room);
 						}
+
+
+						return View("ProcessDwgFile", modelView);
+						//foreach (var room in processingResult)
+						//{
+						//	var cleanedKey = _dwgProccessingService.ExtractLastValue(room.Key);
+						//	var cleanedValue = new Dictionary<string, int>();
+
+						//	foreach (var pBlock in room.Value)
+						//	{
+						//		var cleanedPBlockKey = _dwgProccessingService.ExtractLastValue(pBlock.Key);
+
+
+						//		if (cleanedValue.TryGetValue(cleanedPBlockKey, out int existingValue))
+						//		{
+						//			cleanedValue[cleanedPBlockKey] = existingValue + pBlock.Value; 
+						//		}
+						//		else
+						//		{
+						//			cleanedValue[cleanedPBlockKey] = pBlock.Value;
+						//		}
+						//	}
+
+						//	var viewModel = new DwgProcessingModel
+						//	{
+						//		RoomName = room.Key,
+						//		PBlocks = cleanedValue
+						//	};
+
+						//	viewModelList.Add(viewModel);
+						//}
 
 						// Assuming _googleSheetInit is properly initialized somewhere in your class
 						//_googleSheetInit._processingModels = viewModelList;
 						//_googleSheetInit.WriteToGoogleSheet();
 
-						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
-						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
-						return View("ProcessDwgFile", viewModelList);
+
 					}
 				}
 				catch (Exception ex)

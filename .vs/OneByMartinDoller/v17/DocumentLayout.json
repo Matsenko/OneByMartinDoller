@@ -7,24 +7,12 @@
       "RelativeMoniker": "D:0:0:{EA2A04CA-7A2C-4668-8668-D9B2787F7096}|OneByMartinDoller.Tests\\OneByMartinDoller.Tests.csproj|solutionrelative:onebymartindoller.tests\\dwgprocessingtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\onebymartindoller.site\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1C6C402A-5EF2-4CD0-8E11-B06EA9A46F00}|OneByMartinDoller.Site\\OneByMartinDoller.Site.csproj|solutionrelative:onebymartindoller.site\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\onebymartindoller.shared\\services\\dwgproccesingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|d:\\codeluxsolutions\\upwork\\kaige naidoo\\onebymartindoller\\onebymartindoller\\onebymartindoller.shared\\services\\dwgproccesingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}|OneByMartinDoller.Shared\\OneByMartinDoller.Shared.csproj|solutionrelative:onebymartindoller.shared\\services\\dwgproccesingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|d:\\codeluxsolutions\\upwork\\kaige naidoo\\onebymartindoller\\onebymartindoller\\acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|d:\\codeluxsolutions\\upwork\\kaige naidoo\\onebymartindoller\\onebymartindoller\\acadsharp.examples\\model\\dgwviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\model\\dgwviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|d:\\codeluxsolutions\\upwork\\kaige naidoo\\onebymartindoller\\onebymartindoller\\acadsharp.examples\\model\\circuit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1EA9183B-60BB-4E31-89F9-1494DB04F123}|ACadSharp.Examples\\ACadSharp.Examples.csproj|solutionrelative:acadsharp.examples\\model\\circuit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 25,
+          "SelectedChildIndex": 24,
           "Children": [
             {
               "$type": "Bookmark",
@@ -126,41 +114,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "DGWViewModel.cs",
-              "DocumentMoniker": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Model\\DGWViewModel.cs",
-              "RelativeDocumentMoniker": "ACadSharp.Examples\\Model\\DGWViewModel.cs",
-              "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Model\\DGWViewModel.cs",
-              "RelativeToolTip": "ACadSharp.Examples\\Model\\DGWViewModel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
+              "RelativeDocumentMoniker": "ACadSharp.Examples\\Program.cs",
+              "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
+              "RelativeToolTip": "ACadSharp.Examples\\Program.cs",
+              "ViewState": "AQIAAJgAAAAAAAAAAAAMwKYAAABAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-01T12:00:03.26Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Circuit.cs",
-              "DocumentMoniker": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Model\\Circuit.cs",
-              "RelativeDocumentMoniker": "ACadSharp.Examples\\Model\\Circuit.cs",
-              "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Model\\Circuit.cs",
-              "RelativeToolTip": "ACadSharp.Examples\\Model\\Circuit.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAWAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-01T10:40:30.264Z",
+              "WhenOpened": "2024-08-01T16:36:10.689Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Site\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller.Site\\Controllers\\HomeController.cs",
-              "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Site\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "OneByMartinDoller.Site\\Controllers\\HomeController.cs",
-              "ViewState": "AQIAAD4AAAAAAAAAAAAswEYAAAAdAAAA",
+              "Title": "DwgProccesingService.cs",
+              "DocumentMoniker": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
+              "RelativeDocumentMoniker": "OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
+              "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
+              "RelativeToolTip": "OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
+              "ViewState": "AQIAAPIAAAAAAAAAAAAcwA0BAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T17:22:16.219Z",
+              "WhenOpened": "2024-08-01T16:36:10.7Z",
               "EditorCaption": ""
             },
             {
@@ -171,35 +146,9 @@
               "RelativeDocumentMoniker": "OneByMartinDoller.Tests\\DWGProcessingTest.cs",
               "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Tests\\DWGProcessingTest.cs",
               "RelativeToolTip": "OneByMartinDoller.Tests\\DWGProcessingTest.cs",
-              "ViewState": "AQIAALcAAAAAAAAAAAAhwMYAAAAFAAAA",
+              "ViewState": "AQIAAN4AAAAAAAAAAAAMwOwAAAAoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T17:08:48.744Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
-              "RelativeDocumentMoniker": "ACadSharp.Examples\\Program.cs",
-              "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\ACadSharp.Examples\\Program.cs",
-              "RelativeToolTip": "ACadSharp.Examples\\Program.cs",
-              "ViewState": "AQIAAMoAAAAAAAAAAAASwM8AAAAzAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T17:06:01.373Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "DwgProccesingService.cs",
-              "DocumentMoniker": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
-              "RelativeDocumentMoniker": "OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
-              "ToolTip": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
-              "RelativeToolTip": "OneByMartinDoller.Shared\\Services\\DwgProccesingService.cs",
-              "ViewState": "AQIAAKUBAAAAAAAAAAAMwKkBAABDAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T14:29:40.06Z",
+              "WhenOpened": "2024-08-01T16:35:03.372Z",
               "EditorCaption": ""
             }
           ]

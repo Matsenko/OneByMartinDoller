@@ -7,6 +7,7 @@ using OneByMartinDoller.Shared.Services;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OneByMartinDoller.Shared.Services.IServices;
+using OneByMartinDoller.Shared.Model;
 
 namespace OneByMartinDoller.Tests
 {
@@ -149,14 +150,120 @@ namespace OneByMartinDoller.Tests
 		[TestMethod]
 		public void ParseDocument()
 		{
+			var result=_service.ParseDGW(GetDocument());
+			
+			var restroom = result.FirstOrDefault(x => x.RoomName.ToLower().Equals("restroom"));
+			var kitchenette = result.FirstOrDefault(x => x.RoomName.ToLower().Equals("kitchenette"));
+			var zoomRoom = result.FirstOrDefault(x => x.RoomName.ToLower().Equals("zoom room"));
+			var exterior = result.FirstOrDefault(x => x.RoomName.ToLower().Equals("exterior"));
 
+			var boardroom = result.FirstOrDefault(x => x.RoomName.ToLower().Equals("boardroom"));
+			var exhibitionRoom = result.FirstOrDefault(x => x.RoomName.ToLower().Equals("exhibition room"));
+
+
+			var entrance = result.FirstOrDefault(x => x.RoomName.ToLower().Equals("entrance"));
+
+			#region restroom
+
+			Assert.AreEqual(1, restroom.Circuits.Count());
+			Assert.AreEqual("AX1", restroom.Circuits[0].Name);
+			Assert.AreEqual("GF.A1", restroom.Circuits[0].Cuirts.ToUpper());
+			Assert.AreEqual(1, restroom.Circuits[0].CuirtsItems.Count);
+			Assert.IsTrue( restroom.Circuits[0].CuirtsItems.ContainsKey("AX1"));
+			Assert.AreEqual(1, restroom.Circuits[0].CuirtsItems["AX1"]);
+
+			#endregion
+
+			#region kitchenette
+
+			Assert.AreEqual(1, kitchenette.Circuits.Count());
+			Assert.AreEqual("AX1", kitchenette.Circuits[0].Name);
+			Assert.AreEqual("GF.A2", kitchenette.Circuits[0].Cuirts.ToUpper());
+			Assert.AreEqual(1, kitchenette.Circuits[0].CuirtsItems.Count);
+			Assert.IsTrue(kitchenette.Circuits[0].CuirtsItems.ContainsKey("AX1"));
+			Assert.AreEqual(1, kitchenette.Circuits[0].CuirtsItems["AX1"]);
+
+			#endregion
+
+			#region zoomRoom
+
+			Assert.AreEqual(2, zoomRoom.Circuits.Count());
+			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.Name.Equals("A1")));
+			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.Cuirts.ToUpper()== "GF.A3"));
+			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.Cuirts.ToUpper()== "GF.A4"));
+			Assert.AreEqual(3, zoomRoom.Circuits.Sum(c=>c.CuirtsItems.Sum(x=>x.Value)));
+			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.CuirtsItems.ContainsKey("A1") && c.CuirtsItems["A1"]==2));
+			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.CuirtsItems.ContainsKey("2L") && c.CuirtsItems["2L"]==1));
+			 
+
+			#endregion
+
+			#region exterior
+
+			Assert.AreEqual(4, exterior.Circuits.Count());
+
+			Assert.IsTrue(exterior.Circuits.Any(c => c.Cuirts.ToUpper() == "EX.A4"));
+			Assert.IsTrue(exterior.Circuits.Any(c => c.Cuirts.ToUpper() == "EX.A3"));
+			Assert.IsTrue(exterior.Circuits.Any(c => c.Cuirts.ToUpper() == "EX.A2"));
+			Assert.IsTrue(exterior.Circuits.Any(c => c.Cuirts.ToUpper() == "EX.A1"));
+
+			Assert.AreEqual(14, exterior.Circuits.Sum(c => c.CuirtsItems.Sum(x=>x.Value)));
+
+			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("GB1") && c.CuirtsItems["GB1"] == 6));
+			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("BX1") && c.CuirtsItems["BX1"] == 3));
+			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("FX1") && c.CuirtsItems["FX1"] == 4));
+			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("3LX") && c.CuirtsItems["3LX"] == 1));
+
+		
+
+			#endregion
+
+			#region boardroom
+
+			Assert.AreEqual(2, boardroom.Circuits.Count());
+			Assert.IsTrue(boardroom.Circuits.Any(c => c.Name.Equals("A1+LJ")));
+			Assert.IsTrue(boardroom.Circuits.Any(c => c.Cuirts.ToUpper() == "FF.A2"));
+			Assert.IsTrue(boardroom.Circuits.Any(c => c.Cuirts.ToUpper() == "FF.A1"));
+			Assert.AreEqual(8, boardroom.Circuits.Sum(c => c.CuirtsItems.Sum(x => x.Value)));
+			Assert.IsTrue(boardroom.Circuits.Any(c => c.CuirtsItems.ContainsKey("2L") && c.CuirtsItems["2L"] == 1));
+			Assert.IsTrue(boardroom.Circuits.Any(c => c.CuirtsItems.ContainsKey("A1") && c.CuirtsItems["A1"] == 5));
+			Assert.IsTrue(boardroom.Circuits.Any(c => c.CuirtsItems.ContainsKey("W1") && c.CuirtsItems["W1"] == 2));
+			//Assert.AreEqual(1, exterior.Circuits[0].CuirtsItems["AX1"]);
+
+			#endregion
+
+			#region exhibitionRoom
+
+			Assert.AreEqual(3, exhibitionRoom.Circuits.Count());
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.Name.Equals("A1")));
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.Cuirts.ToUpper() == "GF.B1"));
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.Cuirts.ToUpper() == "GF.B2"));
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.Cuirts.ToUpper() == "GF.B3"));
+			Assert.AreEqual(11, exhibitionRoom.Circuits.Sum(c => c.CuirtsItems.Sum(x => x.Value)));
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.CuirtsItems.ContainsKey("A1") && c.CuirtsItems["A1"] == 7));
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.CuirtsItems.ContainsKey("LC") && c.CuirtsItems["LV"] == 2));
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.CuirtsItems.ContainsKey("B1") && c.CuirtsItems["B1"] == 2));
+			//Assert.AreEqual(1, exterior.Circuits[0].CuirtsItems["AX1"]);
+
+			#endregion
+
+			#region entrance
+
+			Assert.AreEqual(2, entrance.Circuits.Count());
+			Assert.IsTrue(entrance.Circuits.Any(c => c.Name.Equals("A1")));
+			Assert.IsTrue(entrance.Circuits.Any(c => c.Cuirts.ToUpper() == "GF.C1"));
+			Assert.IsTrue(entrance.Circuits.Any(c => c.Cuirts.ToUpper() == "GF.C2"));
+			Assert.AreEqual(4, entrance.Circuits.Sum(c => c.CuirtsItems.Sum(x => x.Value)));
+			Assert.IsTrue(entrance.Circuits.Any(c => c.CuirtsItems.ContainsKey("A1") && c.CuirtsItems["A1"] == 2));
+			Assert.IsTrue(entrance.Circuits.Any(c => c.CuirtsItems.ContainsKey("W1") && c.CuirtsItems["W1"] == 2));
+			//Assert.AreEqual(1, exterior.Circuits[0].CuirtsItems["AX1"]);
+
+			#endregion
 		}
 
 		[TestMethod]
 		public void FinalTestForParseDGWFile()
-		{
-
-
+		{ 
 			var doc = GetDocument();
 			var layouts = _service.GetlayEntiTypeEntity(doc);
 			var circLayout = layouts["E-LUM-CIRC"];
@@ -174,30 +281,72 @@ namespace OneByMartinDoller.Tests
 
 			//Квадратики заполненные  
 			var cuirtises = _service.FillCuirc(squarLines.Keys.ToList(), layouts);
-			 
+			var rooms = ACadSharp.Examples.Program.GetRoomVertices(layouts);
 
-			
-			//линиии с буквами
-			Dictionary<List<Line>, List<string>> tempR = new Dictionary<List<Line>, List<string>>();
-			foreach (var line in lines)
+
+			foreach (var item in cuirtises)
 			{
-				var r = _service.GetBlocksForLines(line, layouts);
-				if (r.Count > 0)
-					tempR.Add(line, r);
+				var linesForSquar = squarLines[item.Key];
+				var blocks = _service.GetBlocksForLines(linesForSquar, layouts);
+
+				if (item.Value.CuirtsItems == null)
+				{
+					item.Value.CuirtsItems = new Dictionary<string, int>();
+				}
+
+				foreach (var room in rooms)
+				{
+					var roomName = room.Key.RoomName;
+					var vertices = room.Value;
+
+					if (ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].StartPoint, new LwPolyline { Vertices = vertices })
+						|| ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].EndPoint, new LwPolyline { Vertices = vertices }))
+					{
+						if(room.Key.Circuits == null)
+						{
+							room.Key.Circuits=new List<Circuit>();
+						}
+						room.Key.Circuits.Add(item.Value);
+					}
+				}
+
+				foreach (var block in blocks)
+				{
+
+					if(!item.Value.CuirtsItems.ContainsKey(block))
+						item.Value.CuirtsItems.Add(block, 1);
+					item.Value.CuirtsItems[block]++;
+				}
+				 
 			}
 
+			
+
+			////линиии с буквами
+			//Dictionary<List<Line>, List<string>> tempR = new Dictionary<List<Line>, List<string>>();
+			//foreach (var line in lines)
+			//{
+			//	var r = _service.GetBlocksForLines(line, layouts);
+			//	if (r.Count > 0)
+			//		tempR.Add(line, r);
+			//}
+
 			//линии с светом 
-			Dictionary<List<Line>, List<bool>> tempR1 = new Dictionary<List<Line>, List<bool>>();
-			foreach (var line in lines)
-			{
-				var ledIs = new List<bool>();
-				foreach (var line2 in line)
-				{
-					var r = _service.CheckPointConnectToLed(line2, layouts);
-					ledIs.Add(r);
-				}
-				tempR1.Add(line, ledIs); 
-			} 
+			//Dictionary<List<Line>, List<bool>> tempR1 = new Dictionary<List<Line>, List<bool>>();
+			//foreach (var line in lines)
+			//{
+			//	var ledIs = new List<bool>();
+			//	foreach (var line2 in line)
+			//	{
+			//		var r = _service.CheckPointConnectToLed(line2, layouts);
+			//		ledIs.Add(r);
+			//	}
+			//	tempR1.Add(line, ledIs);
+			//}
+
+
+
+			//комнаты
 
 		}
 
