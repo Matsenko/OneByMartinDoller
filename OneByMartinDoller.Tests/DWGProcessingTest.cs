@@ -187,6 +187,7 @@ namespace OneByMartinDoller.Tests
 			}
 
 			//линии с светом 
+			Dictionary<List<Line>, List<bool>> tempR1 = new Dictionary<List<Line>, List<bool>>();
 			foreach (var line in lines)
 			{
 				var ledIs = new List<bool>();
@@ -195,7 +196,7 @@ namespace OneByMartinDoller.Tests
 					var r = _service.CheckPointConnectToLed(line2, layouts);
 					ledIs.Add(r);
 				}
-				tempR.Add(line, ledIs); 
+				tempR1.Add(line, ledIs); 
 			} 
 
 		}

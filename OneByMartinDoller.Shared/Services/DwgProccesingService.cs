@@ -227,14 +227,7 @@ namespace OneByMartinDoller.Shared.Services
 			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
 			return pBlockCountInRooms;
 		}
-
-		public List<DGWViewModel> ParseDoc(CadDocument document)
-		{
-			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity = GetlayEntiTypeEntity(doc);
-			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
-
-			return null;
-		}
+ 
 
 		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
 		{
