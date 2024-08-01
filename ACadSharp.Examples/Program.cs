@@ -483,11 +483,36 @@ namespace ACadSharp.Examples
 			return input;
 		}
 
+		public static bool IsPointInPolyline(XY point, LwPolyline polyline, int step)
+		{
+			return IsPointInPolyline(new XYZ(point.X,point.Y,0), polyline, step);
+		}
 
+		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline, int step)
+		{
+			XYZ xYZ1=new XYZ(point.X+step, point.Y+step,0);
+			XYZ xYZ2=new XYZ(point.X-step, point.Y-step,0);
 
+			XYZ xYZ3 = new XYZ(point.X + step, point.Y, 0);
+			XYZ xYZ4 = new XYZ(point.X, point.Y - step, 0);
 
+			var original = IsPointInPolyline(point, polyline);
+			if (original)
+				return original;
+			var bouthAdded=IsPointInPolyline(xYZ1 , polyline);
+			if(bouthAdded) return bouthAdded;
 
+			var bouthMinus=IsPointInPolyline(xYZ2 , polyline);
+			if(bouthMinus) return bouthMinus;
 
+			var xAdded=IsPointInPolyline(xYZ3 , polyline);
+			if (xAdded) return xAdded;
+
+			var yAdded=IsPointInPolyline (xYZ4 , polyline);
+			if (yAdded) return yAdded;
+
+			return false;
+		}
 
 		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline)
 		{

@@ -15,4 +15,8 @@
     <ProjectReference Include="..\ACadSharp\ACadSharp.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+
 </Project>

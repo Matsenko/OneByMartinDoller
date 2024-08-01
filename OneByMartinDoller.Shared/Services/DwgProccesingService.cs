@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using CSMath;
 using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
+using System.Drawing;
+using OneByMartinDoller.Shared.Model;
 
 namespace OneByMartinDoller.Shared.Services
 {
@@ -112,8 +114,17 @@ namespace OneByMartinDoller.Shared.Services
 							startBracketIndex = input.IndexOf('{');
 							closingBracketIndex = input.IndexOf('}');
 							semicolonIndex = input.IndexOf(';');
-							secondChar = input.Substring(0, startBracketIndex);
-							result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+							if (startBracketIndex < 0
+								|| closingBracketIndex < 0
+								|| semicolonIndex < 0)
+							{
+								result = input;
+							}
+							else
+							{ 
+								secondChar = input.Substring(0, startBracketIndex);
+								result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+							}
 						}
 						else
 						{
@@ -217,6 +228,13 @@ namespace OneByMartinDoller.Shared.Services
 			return pBlockCountInRooms;
 		}
 
+		public List<DGWViewModel> ParseDoc(CadDocument document)
+		{
+			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity = GetlayEntiTypeEntity(doc);
+			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
+
+			return null;
+		}
 
 		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
 		{
@@ -264,6 +282,31 @@ namespace OneByMartinDoller.Shared.Services
 			return result;
 		}
 
+		public bool CheckPointConnectToLed(Line line,
+			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		{
+
+			if (!layEntiTypeEntity.ContainsKey("E-LUM-LED"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			}
+
+
+			var leds = layEntiTypeEntity["E-LUM-LED"][ObjectType.LWPOLYLINE].OfType<LwPolyline>().ToList(); 
+
+			var item = leds.FirstOrDefault(b =>
+			CompareToPointsWithStep(line.StartPoint, b.Vertices[0].Location, 500)
+			|| CompareToPointsWithStep(line.EndPoint, b.Vertices[0].Location, 500));
+
+
+			if (item != null)
+			{
+				return true;
+			} 
+
+			return false;
+		}
+
 		public List<List<Line>> GetLinesListsFromsArcList(IEnumerable<Arc> arcList)
 		{
 			const double SPACE_BETWEEN_LINES = 0.05;
@@ -287,7 +330,6 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					var secondLine = lines[j];
 					if (
-
 						((CompareToPointsWithStep(mainLine.EndPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES)
 						&& !mainLine.Equals(secondLine))
 						|| (CompareToPointsWithStep(mainLine.StartPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
@@ -316,43 +358,6 @@ namespace OneByMartinDoller.Shared.Services
 			var temp=result.OrderBy(x=>x.Count);
 			return result;
 
-
-			//while(i<lines.Count())
-			//{
-			//	var line = lines[i];
-			//	var forwarLines = new List<Line>();
-			//	forwarLines.Add(line);
-
-			//	var stepLine = line;
-			//	foreach (var lineF in lines)
-			//	{
-			//		//if (stepLine.EndPoint.IsEqual(lineF.StartPoint))
-			//		if (CompareToPointsWithStep(stepLine.StartPoint, lineF.EndPoint, SPACE_BETWEEN_LINES)) 
-			//		{
-			//			forwarLines.Add(lineF);
-			//			stepLine = lineF;
-			//		}
-			//	}
-			//	//lines.RemoveAll(l=>forwarLines.Contains(l));
-
-			//	stepLine = line;
-			//	foreach (var lineF in lines)
-			//	{
-			//		//if (stepLine.StartPoint.IsEqual(lineF.EndPoint))
-			//		if (CompareToPointsWithStep(stepLine.EndPoint, lineF.StartPoint, SPACE_BETWEEN_LINES))
-			//		{
-			//			forwarLines.Add(lineF);
-			//			stepLine = lineF;
-			//		}
-			//	}
-			//	//lines.RemoveAll(l => forwarLines.Contains(l));
-			//	result.Add(forwarLines);
-			//	i++;
-			//}
-
-
-			//move back
-
 		}
 
 		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace )
@@ -363,6 +368,11 @@ namespace OneByMartinDoller.Shared.Services
 				return (point2.Y - allowedSpace < point1.Y) && (point1.Y < point2.Y + allowedSpace);
 			return result;
 
+		}
+
+		private static bool CompareToPointsWithStep(XYZ point1, XY point2, double allowedSpace)
+		{
+			return CompareToPointsWithStep(point1, new XYZ(point2.X, point2.Y, 0), allowedSpace);
 		}
 
 		public Line ArcToLine(Arc arc)
@@ -405,6 +415,74 @@ namespace OneByMartinDoller.Shared.Services
 			}
 
 			return layEntiTypeEntity;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="lines"> Grouped lines by polilines </param>
+		/// <param name="rectangles"></param>
+		/// <exception cref="NotImplementedException"></exception>
+		public Dictionary<LwPolyline, List<Line>> GetCuirtisWithRelations(List<List<Line>> lines, List<LwPolyline> rectangles)
+		{
+			Dictionary<LwPolyline, List<Line>> result = new Dictionary<LwPolyline, List<Line>>();
+
+			foreach(LwPolyline rect in rectangles)
+			{ 
+				foreach(var line in lines)
+				{
+					foreach (var l in line)
+					{
+						var b1 = ACadSharp.Examples.Program.IsPointInPolyline(l.StartPoint, rect,50);
+						var b2 = ACadSharp.Examples.Program.IsPointInPolyline(l.EndPoint, rect,50);
+						if (b1 || b2)
+						{
+							result.Add(rect, line);
+						}
+
+					}
+				}
+			}
+
+			return result;
+		}
+
+		public Dictionary<LwPolyline, Circuit> FillCuirc(List<LwPolyline> circRectangle, Dictionary<string, Dictionary<ObjectType, List<Entity>>> layouts)
+		{
+			var result = new Dictionary<LwPolyline, Circuit>();
+
+			if (!layouts.ContainsKey("P-BLOCK"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			} 
+			var pBlocks = layouts["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
+
+			foreach(var circ in circRectangle)
+			{
+				var circBlcocksItems = new List<MText>();
+				foreach (var block in pBlocks)
+				{
+					if(ACadSharp.Examples.Program.IsPointInPolyline(block.InsertPoint,circ))
+					{
+						circBlcocksItems.Add(block);
+					}
+				}
+				if(circBlcocksItems.Count > 1)
+				{
+					var t = circBlcocksItems
+						.OrderByDescending(x => x.InsertPoint.X)
+						.Select(t => ExtractLastValue(t.Value));
+
+					var item = new Circuit()
+					{
+						Name = t.FirstOrDefault(),
+						Cuirts = string.Join('+', t.Skip(1))
+					};
+					result.Add(circ, item);	
+				}
+			}
+
+			return result;
 		}
 	}
 }
