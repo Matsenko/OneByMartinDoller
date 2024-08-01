@@ -491,96 +491,60 @@ namespace OneByMartinDoller.Shared.Services
 			return result;
 		}
 
-		public List<List<Line>> GetLinesListsFromsArcList(IEnumerable<Arc> arcList)
+		public List<List<Line>> GetLinesListsFromArcList(IEnumerable<Arc> arcList)
 		{
 			const double SPACE_BETWEEN_LINES = 0.05;
-			
-			var result =new List<List<Line>>();
-			var lines = arcList.Select(x => ArcToLine(x)).ToList();
 
-			//move foward
-			int i = 0;
+			var result = new List<List<Line>>();
+			var lines = arcList.Select(ArcToLine).ToList();
 
-			while (i < lines.Count)
+			for (int i = 0; i < lines.Count; i++)
 			{
 				var mainLine = lines[i];
-				int j = 0;
 				var linesForMain = new List<Line>();
-				
-				if (!result.Any(x => x.Contains(mainLine)))
+
+				if (!IsLineInAnyGroup(result, mainLine))
+				{
 					linesForMain.Add(mainLine);
 
-				while (j < lines.Count)
-				{
-					var secondLine = lines[j];
-					if (
-
-						((CompareToPointsWithStep(mainLine.EndPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES)
-						&& !mainLine.Equals(secondLine))
-						|| (CompareToPointsWithStep(mainLine.StartPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
-						&& !mainLine.Equals(secondLine))
-						|| CompareToPointsWithStep(mainLine.EndPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
-						|| CompareToPointsWithStep(mainLine.StartPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES))
-						&& !linesForMain.Contains(secondLine))
+					for (int j = 0; j < lines.Count; j++)
 					{
-						if (!result.Any(x => x.Contains(secondLine)))
+						var secondLine = lines[j];
+
+						if (AreLinesClose(mainLine, secondLine, SPACE_BETWEEN_LINES) && !linesForMain.Contains(secondLine))
 						{
-							linesForMain.Add(secondLine);
-							mainLine = secondLine;
-							j = 0;
+							if (!IsLineInAnyGroup(result, secondLine))
+							{
+								linesForMain.Add(secondLine);
+								mainLine = secondLine;
+								j = -1; // reset inner loop to re-check all lines
+							}
 						}
 					}
-					j++;
+
+					if (linesForMain.Count > 0)
+					{
+						result.Add(linesForMain);
+					}
 				}
-				if(linesForMain.Count > 0)
-				{
-					result.Add(linesForMain);
-				}
-				i++;
 			}
 
-			var itemCount=result.Sum(x=>x.Count);
-			var temp=result.OrderBy(x=>x.Count);
 			return result;
-
-
-			//while(i<lines.Count())
-			//{
-			//	var line = lines[i];
-			//	var forwarLines = new List<Line>();
-			//	forwarLines.Add(line);
-
-			//	var stepLine = line;
-			//	foreach (var lineF in lines)
-			//	{
-			//		//if (stepLine.EndPoint.IsEqual(lineF.StartPoint))
-			//		if (CompareToPointsWithStep(stepLine.StartPoint, lineF.EndPoint, SPACE_BETWEEN_LINES)) 
-			//		{
-			//			forwarLines.Add(lineF);
-			//			stepLine = lineF;
-			//		}
-			//	}
-			//	//lines.RemoveAll(l=>forwarLines.Contains(l));
-
-			//	stepLine = line;
-			//	foreach (var lineF in lines)
-			//	{
-			//		//if (stepLine.StartPoint.IsEqual(lineF.EndPoint))
-			//		if (CompareToPointsWithStep(stepLine.EndPoint, lineF.StartPoint, SPACE_BETWEEN_LINES))
-			//		{
-			//			forwarLines.Add(lineF);
-			//			stepLine = lineF;
-			//		}
-			//	}
-			//	//lines.RemoveAll(l => forwarLines.Contains(l));
-			//	result.Add(forwarLines);
-			//	i++;
-			//}
-
-
-			//move back
-
 		}
+
+		private bool AreLinesClose(Line line1, Line line2, double threshold)
+		{
+			return (CompareToPointsWithStep(line1.EndPoint, line2.EndPoint, threshold) && !line1.Equals(line2)) ||
+				   (CompareToPointsWithStep(line1.StartPoint, line2.StartPoint, threshold) && !line1.Equals(line2)) ||
+				   CompareToPointsWithStep(line1.EndPoint, line2.StartPoint, threshold) ||
+				   CompareToPointsWithStep(line1.StartPoint, line2.EndPoint, threshold);
+		}
+
+		private bool IsLineInAnyGroup(List<List<Line>> groups, Line line)
+		{
+			return groups.Any(group => group.Contains(line));
+		}
+
 
 		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace )
 		{
