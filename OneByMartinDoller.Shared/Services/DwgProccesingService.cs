@@ -275,6 +275,7 @@ namespace OneByMartinDoller.Shared.Services
 							room.Key.Circuits = new List<Circuit>();
 						}
 						room.Key.Circuits.Add(item.Value);
+						break;	
 					}
 				}
 
@@ -349,8 +350,8 @@ namespace OneByMartinDoller.Shared.Services
 			foreach (var line in lines)
 			{
 				var item = endLine.FirstOrDefault(b =>
-			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 20)
-			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 20));
+			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50)
+			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
 				if (item != null)
 				{
 					var name = ExtractLastValue(item.Block.Name);
