@@ -341,12 +341,14 @@ namespace OneByMartinDoller.Shared.Services
 				.Value
 				.OfType<Insert>() 
 				.ToList();
-			var endLine1 = layEntiTypeEntity["E-LUM-FLMP"]
-				.First()
-				.Value
-				.OfType<Insert>()
-				.ToList();
-			endLine.AddRange(endLine1); 
+			//var endLine1 = layEntiTypeEntity["E-LUM-FLMP"]
+			//	.First()
+			//	.Value
+			//	.OfType<Insert>()
+			//	.ToList();
+
+
+			//endLine.AddRange(endLine1); 
 			foreach (var line in lines)
 			{
 				var item = endLine.FirstOrDefault(b =>
@@ -359,23 +361,29 @@ namespace OneByMartinDoller.Shared.Services
 				}
 				else
 				{
-					var light = endLine1.FirstOrDefault(b =>
-			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 100)
-			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 100));
-					if (light != null)
+					var item1=pBlocks.OrderBy(p=>GetDistance(line.StartPoint,p.InsertPoint)).FirstOrDefault();
+					if(item1 != null)
 					{
-						//сейчас это если про свет.
-						var item2 = pBlocks.FirstOrDefault(b =>
-						CompareToPointsWithStep(b.InsertPoint, light.InsertPoint, 200)
-						|| CompareToPointsWithStep(b.InsertPoint, light.InsertPoint, 200));
-						if (item != null)
-						{
-							result.Add(ExtractLastValue(item2.Value));
-						}
+						result.Add(ExtractLastValue(item1.Value));
+					}	
+					//var item2= pBlocks.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
+					//var item3 = pBlocks.OrderBy(p => GetDistance(line.EndPoint, new XYZ(p.InsertPoint.X+p.RectangleWidth,p.InsertPoint.Y,0))).FirstOrDefault();
+					//var item4 = pBlocks.OrderBy(p => GetDistance(line.EndPoint,  new XYZ(p.InsertPoint.X+p.RectangleWidth,p.InsertPoint.Y,0))).FirstOrDefault();
 
-						 
-					}
-					
+					//var closerPoint12= GetDistance(line.StartPoint, item1.InsertPoint) < GetDistance(line.EndPoint, item2.InsertPoint)
+					//	?item1 : item2;
+					//var closerPoint23= GetDistance(line.StartPoint, item3.InsertPoint) < GetDistance(line.EndPoint, item4.InsertPoint)
+					//	? item3 : item4;
+
+					//if (GetDistance(line.StartPoint, closerPoint12.InsertPoint)<GetDistance(line.EndPoint, closerPoint23.InsertPoint))
+					//{
+					//	result.Add(ExtractLastValue(closerPoint12.Value));
+					//}
+					//else
+					//{
+					//	result.Add(ExtractLastValue(closerPoint23.Value));
+					//} 
+
 				}
 
 				//var item = pBlocks.FirstOrDefault(b =>
@@ -393,6 +401,12 @@ namespace OneByMartinDoller.Shared.Services
 
 			return result;
 		}
+
+		static double GetDistance(XYZ point1, XYZ point2)
+		{
+			return Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
+		}
+
 
 		public bool CheckPointConnectToLed(Line line,
 			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)

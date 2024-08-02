@@ -193,7 +193,7 @@ namespace OneByMartinDoller.Tests
 			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.Cuirts.ToUpper()== "GF.A4"));
 			Assert.AreEqual(3, zoomRoom.Circuits.Sum(c=>c.CuirtsItems.Sum(x=>x.Value)));
 			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.CuirtsItems.ContainsKey("A1") && c.CuirtsItems["A1"]==2));
-			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.CuirtsItems.ContainsKey("2L") && c.CuirtsItems["2L"]==1));
+			Assert.IsTrue(zoomRoom.Circuits.Any(c=>c.CuirtsItems.ContainsKey("LJ") && c.CuirtsItems["LJ"]==1));
 			 
 
 			#endregion
@@ -212,7 +212,7 @@ namespace OneByMartinDoller.Tests
 			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("GB1") && c.CuirtsItems["GB1"] == 6));
 			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("BX1") && c.CuirtsItems["BX1"] == 3));
 			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("FX1") && c.CuirtsItems["FX1"] == 4));
-			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("3LX") && c.CuirtsItems["3LX"] == 1)); 
+			Assert.IsTrue(exterior.Circuits.Any(c => c.CuirtsItems.ContainsKey("LCX") && c.CuirtsItems["LCX"] == 1)); 
 
 			#endregion
 
@@ -223,7 +223,7 @@ namespace OneByMartinDoller.Tests
 			Assert.IsTrue(boardroom.Circuits.Any(c => c.Cuirts.ToUpper() == "FF.A2"));
 			Assert.IsTrue(boardroom.Circuits.Any(c => c.Cuirts.ToUpper() == "FF.A1"));
 			Assert.AreEqual(8, boardroom.Circuits.Sum(c => c.CuirtsItems.Sum(x => x.Value)));
-			Assert.IsTrue(boardroom.Circuits.Any(c => c.CuirtsItems.ContainsKey("2L") && c.CuirtsItems["2L"] == 1));
+			Assert.IsTrue(boardroom.Circuits.Any(c => c.CuirtsItems.ContainsKey("LJ") && c.CuirtsItems["LJ"] == 1));
 			Assert.IsTrue(boardroom.Circuits.Any(c => c.CuirtsItems.ContainsKey("A1") && c.CuirtsItems["A1"] == 5));
 			Assert.IsTrue(boardroom.Circuits.Any(c => c.CuirtsItems.ContainsKey("W1") && c.CuirtsItems["W1"] == 2)); 
 
@@ -238,7 +238,7 @@ namespace OneByMartinDoller.Tests
 			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.Cuirts.ToUpper() == "GF.B3"));
 			Assert.AreEqual(11, exhibitionRoom.Circuits.Sum(c => c.CuirtsItems.Sum(x => x.Value)));
 			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.CuirtsItems.ContainsKey("A1") && c.CuirtsItems["A1"] == 7));
-			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.CuirtsItems.ContainsKey("1L") && c.CuirtsItems["1L"] == 2));
+			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.CuirtsItems.ContainsKey("LC") && c.CuirtsItems["LC"] == 2));
 			Assert.IsTrue(exhibitionRoom.Circuits.Any(c => c.CuirtsItems.ContainsKey("B1") && c.CuirtsItems["B1"] == 2)); 
 
 			#endregion
