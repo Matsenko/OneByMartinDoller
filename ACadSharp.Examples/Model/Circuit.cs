@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ACadSharp.Examples.Model;
+using System.Collections.Generic;
 
 namespace OneByMartinDoller.Shared.Model
 {
@@ -7,6 +8,6 @@ namespace OneByMartinDoller.Shared.Model
 		public string Name { get; set; }
 		public string Cuirts { get; set; }
 
-		public Dictionary<string, int> CuirtsItems { get; set; }
+		public Dictionary<BlockItem, int> CuirtsItems { get; set; }
 	}
 }

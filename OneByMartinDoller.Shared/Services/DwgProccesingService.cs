@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Drawing;
 using OneByMartinDoller.Shared.Model;
+using ACadSharp.Blocks;
+using ACadSharp.Examples.Model;
 
 namespace OneByMartinDoller.Shared.Services
 {
@@ -259,7 +261,7 @@ namespace OneByMartinDoller.Shared.Services
 
 				if (item.Value.CuirtsItems == null)
 				{
-					item.Value.CuirtsItems = new Dictionary<string, int>();
+					item.Value.CuirtsItems = new Dictionary<BlockItem, int>();
 				}
 
 				foreach (var room in rooms)
@@ -324,10 +326,10 @@ namespace OneByMartinDoller.Shared.Services
 			return null;
 		}
 
-		public List<string> GetBlocksForLines(List<Line> lines,
+		public List<BlockItem> GetBlocksForLines(List<Line> lines,
 			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
-			var result = new List<string>();
+			var result = new List<BlockItem>();
 
 			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
 			{
@@ -341,11 +343,11 @@ namespace OneByMartinDoller.Shared.Services
 				.Value
 				.OfType<Insert>() 
 				.ToList();
-			//var endLine1 = layEntiTypeEntity["E-LUM-FLMP"]
-			//	.First()
-			//	.Value
-			//	.OfType<Insert>()
-			//	.ToList();
+			var ledItems = layEntiTypeEntity["E-LUM-FLMP"]
+				.First()
+				.Value
+				.OfType<Insert>()
+				.ToList();
 
 
 			//endLine.AddRange(endLine1); 
@@ -357,14 +359,22 @@ namespace OneByMartinDoller.Shared.Services
 				if (item != null)
 				{
 					var name = ExtractLastValue(item.Block.Name);
-					result.Add(name);
+					result.Add(new BlockItem { MainBlock=name, SubBlock=string.Empty});
 				}
 				else
 				{
-					var item1=pBlocks.OrderBy(p=>GetDistance(line.StartPoint,p.InsertPoint)).FirstOrDefault();
-					if(item1 != null)
+					var mainBlockName=pBlocks.OrderBy(p=>GetDistance(line.StartPoint,p.InsertPoint)).FirstOrDefault();
+					if(mainBlockName != null)
 					{
-						result.Add(ExtractLastValue(item1.Value));
+						var ledName= ledItems.FirstOrDefault(b =>
+			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50)
+			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
+						if(mainBlockName!=null)
+						{
+							var mainBlock = ExtractLastValue(mainBlockName.Value);
+							var ledBlock = ledName==null?string.Empty:ledName.Block.Name;
+							result.Add(new BlockItem { MainBlock=mainBlock, SubBlock=ledBlock});
+						}
 					}	
 					//var item2= pBlocks.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
 					//var item3 = pBlocks.OrderBy(p => GetDistance(line.EndPoint, new XYZ(p.InsertPoint.X+p.RectangleWidth,p.InsertPoint.Y,0))).FirstOrDefault();

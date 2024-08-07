@@ -81,43 +81,7 @@ namespace WebApplication1.Controllers
 								modelView.Add(room.FloorType, new List<DGWViewModel>());
 							modelView[room.FloorType].Add(room);
 						}
-
-
 						return View("ProcessDwgFile", modelView);
-						//foreach (var room in processingResult)
-						//{
-						//	var cleanedKey = _dwgProccessingService.ExtractLastValue(room.Key);
-						//	var cleanedValue = new Dictionary<string, int>();
-
-						//	foreach (var pBlock in room.Value)
-						//	{
-						//		var cleanedPBlockKey = _dwgProccessingService.ExtractLastValue(pBlock.Key);
-
-
-						//		if (cleanedValue.TryGetValue(cleanedPBlockKey, out int existingValue))
-						//		{
-						//			cleanedValue[cleanedPBlockKey] = existingValue + pBlock.Value; 
-						//		}
-						//		else
-						//		{
-						//			cleanedValue[cleanedPBlockKey] = pBlock.Value;
-						//		}
-						//	}
-
-						//	var viewModel = new DwgProcessingModel
-						//	{
-						//		RoomName = room.Key,
-						//		PBlocks = cleanedValue
-						//	};
-
-						//	viewModelList.Add(viewModel);
-						//}
-
-						// Assuming _googleSheetInit is properly initialized somewhere in your class
-						//_googleSheetInit._processingModels = viewModelList;
-						//_googleSheetInit.WriteToGoogleSheet();
-
-
 					}
 				}
 				catch (Exception ex)
