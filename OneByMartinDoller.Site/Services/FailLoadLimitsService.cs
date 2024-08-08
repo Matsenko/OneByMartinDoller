@@ -12,9 +12,6 @@ namespace OneByMartinDoller.Site.Services
 		public int _availableUploadFileCount = 5;
 		public int AvaliableUploadFileCount => _availableUploadFileCount;
 
-<<<<<<< HEAD
-		public int AvaliableUploadFileCount = 7;
-=======
 		public int AmountOfUpLoadFiles
 		{
 			get
@@ -24,7 +21,6 @@ namespace OneByMartinDoller.Site.Services
 		}
 
 		public bool CanUploadFile => AmountOfUpLoadFiles < AvaliableUploadFileCount;
->>>>>>> GoogleSheet
 
 		public FailLoadLimits()
 		{
@@ -73,7 +69,7 @@ namespace OneByMartinDoller.Site.Services
 			{
 				Console.WriteLine($"Error reading file: {ex.Message}");
 			}
-			return 0; 
+			return 0;
 		}
 
 		public void WriteAmountOfUpLoadFiles(int amount)
