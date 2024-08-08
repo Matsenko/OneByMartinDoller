@@ -1,4 +1,5 @@
-﻿@model List<OneByMartinDoller.GoogleSheet.Shared.DwgProcessingModel>
+﻿@using OneByMartinDoller.Shared.Model;
+@model Dictionary<FloorTypes, List<DGWViewModel>>
 
 @{
     string spreadSheetId = ViewBag.SpreadSheetId as string;
@@ -8,37 +9,43 @@
     <a href="@googleSheetUrl" target="_blank">Open Google Sheet </a>
 </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Room Name</th>
-            <th>P-Block</th>
-            <th>Count</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+@foreach (var entry in Model)
+{
+    <h2>@entry.Key</h2> <!-- Display the floor type -->
+    <ul>
+        @foreach (var room in entry.Value)
         {
-            <tr>
-                <td>@item.RoomName</td>
-                <td>
-                    <ul>
-                        @foreach (var pBlock in item.PBlocks)
+            <li>
+                <h3>@room.RoomName</h3>
+                <p>Floor Type: @room.FloorType</p> 
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cuirts</th>
+                            <th>Name</th>                            
+                            <th>Cuirt Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var circuit in room.Circuits)
                         {
-                            <li>@pBlock.Key</li>
+                            <tr>
+                                <td>@circuit.Cuirts</td>
+                                <td>@circuit.Name</td> 
+                                <td>
+                                    <ul>
+                                        @foreach (var item in circuit.CuirtsItems)
+                                        {
+                                            <li>@item.Key: @item.Value</li>
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
                         }
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        @foreach (var pBlock in item.PBlocks)
-                        {
-                            <li>@pBlock.Value</li>
-                        }
-                    </ul>
-                </td>
-            </tr>
+                    </tbody>
+                </table>
+            </li>
         }
-    </tbody>
-</table>
+    </ul>
+}
 

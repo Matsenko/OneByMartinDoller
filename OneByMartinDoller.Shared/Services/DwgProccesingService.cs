@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 using CSMath;
 using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
+using System.Drawing;
 using OneByMartinDoller.Shared.Model;
+using ACadSharp.Blocks;
+using ACadSharp.Examples.Model;
 
 namespace OneByMartinDoller.Shared.Services
 {
@@ -110,17 +113,19 @@ namespace OneByMartinDoller.Shared.Services
 						input = input.Remove(0, closingBracketIndex + 1);
 						if (input.Length > 1)
 						{
-							if (input.Contains("{") && input.Contains("}") && input.Contains(";"))
-							{
-								startBracketIndex = input.IndexOf('{');
-								closingBracketIndex = input.IndexOf('}');
-								semicolonIndex = input.IndexOf(';');
-								secondChar = input.Substring(0, startBracketIndex);
-								result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
-							}
-							else
+							startBracketIndex = input.IndexOf('{');
+							closingBracketIndex = input.IndexOf('}');
+							semicolonIndex = input.IndexOf(';');
+							if (startBracketIndex < 0
+								|| closingBracketIndex < 0
+								|| semicolonIndex < 0)
 							{
 								result = input;
+							}
+							else
+							{ 
+								secondChar = input.Substring(0, startBracketIndex);
+								result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
 							}
 						}
 						else
@@ -220,236 +225,91 @@ namespace OneByMartinDoller.Shared.Services
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc)
 		{
 			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity = GetlayEntiTypeEntity(doc);
-			var roomVertices = GetRoomVertices(layEntiTypeEntity);
-			var pBlockCountInRooms = CountPBlockInRooms(layEntiTypeEntity, roomVertices);
+			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
+			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
 			return pBlockCountInRooms;
 		}
-		public  Dictionary<DGWViewModel, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
-		{
-			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
 
-			var polygons = layEntiTypeEntity.ContainsKey("0-CountArea")
-							? layEntiTypeEntity["0-CountArea"].Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
-							: new List<LwPolyline>();
+		public List<DGWViewModel> ParseDGW(CadDocument doc)
+		{ 
+			var layouts = GetlayEntiTypeEntity(doc);
+			var circLayout = layouts["E-LUM-CIRC"];
+			var rectangles = circLayout[ObjectType.LWPOLYLINE]
+				.Select(x => x as LwPolyline)
+				.ToList();
 
-			var labels = new List<MText>();
-			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
+			var arcList = circLayout[ObjectType.ARC].Select(x => x as Arc).ToList();
+
+			//преобразовуем arc в линии
+			var lines = GetLinesListsFromsArcList(arcList);
+
+			//ключ это квадратик, значения это линии 
+			var squarLines = GetCuirtisWithRelations(lines, rectangles);
+
+			//Квадратики заполненные  
+			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);
+			var rooms = ACadSharp.Examples.Program.GetRoomVertices(layouts);
+
+			rooms = rooms
+				.OrderBy(l => CalculateArea(l.Value))
+				.ToDictionary(entry => entry.Key, entry => entry.Value);
+
+			foreach (var item in cuirtises)
 			{
-				var groundFloor = layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
-				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
-				{
-					result.Add(item.Key, item.Value);
-				};
-			}
-			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
-			{
-				var firstFloor = layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
-				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
-				{
-					result.Add(item.Key, item.Value);
-				};
-			}
+				var linesForSquar = squarLines[item.Key];
+				var blocks = GetBlocksForLines(linesForSquar, layouts);
 
-
-			return result;
-		}
-
-		private  Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis(List<LwPolyline> polygons, IEnumerable<MText> labels, FloorTypes floorType)
-		{
-			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
-			foreach (var label in labels)
-			{
-				label.Value = CleanRoomName(label.Value);
-				var labelPoint = label.InsertPoint;
-				foreach (var polygon in polygons)
+				if (item.Value.CuirtsItems == null)
 				{
-					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.RectangleWidth / 2), labelPoint.Y, labelPoint.Z), polygon))
-					{
-						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices);
-						break;
-					}
+					item.Value.CuirtsItems = new Dictionary<BlockItem, int>();
 				}
 
-			}
-			return result;
-		}
-
-		public  Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
-	Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
-	Dictionary<DGWViewModel, List<LwPolyline.Vertex>> roomVertices)
-		{
-			var result = new Dictionary<string, Dictionary<string, int>>();
-
-
-			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
-			{
-				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
-			}
-
-
-			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
-
-			var outRooms = new List<MText>();
-			foreach (var pBlock in pBlocks)
-			{
-				var pBlockPoint = pBlock.InsertPoint;
-				var isInRoom = false;
-
-
-				foreach (var room in roomVertices)
+				foreach (var room in rooms)
 				{
 					var roomName = room.Key.RoomName;
 					var vertices = room.Value;
 
-					if (IsPointInPolyline(pBlockPoint, new LwPolyline { Vertices = vertices }))
+					if (ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].StartPoint, new LwPolyline { Vertices = vertices })
+						|| ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].EndPoint, new LwPolyline { Vertices = vertices }))
 					{
-						isInRoom = true;
-						if (!result.ContainsKey(roomName))
+						if (room.Key.Circuits == null)
 						{
-							result[roomName] = new Dictionary<string, int>();
+							room.Key.Circuits = new List<Circuit>();
 						}
-
-						var pBlockValue = pBlock.Value;
-
-						if (result[roomName].ContainsKey(pBlockValue))
-						{
-							result[roomName][pBlockValue]++;
-						}
-						else
-						{
-							result[roomName][pBlockValue] = 1;
-						}
-						break;
+						room.Key.Circuits.Add(item.Value);
+						break;	
 					}
 				}
 
-				if (!isInRoom)
+				foreach (var block in blocks)
 				{
-					outRooms.Add(pBlock);
+					if (!item.Value.CuirtsItems.ContainsKey(block))
+						item.Value.CuirtsItems.Add(block, 0);
+					item.Value.CuirtsItems[block]++;
 				}
+
 			}
 
-			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
-			{
-				var lumCircEntities = layEntiTypeEntity["E-LUM-CIRC"];
-				foreach (var outRoom in outRooms)
-				{
-					var pBlockValue = outRoom.Value;
-					var point = outRoom.InsertPoint;
-					LwPolyline containingRectangle = null;
-
-
-					foreach (var entity in lumCircEntities.Values.ElementAt(1))
-					{
-						if (entity is LwPolyline rectangle && IsPointInPolyline(point, rectangle))
-						{
-							containingRectangle = rectangle;
-							break;
-						}
-					}
-
-					if (containingRectangle != null)
-					{
-
-						foreach (var entity in lumCircEntities.Values.ElementAt(0))
-						{
-							if (entity is Line line)
-							{
-
-								var startPoint = new CSMath.XYZ(line.StartPoint.X, line.StartPoint.Y, line.StartPoint.Z);
-								var endPoint = new CSMath.XYZ(line.EndPoint.X, line.EndPoint.Y, line.EndPoint.Z);
-
-								foreach (var room in roomVertices)
-								{
-									var roomName = room.Key.RoomName;
-									var vertices = room.Value;
-
-									if (IsPointInPolyline(startPoint, new LwPolyline { Vertices = vertices }) ||
-										IsPointInPolyline(endPoint, new LwPolyline { Vertices = vertices }))
-									{
-										if (!result.ContainsKey(roomName))
-										{
-											result[roomName] = new Dictionary<string, int>();
-										}
-
-										if (result[roomName].ContainsKey(pBlockValue))
-										{
-											result[roomName][pBlockValue]++;
-										}
-										else
-										{
-											result[roomName][pBlockValue] = 1;
-										}
-
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			return result;
+			return rooms.Keys.ToList();
 		}
 
-		public bool IsPointInPolyline(XYZ point, LwPolyline polyline)
+		public static double CalculateArea(List<LwPolyline.Vertex> vertices)
 		{
-			var vertices = polyline.Vertices;
-			bool isInside = false;
-
-			double xMin = vertices.Min(v => v.Location.X);
-			double xMax = vertices.Max(v => v.Location.X);
-			double yMin = vertices.Min(v => v.Location.Y);
-			double yMax = vertices.Max(v => v.Location.Y);
-
-
-
-			if (point.X < xMin || point.X > xMax || point.Y < yMin || point.Y > yMax)
+			if (vertices.Count != 4)
 			{
-
-				return false;
+				throw new ArgumentException("Exactly 4 points are required.");
 			}
 
-			for (int i = 0, j = vertices.Count - 1; i < vertices.Count; j = i++)
+			double area = 0;
+			for (int i = 0; i < vertices.Count; i++)
 			{
-				var xi = vertices[i].Location.X;
-				var yi = vertices[i].Location.Y;
-				var xj = vertices[j].Location.X;
-				var yj = vertices[j].Location.Y;
-
-
-
-				if ((yi > point.Y) != (yj > point.Y) && (point.X < (xj - xi) * (point.Y - yi) / (yj - yi) + xi))
-				{
-					isInside = !isInside;
-				}
+				int nextIndex = (i + 1) % vertices.Count;
+				area += vertices[i].Location.X * vertices[nextIndex].Location.Y;
+				area -= vertices[i].Location.Y * vertices[nextIndex].Location.X;
 			}
 
-			return isInside;
-		}
-		public  int EnterInRoomIndexes(List<List<LwPolyline.Vertex>> vertexs, CSMath.XYZ point)
-		{
-			int result = -1;
-			for (int i = 0; i < vertexs.Count; i++)
-			{
-				var xMin = vertexs[i].Min(x => x.Location.X);
-				var xMax = vertexs[i].Max(x => x.Location.X);
-				var yMin = vertexs[i].Min(x => x.Location.Y);
-				var yMax = vertexs[i].Max(x => x.Location.Y);
-
-
-				if (xMin <= point.X
-					&& xMax >= point.X
-					&& yMin <= point.Y
-					&& yMax >= point.Y)
-				{
-					result = i;
-					break;
-				}
-			}
-
-			return result;
+			area = Math.Abs(area) / 2.0;
+			return area;
 		}
 
 		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
@@ -466,10 +326,10 @@ namespace OneByMartinDoller.Shared.Services
 			return null;
 		}
 
-		public List<string> GetBlocksForLines(List<Line> lines,
+		public List<BlockItem> GetBlocksForLines(List<Line> lines,
 			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
-			var result = new List<string>();
+			var result = new List<BlockItem>();
 
 			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
 			{
@@ -478,80 +338,163 @@ namespace OneByMartinDoller.Shared.Services
 
 
 			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
+			var endLine = layEntiTypeEntity["E-LUM-GFIT"]
+				.First()
+				.Value
+				.OfType<Insert>() 
+				.ToList();
+			var ledItems = layEntiTypeEntity["E-LUM-FLMP"]
+				.First()
+				.Value
+				.OfType<Insert>()
+				.ToList();
 
-			foreach(var line in lines)
+
+			//endLine.AddRange(endLine1); 
+			foreach (var line in lines)
 			{
-				var item = pBlocks.FirstOrDefault(b =>
-				CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 700)
-				|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 700));
+				var item = endLine.FirstOrDefault(b =>
+			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50)
+			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
 				if (item != null)
 				{
-					result.Add(ExtractLastValue(item.Value));
+					var name = ExtractLastValue(item.Block.Name);
+					result.Add(new BlockItem { MainBlock=name, SubBlock=string.Empty});
 				}
 				else
 				{
-					var inserPoint=pBlocks.Select(x=>x.InsertPoint).OrderBy(p=>p.X).ToList();
-					 
+					var mainBlockName=pBlocks.OrderBy(p=>GetDistance(line.StartPoint,p.InsertPoint)).FirstOrDefault();
+					if(mainBlockName != null)
+					{
+						var ledName= ledItems.FirstOrDefault(b =>
+			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50)
+			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
+						if(mainBlockName!=null)
+						{
+							var mainBlock = ExtractLastValue(mainBlockName.Value);
+							var ledBlock = ledName==null?string.Empty:ledName.Block.Name;
+							result.Add(new BlockItem { MainBlock=mainBlock, SubBlock=ledBlock});
+						}
+					}	
+					//var item2= pBlocks.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
+					//var item3 = pBlocks.OrderBy(p => GetDistance(line.EndPoint, new XYZ(p.InsertPoint.X+p.RectangleWidth,p.InsertPoint.Y,0))).FirstOrDefault();
+					//var item4 = pBlocks.OrderBy(p => GetDistance(line.EndPoint,  new XYZ(p.InsertPoint.X+p.RectangleWidth,p.InsertPoint.Y,0))).FirstOrDefault();
+
+					//var closerPoint12= GetDistance(line.StartPoint, item1.InsertPoint) < GetDistance(line.EndPoint, item2.InsertPoint)
+					//	?item1 : item2;
+					//var closerPoint23= GetDistance(line.StartPoint, item3.InsertPoint) < GetDistance(line.EndPoint, item4.InsertPoint)
+					//	? item3 : item4;
+
+					//if (GetDistance(line.StartPoint, closerPoint12.InsertPoint)<GetDistance(line.EndPoint, closerPoint23.InsertPoint))
+					//{
+					//	result.Add(ExtractLastValue(closerPoint12.Value));
+					//}
+					//else
+					//{
+					//	result.Add(ExtractLastValue(closerPoint23.Value));
+					//} 
+
 				}
+
+				//var item = pBlocks.FirstOrDefault(b =>
+				//CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 20)
+				//|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 20));
+				//if (item != null)
+				//{
+				//	result.Add(ExtractLastValue(item.Value));
+				//}
+				//else
+				//{
+				//	var inserPoint=pBlocks.Select(x=>x.InsertPoint).OrderBy(p=>p.X).ToList();
+				//}
 			}
 
 			return result;
 		}
 
-		public List<List<Line>> GetLinesListsFromArcList(IEnumerable<Arc> arcList)
+		static double GetDistance(XYZ point1, XYZ point2)
+		{
+			return Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
+		}
+
+
+		public bool CheckPointConnectToLed(Line line,
+			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		{
+
+			if (!layEntiTypeEntity.ContainsKey("E-LUM-LED"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			}
+
+
+			var leds = layEntiTypeEntity["E-LUM-LED"][ObjectType.LWPOLYLINE].OfType<LwPolyline>().ToList(); 
+
+			var item = leds.FirstOrDefault(b =>
+			CompareToPointsWithStep(line.StartPoint, b.Vertices[0].Location, 500)
+			|| CompareToPointsWithStep(line.EndPoint, b.Vertices[0].Location, 500));
+
+
+			if (item != null)
+			{
+				return true;
+			} 
+
+			return false;
+		}
+
+		public List<List<Line>> GetLinesListsFromsArcList(IEnumerable<Arc> arcList)
 		{
 			const double SPACE_BETWEEN_LINES = 0.05;
+			
+			var result =new List<List<Line>>();
+			var lines = arcList.Select(x => ArcToLine(x)).ToList();
 
-			var result = new List<List<Line>>();
-			var lines = arcList.Select(ArcToLine).ToList();
+			//move foward
+			int i = 0;
 
-			for (int i = 0; i < lines.Count; i++)
+			while (i < lines.Count)
 			{
 				var mainLine = lines[i];
+				int j = 0;
 				var linesForMain = new List<Line>();
-
-				if (!IsLineInAnyGroup(result, mainLine))
-				{
+				
+				if (!result.Any(x => x.Contains(mainLine)))
 					linesForMain.Add(mainLine);
 
-					for (int j = 0; j < lines.Count; j++)
+				while (j < lines.Count)
+				{
+					var secondLine = lines[j];
+					if (
+						((CompareToPointsWithStep(mainLine.EndPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES)
+						&& !mainLine.Equals(secondLine))
+						|| (CompareToPointsWithStep(mainLine.StartPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
+						&& !mainLine.Equals(secondLine))
+						|| CompareToPointsWithStep(mainLine.EndPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
+						|| CompareToPointsWithStep(mainLine.StartPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES))
+						&& !linesForMain.Contains(secondLine))
 					{
-						var secondLine = lines[j];
-
-						if (AreLinesClose(mainLine, secondLine, SPACE_BETWEEN_LINES) && !linesForMain.Contains(secondLine))
+						if (!result.Any(x => x.Contains(secondLine)))
 						{
-							if (!IsLineInAnyGroup(result, secondLine))
-							{
-								linesForMain.Add(secondLine);
-								mainLine = secondLine;
-								j = -1; // reset inner loop to re-check all lines
-							}
+							linesForMain.Add(secondLine);
+							mainLine = secondLine;
+							j = 0;
 						}
 					}
-
-					if (linesForMain.Count > 0)
-					{
-						result.Add(linesForMain);
-					}
+					j++;
 				}
+				if(linesForMain.Count > 0)
+				{
+					result.Add(linesForMain);
+				}
+				i++;
 			}
 
+			var itemCount=result.Sum(x=>x.Count);
+			var temp=result.OrderBy(x=>x.Count);
 			return result;
-		}
 
-		private bool AreLinesClose(Line line1, Line line2, double threshold)
-		{
-			return (CompareToPointsWithStep(line1.EndPoint, line2.EndPoint, threshold) && !line1.Equals(line2)) ||
-				   (CompareToPointsWithStep(line1.StartPoint, line2.StartPoint, threshold) && !line1.Equals(line2)) ||
-				   CompareToPointsWithStep(line1.EndPoint, line2.StartPoint, threshold) ||
-				   CompareToPointsWithStep(line1.StartPoint, line2.EndPoint, threshold);
 		}
-
-		private bool IsLineInAnyGroup(List<List<Line>> groups, Line line)
-		{
-			return groups.Any(group => group.Contains(line));
-		}
-
 
 		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace )
 		{
@@ -561,6 +504,11 @@ namespace OneByMartinDoller.Shared.Services
 				return (point2.Y - allowedSpace < point1.Y) && (point1.Y < point2.Y + allowedSpace);
 			return result;
 
+		}
+
+		private static bool CompareToPointsWithStep(XYZ point1, XY point2, double allowedSpace)
+		{
+			return CompareToPointsWithStep(point1, new XYZ(point2.X, point2.Y, 0), allowedSpace);
 		}
 
 		public Line ArcToLine(Arc arc)
@@ -574,6 +522,7 @@ namespace OneByMartinDoller.Shared.Services
 			endPoint.Y = arc.Center.Y + arc.Radius * (Math.Sin(arc.EndAngle));
 			return new Line(startPoint, endPoint);
 		}
+
 
 
 
@@ -602,6 +551,75 @@ namespace OneByMartinDoller.Shared.Services
 			}
 
 			return layEntiTypeEntity;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="lines"> Grouped lines by polilines </param>
+		/// <param name="rectangles"></param>
+		/// <exception cref="NotImplementedException"></exception>
+		public Dictionary<LwPolyline, List<Line>> GetCuirtisWithRelations(List<List<Line>> lines, List<LwPolyline> rectangles)
+		{
+			Dictionary<LwPolyline, List<Line>> result = new Dictionary<LwPolyline, List<Line>>();
+
+			foreach(LwPolyline rect in rectangles)
+			{ 
+				foreach(var line in lines)
+				{
+					foreach (var l in line)
+					{
+						var b1 = ACadSharp.Examples.Program.IsPointInPolyline(l.StartPoint, rect,50);
+						var b2 = ACadSharp.Examples.Program.IsPointInPolyline(l.EndPoint, rect,50);
+						if (b1 || b2)
+						{
+							result.Add(rect, line);
+						}
+
+					}
+				}
+			}
+
+			return result;
+		}
+
+		public Dictionary<LwPolyline, Circuit> FillCuirc(List<LwPolyline> circRectangle, Dictionary<string, Dictionary<ObjectType, List<Entity>>> layouts)
+		{
+			var result = new Dictionary<LwPolyline, Circuit>();
+
+			if (!layouts.ContainsKey("P-BLOCK"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			} 
+			var pBlocks = layouts["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
+
+			foreach(var circ in circRectangle)
+			{
+				var circBlcocksItems = new List<MText>();
+				foreach (var block in pBlocks)
+				{
+					if(ACadSharp.Examples.Program.IsPointInPolyline(block.InsertPoint,circ))
+					{ 
+						circBlcocksItems.Add(block);
+					}
+				}
+				
+				if(circBlcocksItems.Count > 1)
+				{
+					var t = circBlcocksItems
+						.OrderByDescending(x => x.InsertPoint.X)
+						.Select(t => ExtractLastValue(t.Value));
+
+					var item = new Circuit()
+					{
+						Name = t.FirstOrDefault(),
+						Cuirts = string.Join('+', t.Skip(1))
+					};
+					result.Add(circ, item);	
+				}
+			}
+
+			return result;
 		}
 	}
 }
