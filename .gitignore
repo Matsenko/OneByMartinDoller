@@ -131,3 +131,5 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+/OneByMartinDoller.Site/credentials.json
+/.vs

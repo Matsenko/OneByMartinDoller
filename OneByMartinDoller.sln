@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneByMartinDoller.GoogleShe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneByMartinDoller.Shared", "OneByMartinDoller.Shared\OneByMartinDoller.Shared.csproj", "{A8840FAB-FBF6-4F3F-9940-29B0A7DF3496}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneByMartinDoller.Tests", "OneByMartinDoller.Tests\OneByMartinDoller.Tests.csproj", "{EA2A04CA-7A2C-4668-8668-D9B2787F7096}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneByMartinDoller.Tests", "OneByMartinDoller.Tests\OneByMartinDoller.Tests.csproj", "{EA2A04CA-7A2C-4668-8668-D9B2787F7096}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

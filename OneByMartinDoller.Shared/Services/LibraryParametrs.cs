@@ -16,7 +16,7 @@ namespace OneByMartinDoller.Shared.Services
 		private static readonly string _sheetName = "Лист1";
 
 		// Path to credentials file
-		private static readonly string _credentialsPath = "credentials.json";
+		private static readonly string _credentialsPath = "C:\\OneByMartinDoller\\OneByMartinDoller.Site\\credentials.json";
 
 		// Project name
 		private static readonly string _projectName = "My Project 39375";
@@ -30,7 +30,7 @@ namespace OneByMartinDoller.Shared.Services
 
 		#region CsvChanger
 
-		public static readonly string _csvPath = "inputCsvFile.csv";
+		public static readonly string _csvPath = "C:\\Users\\vovam\\Downloads\\Test.csv";
 		public static readonly string _outputCsvPath = "outputCsvFile.csv";
 		public static readonly int _startRow = 1;
 		public static readonly int _endRow = 3;

@@ -110,11 +110,18 @@ namespace OneByMartinDoller.Shared.Services
 						input = input.Remove(0, closingBracketIndex + 1);
 						if (input.Length > 1)
 						{
-							startBracketIndex = input.IndexOf('{');
-							closingBracketIndex = input.IndexOf('}');
-							semicolonIndex = input.IndexOf(';');
-							secondChar = input.Substring(0, startBracketIndex);
-							result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+							if (input.Contains("{") && input.Contains("}") && input.Contains(";"))
+							{
+								startBracketIndex = input.IndexOf('{');
+								closingBracketIndex = input.IndexOf('}');
+								semicolonIndex = input.IndexOf(';');
+								secondChar = input.Substring(0, startBracketIndex);
+								result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+							}
+							else
+							{
+								result = input;
+							}
 						}
 						else
 						{
