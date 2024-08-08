@@ -3,17 +3,24 @@ using ACadSharp.IO;
 using ACadSharp.Tables;
 using ACadSharp.Tables.Collections;
 using CSMath;
+using OneByMartinDoller.Shared.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
+
+<<<<<<< HEAD
 using System.Threading;
+=======
+using System.Text;
+>>>>>>> GoogleSheet
 
 namespace ACadSharp.Examples
 {
 	public static class Program
-	{
-		const string _file = "C:\\Users\\vovam\\Downloads\\Showroom Drafting (1).dwg";
+	{ 
+		const string _file = "C:\\Users\\belbo\\Downloads\\Showroom Drafting (4).dwg";
 
 		static void Main(string[] args)
 		{
@@ -22,10 +29,12 @@ namespace ACadSharp.Examples
 			{
 				doc = reader.Read();
 			}
-			exploreDocument(doc);
-			TestArtem(doc);
+			//exploreDocument(doc);
+			//TestArtem(doc);
+			//GeneratePolyLines(doc);
 			Console.ReadLine();
 		}
+ 
 
 		/// <summary>
 		/// Logs in the console the document information
@@ -157,11 +166,13 @@ namespace ACadSharp.Examples
 				}
 			}
 
+			Console.WriteLine(ExtractLastValue("{\fYu Gothic UI Semibold|b1|i0|c128|p34;BB}X{\fYu Gothic UI Semibold|b1|i0|c128|p34;13}"));
+
 			var r = textL.OrderBy(x => x.Value.Count()).ToList();
 		}
-		public static Dictionary<string, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		public static Dictionary<DGWViewModel, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
-			var result = new Dictionary<string, List<LwPolyline.Vertex>>();
+			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
 
 			var polygons = layEntiTypeEntity.ContainsKey("0-CountArea")
 							? layEntiTypeEntity["0-CountArea"].Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
@@ -170,52 +181,75 @@ namespace ACadSharp.Examples
 			var labels = new List<MText>();
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
 			{
-				labels.AddRange(layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>()));
+				var groundFloor=layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor,FloorTypes.GroundFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
 			}
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
 			{
-				labels.AddRange(layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>()));
+				var firstFloor =layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
 			}
+			 
 
+			return result;
+		}
+
+		private static Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis( List<LwPolyline> polygons, IEnumerable<MText> labels, FloorTypes floorType)
+		{
+			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
 			foreach (var label in labels)
 			{
+				label.Value = CleanRoomName(label.Value);
 				var labelPoint = label.InsertPoint;
-				bool found = false;
-
 				foreach (var polygon in polygons)
 				{
-			
 					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.RectangleWidth / 2), labelPoint.Y, labelPoint.Z), polygon))
 					{
-						result[label.Value] = polygon.Vertices;
-						found = true;
+						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices) ;
 						break;
 					}
 				}
 
 			}
-
 			return result;
 		}
 
 		public static Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
-		   Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
-		   Dictionary<string, List<LwPolyline.Vertex>> roomVertices)
+	Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
+	Dictionary<DGWViewModel, List<LwPolyline.Vertex>> roomVertices)
 		{
 			var result = new Dictionary<string, Dictionary<string, int>>();
-			var pBlocks = layEntiTypeEntity["P-BLOCK"].Values.First().OfType<MText>().ToList();
 
+		
+			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			}
+
+	
+			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
+
+			var outRooms = new List<MText>();
 			foreach (var pBlock in pBlocks)
 			{
 				var pBlockPoint = pBlock.InsertPoint;
+				var isInRoom = false;
+
 
 				foreach (var room in roomVertices)
 				{
-					var roomName = room.Key;
+					var roomName = room.Key.RoomName;
 					var vertices = room.Value;
 
 					if (IsPointInPolyline(pBlockPoint, new LwPolyline { Vertices = vertices }))
 					{
+						isInRoom = true;
 						if (!result.ContainsKey(roomName))
 						{
 							result[roomName] = new Dictionary<string, int>();
@@ -231,14 +265,86 @@ namespace ACadSharp.Examples
 						{
 							result[roomName][pBlockValue] = 1;
 						}
+						break;
+					}
+				}
+
+				if (!isInRoom)
+				{
+					outRooms.Add(pBlock);
+				}
+			}
+
+			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
+			{
+				var lumCircEntities = layEntiTypeEntity["E-LUM-CIRC"];
+				foreach (var outRoom in outRooms)
+				{
+					var pBlockValue = outRoom.Value;
+					var point = outRoom.InsertPoint;
+					LwPolyline containingRectangle = null;
+
+		
+					foreach (var entity in lumCircEntities.Values.ElementAt(1))
+					{
+						if (entity is LwPolyline rectangle && IsPointInPolyline(point, rectangle))
+						{
+							containingRectangle = rectangle;
+							break;
+						}
+					}
+
+					if (containingRectangle != null)
+					{
+			
+						foreach (var entity in lumCircEntities.Values.ElementAt(0))
+						{
+							if (entity is Line line)
+							{
+					
+								var startPoint = new CSMath.XYZ(line.StartPoint.X, line.StartPoint.Y, line.StartPoint.Z);
+								var endPoint = new CSMath.XYZ(line.EndPoint.X, line.EndPoint.Y, line.EndPoint.Z);
+
+								foreach (var room in roomVertices)
+								{
+									var roomName = room.Key.RoomName;
+									var vertices = room.Value;
+
+									if (IsPointInPolyline(startPoint, new LwPolyline { Vertices = vertices }) ||
+										IsPointInPolyline(endPoint, new LwPolyline { Vertices = vertices }))
+									{
+										if (!result.ContainsKey(roomName))
+										{
+											result[roomName] = new Dictionary<string, int>();
+										}
+
+										if (result[roomName].ContainsKey(pBlockValue))
+										{
+											result[roomName][pBlockValue]++;
+										}
+										else
+										{
+											result[roomName][pBlockValue] = 1;
+										}
+
+										break;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 
 			return result;
 		}
+
+
+
+
 		public static string ExtractLastValue(string input)
 		{
+<<<<<<< HEAD
 			if (string.IsNullOrWhiteSpace(input))
 				return input;
 			var result = string.Empty;
@@ -248,6 +354,74 @@ namespace ACadSharp.Examples
 				for (int i = 0; i < input.Length; i++)
 				{
 					if (input[i] == '{')
+=======
+			int startBracketIndex = input.IndexOf('{');
+			int semicolonIndex = input.IndexOf(';');
+			int closingBracketIndex = input.IndexOf('}');
+			string result = string.Empty;
+
+			if (startBracketIndex >= 0 && semicolonIndex >= 0 && closingBracketIndex > semicolonIndex)
+			{
+				string firstChar = string.Empty;
+				string secondChar = string.Empty;
+
+				if (startBracketIndex > 0)
+				{
+
+					firstChar = input.Substring(0, startBracketIndex);
+					if (firstChar.Contains('\\'))
+					{
+						input = input.Remove(0, startBracketIndex);
+						semicolonIndex = input.IndexOf(';');
+						input = input.Remove(0, semicolonIndex + 1);
+						int backSlashIndex = input.IndexOf('\\');
+						firstChar = input.Substring(0, backSlashIndex);
+						backSlashIndex = input.IndexOf("\\S");
+						input = input.Remove(0, backSlashIndex + 2);
+						int squareIndex = input.IndexOf("^");
+						result = input.Substring(0, squareIndex);
+
+						result = ConvertToSuperscript(result);
+
+
+
+					}
+					else
+					{
+						result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+					}
+
+				}
+				else if (startBracketIndex == 0)
+				{
+					firstChar = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1);
+					input = input.Remove(0, closingBracketIndex + 1);
+					if (input.Length > 1)
+					{
+						startBracketIndex = input.IndexOf('{');
+						closingBracketIndex = input.IndexOf('}');
+						semicolonIndex = input.IndexOf(';');
+						secondChar = input.Substring(0, startBracketIndex);
+						result = input.Substring(semicolonIndex + 1, closingBracketIndex - semicolonIndex - 1).Trim();
+
+
+
+
+					}
+					else
+					{
+						result = input;
+					}
+
+				}
+				if (firstChar != string.Empty)
+				{
+					if (secondChar == string.Empty)
+					{
+						return $"{firstChar}{result}";
+					}
+					else
+>>>>>>> GoogleSheet
 					{
 						var closeIndex = input.IndexOf('}', i);
 						result += input.Substring(i, closeIndex - i)
@@ -255,7 +429,10 @@ namespace ACadSharp.Examples
 						i = closeIndex;
 						continue;
 					}
+<<<<<<< HEAD
 					result += input[i];
+=======
+>>>>>>> GoogleSheet
 				}
 			}
 			else if (input.Contains(';'))
@@ -269,7 +446,59 @@ namespace ACadSharp.Examples
 			return result;
 
 		}
-	
+		public static string ConvertToSuperscript(string input)
+		{
+			StringBuilder result = new StringBuilder();
+			foreach (char c in input)
+			{
+				result.Append(CharToSuperscript(c));
+			}
+			return result.ToString();
+		}
+
+		public static string CharToSuperscript(char c)
+		{
+			switch (c)
+			{
+				case '0': return "\u2070";
+				case '1': return "\u00B9";
+				case '2': return "\u00B2";
+				case '3': return "\u00B3";
+				case '4': return "\u2074";
+				case '5': return "\u2075";
+				case '6': return "\u2076";
+				case '7': return "\u2077";
+				case '8': return "\u2078";
+				case '9': return "\u2079";
+				case 'a': return "\u1D43";
+				case 'b': return "\u1D47";
+				case 'c': return "\u1D9C";
+				case 'd': return "\u1D48";
+				case 'e': return "\u1D49";
+				case 'f': return "\u1DA0";
+				case 'g': return "\u1D4D";
+				case 'h': return "\u02B0";
+				case 'i': return "\u2071";
+				case 'j': return "\u02B2";
+				case 'k': return "\u1D4F";
+				case 'l': return "\u02E1";
+				case 'm': return "\u1D50";
+				case 'n': return "\u207F";
+				case 'o': return "\u1D52";
+				case 'p': return "\u1D56";
+				case 'q': return "\u02A0";
+				case 'r': return "\u02B3";
+				case 's': return "\u02E2";
+				case 't': return "\u1D57";
+				case 'u': return "\u1D58";
+				case 'v': return "\u1D5B";
+				case 'w': return "\u02B7";
+				case 'x': return "\u02E3";
+				case 'y': return "\u02B8";
+				case 'z': return "\u1DBB";
+				default: return c.ToString();
+			}
+		}
 		public static string CleanRoomName(string input)
 		{
 			if (input == null)
@@ -277,23 +506,47 @@ namespace ACadSharp.Examples
 				throw new ArgumentNullException(nameof(input), "Input cannot be null.");
 			}
 
-			// Check if the input contains "\pxqc;"
+	
 			if (input.Contains(@"\pxqc;"))
 			{
-				// Replace all occurrences of "\pxqc;" with an empty string
+			
 				string result = input.Replace(@"\pxqc;", string.Empty);
 				return result;
 			}
 
-			// If "\pxqc;" is not found, return the original input
 			return input;
 		}
 
+		public static bool IsPointInPolyline(XY point, LwPolyline polyline, int step)
+		{
+			return IsPointInPolyline(new XYZ(point.X,point.Y,0), polyline, step);
+		}
 
+		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline, int step)
+		{
+			XYZ xYZ1=new XYZ(point.X+step, point.Y+step,0);
+			XYZ xYZ2=new XYZ(point.X-step, point.Y-step,0);
 
+			XYZ xYZ3 = new XYZ(point.X + step, point.Y, 0);
+			XYZ xYZ4 = new XYZ(point.X, point.Y - step, 0);
 
+			var original = IsPointInPolyline(point, polyline);
+			if (original)
+				return original;
+			var bouthAdded=IsPointInPolyline(xYZ1 , polyline);
+			if(bouthAdded) return bouthAdded;
 
+			var bouthMinus=IsPointInPolyline(xYZ2 , polyline);
+			if(bouthMinus) return bouthMinus;
 
+			var xAdded=IsPointInPolyline(xYZ3 , polyline);
+			if (xAdded) return xAdded;
+
+			var yAdded=IsPointInPolyline (xYZ4 , polyline);
+			if (yAdded) return yAdded;
+
+			return false;
+		}
 
 		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline)
 		{

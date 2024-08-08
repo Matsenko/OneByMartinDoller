@@ -1,0 +1,83 @@
+Unlisted object not implemented, DXF name: RASTERVARIABLES
+Unlisted object not implemented, DXF name: WIPEOUTVARIABLES
+Unlisted object not implemented, DXF name: MATERIAL
+Unlisted object not implemented, DXF name: MATERIAL
+Unlisted object not implemented, DXF name: MATERIAL
+Unlisted object with DXF name MESH has been read as an UnknownEntity
+Unlisted object with DXF name MESH has been read as an UnknownEntity
+Unlisted object with DXF name ACAD_TABLE has been read as an UnknownEntity
+Unlisted object not implemented, DXF name: ACDBDETAILVIEWSTYLE
+Unlisted object not implemented, DXF name: ACDBDETAILVIEWSTYLE
+Unlisted object not implemented, DXF name: MLEADERSTYLE
+Unlisted object not implemented, DXF name: MLEADERSTYLE
+Unlisted object not implemented, DXF name: ACDBSECTIONVIEWSTYLE
+Unlisted object not implemented, DXF name: ACDBSECTIONVIEWSTYLE
+Unlisted object not implemented, DXF name: TABLESTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: VISUALSTYLE
+Unlisted object not implemented, DXF name: DIMASSOC
+Unlisted object not implemented, DXF name: DIMASSOC
+Entry not found ACAD_IMAGE_VARS|2243 for dictionary |12
+Entry not found ACAD_WIPEOUT_VARS|1102 for dictionary |12
+Entry not found ByBlock|151 for dictionary ACAD_MATERIAL|114
+Entry not found ByLayer|150 for dictionary ACAD_MATERIAL|114
+Entry not found Global|152 for dictionary ACAD_MATERIAL|114
+Entry not found Imperial24|428 for dictionary ACAD_DETAILVIEWSTYLE|427
+Entry not found Metric50|924 for dictionary ACAD_DETAILVIEWSTYLE|427
+Entry not found Annotative|229 for dictionary ACAD_MLEADERSTYLE|215
+Entry not found Standard|216 for dictionary ACAD_MLEADERSTYLE|215
+Entry not found Imperial24|426 for dictionary ACAD_SECTIONVIEWSTYLE|424
+Entry not found Metric50|923 for dictionary ACAD_SECTIONVIEWSTYLE|424
+Entry not found Standard|135 for dictionary ACAD_TABLESTYLE|134
+Entry not found 2dWireframe|159 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Basic|158 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Brighten|165 for dictionary ACAD_VISUALSTYLE|153
+Entry not found ColorChange|169 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Conceptual|162 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Dim|164 for dictionary ACAD_VISUALSTYLE|153
+Entry not found EdgeColorOff|373 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Facepattern|168 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Flat|154 for dictionary ACAD_VISUALSTYLE|153
+Entry not found FlatWithEdges|155 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Gouraud|156 for dictionary ACAD_VISUALSTYLE|153
+Entry not found GouraudWithEdges|157 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Hidden|161 for dictionary ACAD_VISUALSTYLE|153
+Entry not found JitterOff|371 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Linepattern|167 for dictionary ACAD_VISUALSTYLE|153
+Entry not found OverhangOff|372 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Realistic|163 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Shaded|386 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Shaded with edges|385 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Shades of Gray|382 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Sketchy|383 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Thicken|166 for dictionary ACAD_VISUALSTYLE|153
+Entry not found Wireframe|160 for dictionary ACAD_VISUALSTYLE|153
+Entry not found X-Ray|384 for dictionary ACAD_VISUALSTYLE|153
+Entry not found ACAD_DIMASSOC|1313 for dictionary |1312
+Entry not found ACAD_DIMASSOC|1316 for dictionary |1315
+Reactor with handle 1313 not found
+Reactor with handle 1316 not found
+Reactor with handle 1313 not found
+Reactor with handle 1316 not found

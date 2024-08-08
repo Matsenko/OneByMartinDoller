@@ -5,7 +5,7 @@
 
 		public void UploadFile();
 		public void DisplayUploadStatus();
-		public void ReadAmountOfUpLoadFiles();
-		public void WriteAmountOfUpLoadFiles();
+		public int ReadAmountOfUpLoadFiles();
+		public void WriteAmountOfUpLoadFiles(int amount);
 	}
 }

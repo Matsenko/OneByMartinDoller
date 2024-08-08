@@ -1,3 +1,5 @@
+using OneByMartinDoller.GoogleSheet;
+using OneByMartinDoller.Shared.Services;
 using OneByMartinDoller.Site.Services;
 using OneByMartinDoller.Site.Services.IServices;
 
@@ -6,6 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<FailLoadLimits>();
+builder.Services.AddSingleton< GoogleSheetInit>(provider => new GoogleSheetInit(
+	LibraryParametrs.SpreadSheetId,
+	LibraryParametrs.SheetName,
+	LibraryParametrs.CredentialsPath,
+	LibraryParametrs.ProjectName,
+	null));
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

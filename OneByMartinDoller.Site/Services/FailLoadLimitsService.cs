@@ -4,16 +4,27 @@ using System.IO;
 
 namespace OneByMartinDoller.Site.Services
 {
-
-	public class FailLoadLimits:IFailLoadLimitsService
+	public class FailLoadLimits : IFailLoadLimitsService
 	{
-		private const string FileName = "upload_limits.txt";
+		public const string FileName = "upload_limits.txt";
 		public static readonly string USER_MESSAGE = "You have reached the file upload limit.";
 
-		public int AmountOfUpLoadFiles { get; private set; }
-		public bool CanUploadFile => AmountOfUpLoadFiles < AvaliableUploadFileCount;
+		public int _availableUploadFileCount = 5;
+		public int AvaliableUploadFileCount => _availableUploadFileCount;
 
+<<<<<<< HEAD
 		public int AvaliableUploadFileCount = 7;
+=======
+		public int AmountOfUpLoadFiles
+		{
+			get
+			{
+				return ReadAmountOfUpLoadFiles();
+			}
+		}
+
+		public bool CanUploadFile => AmountOfUpLoadFiles < AvaliableUploadFileCount;
+>>>>>>> GoogleSheet
 
 		public FailLoadLimits()
 		{
@@ -29,8 +40,8 @@ namespace OneByMartinDoller.Site.Services
 				return;
 			}
 
-			AmountOfUpLoadFiles++;
-			WriteAmountOfUpLoadFiles();
+			int newAmount = AmountOfUpLoadFiles + 1;
+			WriteAmountOfUpLoadFiles(newAmount);
 		}
 
 		public void DisplayUploadStatus()
@@ -45,7 +56,7 @@ namespace OneByMartinDoller.Site.Services
 			}
 		}
 
-		public void ReadAmountOfUpLoadFiles()
+		public int ReadAmountOfUpLoadFiles()
 		{
 			try
 			{
@@ -54,30 +65,22 @@ namespace OneByMartinDoller.Site.Services
 					string data = File.ReadAllText(FileName);
 					if (int.TryParse(data, out int amount))
 					{
-						AmountOfUpLoadFiles = amount;
+						return amount;
 					}
-					else
-					{
-						AmountOfUpLoadFiles = 0;
-						WriteAmountOfUpLoadFiles(); 
-					}
-				}
-				else
-				{
-					WriteAmountOfUpLoadFiles(); 
 				}
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine($"Error reading file: {ex.Message}");
 			}
+			return 0; 
 		}
 
-		public void WriteAmountOfUpLoadFiles()
+		public void WriteAmountOfUpLoadFiles(int amount)
 		{
 			try
 			{
-				File.WriteAllText(FileName, AmountOfUpLoadFiles.ToString());
+				File.WriteAllText(FileName, amount.ToString());
 			}
 			catch (Exception ex)
 			{
@@ -85,5 +88,4 @@ namespace OneByMartinDoller.Site.Services
 			}
 		}
 	}
-
 }
