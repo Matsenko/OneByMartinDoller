@@ -8,23 +8,26 @@
     "net8.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\belbo\\.nuget\\packages\\": {},
+    "C:\\Users\\vovam\\.nuget\\packages\\": {},
+    "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\FinalDGWtoCSV\\OneByMartinDoller\\OneByMartinDoller.csproj",
+      "projectUniqueName": "C:\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj",
       "projectName": "OneByMartinDoller",
-      "projectPath": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\FinalDGWtoCSV\\OneByMartinDoller\\OneByMartinDoller.csproj",
-      "packagesPath": "C:\\Users\\belbo\\.nuget\\packages\\",
-      "outputPath": "D:\\CodeLuxSolutions\\UpWork\\Kaige Naidoo\\FinalDGWtoCSV\\OneByMartinDoller\\obj\\",
+      "projectPath": "C:\\OneByMartinDoller\\OneByMartinDoller\\OneByMartinDoller.csproj",
+      "packagesPath": "C:\\Users\\vovam\\.nuget\\packages\\",
+      "outputPath": "C:\\OneByMartinDoller\\OneByMartinDoller\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\belbo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\vovam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.1.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -33,6 +36,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\DevExpress 24.1\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
@@ -75,7 +79,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400-preview.0.24324.5/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
