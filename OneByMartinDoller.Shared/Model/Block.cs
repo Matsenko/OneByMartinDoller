@@ -15,5 +15,21 @@ namespace OneByMartinDoller.Shared.Model
 		{
 			return $"{MainBlock} {SubBlock}";
 		}
+		public override bool Equals(object obj)
+		{
+			if (obj == null || GetType() != obj.GetType())
+				return false;
+
+			var other = (BlockItem)obj;
+			return MainBlock == other.MainBlock && SubBlock == other.SubBlock;
+		}
+
+
+		public override int GetHashCode()
+		{
+			int hashMainBlock = MainBlock == null ? 0 : MainBlock.GetHashCode();
+			int hashSubBlock = SubBlock == null ? 0 : SubBlock.GetHashCode();
+			return hashMainBlock ^ hashSubBlock;
+		}
 	}
 }

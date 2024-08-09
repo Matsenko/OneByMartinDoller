@@ -15,9 +15,10 @@ namespace ACadSharp.Examples
 	public static class Program
 	{ 
 		const string _file = "C:\\Users\\belbo\\Downloads\\Showroom Drafting (4).dwg";
-
+	
 		static void Main(string[] args)
 		{
+		
 			CadDocument doc;
 			using (DwgReader reader = new DwgReader(_file))
 			{

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using OneByMartinDoller.GoogleSheet;
 using OneByMartinDoller.Shared.Model;
 using Google.Apis.Drive.v3;
+using System.Text.RegularExpressions;
 
 namespace WebApplication1.Controllers
 {
@@ -75,11 +76,73 @@ namespace WebApplication1.Controllers
 						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
 
 						var modelView = new Dictionary<FloorTypes, List<DGWViewModel>>();
-						foreach(var room in extractedDoc)
+						foreach (var room in extractedDoc)
 						{
-							if(!modelView.ContainsKey(room.FloorType))
+							if (!modelView.ContainsKey(room.FloorType))
 								modelView.Add(room.FloorType, new List<DGWViewModel>());
+
+							foreach (var circuit in room.Circuits)
+							{
+								var transformedItems = new Dictionary<BlockItem, int>();
+
+								foreach (var item in circuit.CuirtsItems)
+								{
+									var blockItem = item.Key;
+									var value = item.Value;
+
+									BlockItem transformedBlockItem = TransformBlockItem(blockItem, out int transformedValue);
+
+				
+									int finalValue = transformedValue * value;
+
+
+									if (transformedItems.ContainsKey(transformedBlockItem))
+									{
+										transformedItems[transformedBlockItem] += finalValue;
+									}
+									else
+									{
+										transformedItems[transformedBlockItem] = finalValue;
+									}
+								}
+
+								circuit.CuirtsItems = transformedItems;
+							}
+
 							modelView[room.FloorType].Add(room);
+						}
+
+
+						BlockItem TransformBlockItem(BlockItem item, out int transformedValue)
+						{
+							transformedValue = 1; 
+
+				
+							if (item.MainBlock.StartsWith("L"))
+							{
+
+								var match = Regex.Match(item.MainBlock, @"(\d*)[A-Za-z]+:(\d+)");
+								if (match.Success)
+								{
+	
+									int numberBeforeColon = int.Parse(match.Groups[1].Value);
+									int numberAfterColon = int.Parse(match.Groups[2].Value);
+
+		
+									var newBlockItem = new BlockItem
+									{
+										MainBlock = $"{numberBeforeColon}L",
+										SubBlock = item.SubBlock
+									};
+
+						
+									transformedValue = numberAfterColon;
+
+									return newBlockItem;
+								}
+							}
+		
+							return item;
 						}
 						return View("ProcessDwgFile", modelView);
 					}
