@@ -12,12 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ACadSharp.Examples\ACadSharp.Examples.csproj" />
     <ProjectReference Include="..\ACadSharp\ACadSharp.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

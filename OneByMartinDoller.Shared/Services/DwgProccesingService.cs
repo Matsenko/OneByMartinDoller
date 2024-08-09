@@ -10,9 +10,11 @@ using CSMath;
 using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Drawing;
-using OneByMartinDoller.Shared.Model;
+
 using ACadSharp.Blocks;
+using OneByMartinDoller.Shared.Model;
 using ACadSharp.Examples.Model;
+
 
 namespace OneByMartinDoller.Shared.Services
 {
@@ -225,10 +227,179 @@ namespace OneByMartinDoller.Shared.Services
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc)
 		{
 			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity = GetlayEntiTypeEntity(doc);
-			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layEntiTypeEntity);
-			var pBlockCountInRooms = ACadSharp.Examples.Program.CountPBlockInRooms(layEntiTypeEntity, roomVertices);
+			var roomVertices = GetRoomVertices(layEntiTypeEntity);
+			var pBlockCountInRooms = CountPBlockInRooms(layEntiTypeEntity, roomVertices);
 			return pBlockCountInRooms;
 		}
+		public  Dictionary<DGWViewModel, List<LwPolyline.Vertex>> GetRoomVertices(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		{
+			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
+
+			var polygons = layEntiTypeEntity.ContainsKey("0-CountArea")
+							? layEntiTypeEntity["0-CountArea"].Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
+							: new List<LwPolyline>();
+
+			var labels = new List<MText>();
+			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
+			{
+				var groundFloor = layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+			}
+			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
+			{
+				var firstFloor = layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+			}
+
+
+			return result;
+		}
+
+		private  Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis(List<LwPolyline> polygons, IEnumerable<MText> labels, FloorTypes floorType)
+		{
+			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
+			foreach (var label in labels)
+			{
+				label.Value = CleanRoomName(label.Value);
+				var labelPoint = label.InsertPoint;
+				foreach (var polygon in polygons)
+				{
+					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.RectangleWidth / 2), labelPoint.Y, labelPoint.Z), polygon))
+					{
+						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices);
+						break;
+					}
+				}
+
+			}
+			return result;
+		}
+
+		public static Dictionary<string, Dictionary<string, int>> CountPBlockInRooms(
+	Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity,
+	Dictionary<DGWViewModel, List<LwPolyline.Vertex>> roomVertices)
+		{
+			var result = new Dictionary<string, Dictionary<string, int>>();
+
+
+			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			}
+
+
+			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
+
+			var outRooms = new List<MText>();
+			foreach (var pBlock in pBlocks)
+			{
+				var pBlockPoint = pBlock.InsertPoint;
+				var isInRoom = false;
+
+
+				foreach (var room in roomVertices)
+				{
+					var roomName = room.Key.RoomName;
+					var vertices = room.Value;
+
+					if (IsPointInPolyline(pBlockPoint, new LwPolyline { Vertices = vertices }))
+					{
+						isInRoom = true;
+						if (!result.ContainsKey(roomName))
+						{
+							result[roomName] = new Dictionary<string, int>();
+						}
+
+						var pBlockValue = pBlock.Value;
+
+						if (result[roomName].ContainsKey(pBlockValue))
+						{
+							result[roomName][pBlockValue]++;
+						}
+						else
+						{
+							result[roomName][pBlockValue] = 1;
+						}
+						break;
+					}
+				}
+
+				if (!isInRoom)
+				{
+					outRooms.Add(pBlock);
+				}
+			}
+
+			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
+			{
+				var lumCircEntities = layEntiTypeEntity["E-LUM-CIRC"];
+				foreach (var outRoom in outRooms)
+				{
+					var pBlockValue = outRoom.Value;
+					var point = outRoom.InsertPoint;
+					LwPolyline containingRectangle = null;
+
+
+					foreach (var entity in lumCircEntities.Values.ElementAt(1))
+					{
+						if (entity is LwPolyline rectangle && IsPointInPolyline(point, rectangle))
+						{
+							containingRectangle = rectangle;
+							break;
+						}
+					}
+
+					if (containingRectangle != null)
+					{
+
+						foreach (var entity in lumCircEntities.Values.ElementAt(0))
+						{
+							if (entity is Line line)
+							{
+
+								var startPoint = new CSMath.XYZ(line.StartPoint.X, line.StartPoint.Y, line.StartPoint.Z);
+								var endPoint = new CSMath.XYZ(line.EndPoint.X, line.EndPoint.Y, line.EndPoint.Z);
+
+								foreach (var room in roomVertices)
+								{
+									var roomName = room.Key.RoomName;
+									var vertices = room.Value;
+
+									if (IsPointInPolyline(startPoint, new LwPolyline { Vertices = vertices }) ||
+										IsPointInPolyline(endPoint, new LwPolyline { Vertices = vertices }))
+									{
+										if (!result.ContainsKey(roomName))
+										{
+											result[roomName] = new Dictionary<string, int>();
+										}
+
+										if (result[roomName].ContainsKey(pBlockValue))
+										{
+											result[roomName][pBlockValue]++;
+										}
+										else
+										{
+											result[roomName][pBlockValue] = 1;
+										}
+
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+
 
 		public List<DGWViewModel> ParseDGW(CadDocument doc)
 		{ 
@@ -248,7 +419,7 @@ namespace OneByMartinDoller.Shared.Services
 
 			//Квадратики заполненные  
 			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);
-			var rooms = ACadSharp.Examples.Program.GetRoomVertices(layouts);
+			var rooms = GetRoomVertices(layouts);
 
 			rooms = rooms
 				.OrderBy(l => CalculateArea(l.Value))
@@ -269,8 +440,8 @@ namespace OneByMartinDoller.Shared.Services
 					var roomName = room.Key.RoomName;
 					var vertices = room.Value;
 
-					if (ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].StartPoint, new LwPolyline { Vertices = vertices })
-						|| ACadSharp.Examples.Program.IsPointInPolyline(linesForSquar[0].EndPoint, new LwPolyline { Vertices = vertices }))
+					if (IsPointInPolyline(linesForSquar[0].StartPoint, new LwPolyline { Vertices = vertices })
+						|| IsPointInPolyline(linesForSquar[0].EndPoint, new LwPolyline { Vertices = vertices }))
 					{
 						if (room.Key.Circuits == null)
 						{
@@ -315,7 +486,7 @@ namespace OneByMartinDoller.Shared.Services
 		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
 		{
 			var layouts = GetlayEntiTypeEntity(doc);
-			var roomVertices = ACadSharp.Examples.Program.GetRoomVertices(layouts);
+			var roomVertices = GetRoomVertices(layouts);
 			var circLayout = layouts["E-LUM-CIRC"];
 			var lines = new List<Line>();
 			foreach (var arc in circLayout[ObjectType.ARC])
@@ -324,6 +495,95 @@ namespace OneByMartinDoller.Shared.Services
 			}
 
 			return null;
+		}
+		public static bool IsPointInPolyline(XY point, LwPolyline polyline, int step)
+		{
+			return IsPointInPolyline(new XYZ(point.X, point.Y, 0), polyline, step);
+		}
+
+		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline, int step)
+		{
+			XYZ xYZ1 = new XYZ(point.X + step, point.Y + step, 0);
+			XYZ xYZ2 = new XYZ(point.X - step, point.Y - step, 0);
+
+			XYZ xYZ3 = new XYZ(point.X + step, point.Y, 0);
+			XYZ xYZ4 = new XYZ(point.X, point.Y - step, 0);
+
+			var original = IsPointInPolyline(point, polyline);
+			if (original)
+				return original;
+			var bouthAdded = IsPointInPolyline(xYZ1, polyline);
+			if (bouthAdded) return bouthAdded;
+
+			var bouthMinus = IsPointInPolyline(xYZ2, polyline);
+			if (bouthMinus) return bouthMinus;
+
+			var xAdded = IsPointInPolyline(xYZ3, polyline);
+			if (xAdded) return xAdded;
+
+			var yAdded = IsPointInPolyline(xYZ4, polyline);
+			if (yAdded) return yAdded;
+
+			return false;
+		}
+
+		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline)
+		{
+			var vertices = polyline.Vertices;
+			bool isInside = false;
+
+			double xMin = vertices.Min(v => v.Location.X);
+			double xMax = vertices.Max(v => v.Location.X);
+			double yMin = vertices.Min(v => v.Location.Y);
+			double yMax = vertices.Max(v => v.Location.Y);
+
+
+
+			if (point.X < xMin || point.X > xMax || point.Y < yMin || point.Y > yMax)
+			{
+
+				return false;
+			}
+
+			for (int i = 0, j = vertices.Count - 1; i < vertices.Count; j = i++)
+			{
+				var xi = vertices[i].Location.X;
+				var yi = vertices[i].Location.Y;
+				var xj = vertices[j].Location.X;
+				var yj = vertices[j].Location.Y;
+
+
+
+				if ((yi > point.Y) != (yj > point.Y) && (point.X < (xj - xi) * (point.Y - yi) / (yj - yi) + xi))
+				{
+					isInside = !isInside;
+				}
+			}
+
+			return isInside;
+		}
+		public static int EnterInRoomIndexes(List<List<LwPolyline.Vertex>> vertexs, CSMath.XYZ point)
+		{
+			int result = -1;
+			for (int i = 0; i < vertexs.Count; i++)
+			{
+				var xMin = vertexs[i].Min(x => x.Location.X);
+				var xMax = vertexs[i].Max(x => x.Location.X);
+				var yMin = vertexs[i].Min(x => x.Location.Y);
+				var yMax = vertexs[i].Max(x => x.Location.Y);
+
+
+				if (xMin <= point.X
+					&& xMax >= point.X
+					&& yMin <= point.Y
+					&& yMax >= point.Y)
+				{
+					result = i;
+					break;
+				}
+			}
+
+			return result;
 		}
 
 		public List<BlockItem> GetBlocksForLines(List<Line> lines,
@@ -569,8 +829,8 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					foreach (var l in line)
 					{
-						var b1 = ACadSharp.Examples.Program.IsPointInPolyline(l.StartPoint, rect,50);
-						var b2 = ACadSharp.Examples.Program.IsPointInPolyline(l.EndPoint, rect,50);
+						var b1 =IsPointInPolyline(l.StartPoint, rect,50);
+						var b2 = IsPointInPolyline(l.EndPoint, rect,50);
 						if (b1 || b2)
 						{
 							result.Add(rect, line);
@@ -598,7 +858,7 @@ namespace OneByMartinDoller.Shared.Services
 				var circBlcocksItems = new List<MText>();
 				foreach (var block in pBlocks)
 				{
-					if(ACadSharp.Examples.Program.IsPointInPolyline(block.InsertPoint,circ))
+					if(IsPointInPolyline(block.InsertPoint,circ))
 					{ 
 						circBlcocksItems.Add(block);
 					}
