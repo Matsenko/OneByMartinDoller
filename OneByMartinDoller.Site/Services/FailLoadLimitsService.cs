@@ -69,7 +69,7 @@ namespace OneByMartinDoller.Site.Services
 			{
 				Console.WriteLine($"Error reading file: {ex.Message}");
 			}
-			return 0;
+			return 0; 
 		}
 
 		public void WriteAmountOfUpLoadFiles(int amount)

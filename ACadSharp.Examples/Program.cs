@@ -13,7 +13,7 @@ using System.Text;
 namespace ACadSharp.Examples
 {
 	public static class Program
-	{
+	{ 
 		const string _file = "C:\\Users\\belbo\\Downloads\\Showroom Drafting (4).dwg";
 
 		static void Main(string[] args)
@@ -28,7 +28,7 @@ namespace ACadSharp.Examples
 			//GeneratePolyLines(doc);
 			Console.ReadLine();
 		}
-
+ 
 
 		/// <summary>
 		/// Logs in the console the document information
@@ -175,26 +175,26 @@ namespace ACadSharp.Examples
 			var labels = new List<MText>();
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
 			{
-				var groundFloor = layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
-				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
+				var groundFloor=layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor,FloorTypes.GroundFloor))
 				{
 					result.Add(item.Key, item.Value);
 				};
 			}
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
 			{
-				var firstFloor = layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
+				var firstFloor =layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
 				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
 				{
 					result.Add(item.Key, item.Value);
 				};
 			}
-
+			 
 
 			return result;
 		}
 
-		private static Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis(List<LwPolyline> polygons, IEnumerable<MText> labels, FloorTypes floorType)
+		private static Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis( List<LwPolyline> polygons, IEnumerable<MText> labels, FloorTypes floorType)
 		{
 			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
 			foreach (var label in labels)
@@ -205,7 +205,7 @@ namespace ACadSharp.Examples
 				{
 					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.RectangleWidth / 2), labelPoint.Y, labelPoint.Z), polygon))
 					{
-						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices);
+						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices) ;
 						break;
 					}
 				}
@@ -220,13 +220,13 @@ namespace ACadSharp.Examples
 		{
 			var result = new Dictionary<string, Dictionary<string, int>>();
 
-
+		
 			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
 			{
 				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
 			}
 
-
+	
 			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
 
 			var outRooms = new List<MText>();
@@ -278,7 +278,7 @@ namespace ACadSharp.Examples
 					var point = outRoom.InsertPoint;
 					LwPolyline containingRectangle = null;
 
-
+		
 					foreach (var entity in lumCircEntities.Values.ElementAt(1))
 					{
 						if (entity is LwPolyline rectangle && IsPointInPolyline(point, rectangle))
@@ -290,12 +290,12 @@ namespace ACadSharp.Examples
 
 					if (containingRectangle != null)
 					{
-
+			
 						foreach (var entity in lumCircEntities.Values.ElementAt(0))
 						{
 							if (entity is Line line)
 							{
-
+					
 								var startPoint = new CSMath.XYZ(line.StartPoint.X, line.StartPoint.Y, line.StartPoint.Z);
 								var endPoint = new CSMath.XYZ(line.EndPoint.X, line.EndPoint.Y, line.EndPoint.Z);
 
@@ -409,8 +409,8 @@ namespace ACadSharp.Examples
 					}
 				}
 			}
+			return result;
 
-			return input;
 		}
 		public static string ConvertToSuperscript(string input)
 		{
@@ -472,10 +472,10 @@ namespace ACadSharp.Examples
 				throw new ArgumentNullException(nameof(input), "Input cannot be null.");
 			}
 
-
+	
 			if (input.Contains(@"\pxqc;"))
 			{
-
+			
 				string result = input.Replace(@"\pxqc;", string.Empty);
 				return result;
 			}
@@ -485,13 +485,13 @@ namespace ACadSharp.Examples
 
 		public static bool IsPointInPolyline(XY point, LwPolyline polyline, int step)
 		{
-			return IsPointInPolyline(new XYZ(point.X, point.Y, 0), polyline, step);
+			return IsPointInPolyline(new XYZ(point.X,point.Y,0), polyline, step);
 		}
 
 		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline, int step)
 		{
-			XYZ xYZ1 = new XYZ(point.X + step, point.Y + step, 0);
-			XYZ xYZ2 = new XYZ(point.X - step, point.Y - step, 0);
+			XYZ xYZ1=new XYZ(point.X+step, point.Y+step,0);
+			XYZ xYZ2=new XYZ(point.X-step, point.Y-step,0);
 
 			XYZ xYZ3 = new XYZ(point.X + step, point.Y, 0);
 			XYZ xYZ4 = new XYZ(point.X, point.Y - step, 0);
@@ -499,16 +499,16 @@ namespace ACadSharp.Examples
 			var original = IsPointInPolyline(point, polyline);
 			if (original)
 				return original;
-			var bouthAdded = IsPointInPolyline(xYZ1, polyline);
-			if (bouthAdded) return bouthAdded;
+			var bouthAdded=IsPointInPolyline(xYZ1 , polyline);
+			if(bouthAdded) return bouthAdded;
 
-			var bouthMinus = IsPointInPolyline(xYZ2, polyline);
-			if (bouthMinus) return bouthMinus;
+			var bouthMinus=IsPointInPolyline(xYZ2 , polyline);
+			if(bouthMinus) return bouthMinus;
 
-			var xAdded = IsPointInPolyline(xYZ3, polyline);
+			var xAdded=IsPointInPolyline(xYZ3 , polyline);
 			if (xAdded) return xAdded;
 
-			var yAdded = IsPointInPolyline(xYZ4, polyline);
+			var yAdded=IsPointInPolyline (xYZ4 , polyline);
 			if (yAdded) return yAdded;
 
 			return false;

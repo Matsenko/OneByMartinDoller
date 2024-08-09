@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ACadSharp.Examples.Model
+namespace OneByMartinDoller.Shared.Model
 {
 	public class BlockItem
 	{

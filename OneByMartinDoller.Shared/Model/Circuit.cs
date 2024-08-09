@@ -1,5 +1,4 @@
-﻿using ACadSharp.Examples.Model;
-using System.Collections.Generic;
+﻿
 
 namespace OneByMartinDoller.Shared.Model
 {

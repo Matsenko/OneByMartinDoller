@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ACadSharp.Examples\ACadSharp.Examples.csproj" />
     <ProjectReference Include="..\ACadSharp\ACadSharp.csproj" />
     <ProjectReference Include="..\OneByMartinDoller.Shared\OneByMartinDoller.Shared.csproj" />
   </ItemGroup>
