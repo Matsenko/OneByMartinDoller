@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneByMartinDoller.Shared", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneByMartinDoller.Tests", "OneByMartinDoller.Tests\OneByMartinDoller.Tests.csproj", "{EA2A04CA-7A2C-4668-8668-D9B2787F7096}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{4B914E56-4F63-4F72-A871-D1311057BD6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,12 @@ Global
 		{EA2A04CA-7A2C-4668-8668-D9B2787F7096}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA2A04CA-7A2C-4668-8668-D9B2787F7096}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{EA2A04CA-7A2C-4668-8668-D9B2787F7096}.Test|Any CPU.Build.0 = Test|Any CPU
+		{4B914E56-4F63-4F72-A871-D1311057BD6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B914E56-4F63-4F72-A871-D1311057BD6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B914E56-4F63-4F72-A871-D1311057BD6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B914E56-4F63-4F72-A871-D1311057BD6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B914E56-4F63-4F72-A871-D1311057BD6F}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{4B914E56-4F63-4F72-A871-D1311057BD6F}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

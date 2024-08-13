@@ -2,7 +2,10 @@
 using CsvHelper.Configuration;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
+using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
 using OneByMartinDoller.Shared.Services;
 using System;
@@ -17,8 +20,8 @@ namespace OneByMartinDoller.Shared
 {
 	public class CsvChanger
 	{
-		private readonly string _inputFilePath;
-		private readonly string _outputFilePath;
+		private  string _inputFilePath;
+		private  string _outputFilePath;
 		private readonly int _startRow;
 		private readonly int _endRow;
 		private List<List<string>> _records;
@@ -121,7 +124,8 @@ namespace OneByMartinDoller.Shared
 			var file = request.ResponseBody;
 			Console.WriteLine("File ID: " + file.Id);
 		}
-		public void ProcessCsv()
+	
+		public async Task ProcessCsv()
 		{
 			LoadCsv();
 			ModifyRecords();
