@@ -15,4 +15,8 @@
     <PackageReference Include="Google.Apis.Sheets.v4" Version="1.68.0.3476" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OneByMartinDoller.Shared\OneByMartinDoller.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

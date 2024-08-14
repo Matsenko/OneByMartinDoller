@@ -13,7 +13,7 @@ namespace OneByMartinDoller.Shared.Services
 		private static readonly string _spreadSheetId = "1ICVAFk-VP90By7OZrrykMqql0pdQ0FWT5aCbKYDZMSo";
 
 		// Sheet name
-		private static readonly string _sheetName = "Лист1";
+		private static readonly string _sheetName = "Лист2";
 
 		// Path to credentials file
 		private static readonly string _credentialsPath = "C:\\OneByMartinDoller\\OneByMartinDoller.Site\\credentials.json";
