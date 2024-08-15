@@ -17,6 +17,8 @@ namespace WebApplication1.Controllers
 	{
 		private readonly ILogger<HomeController> _logger; 
 		private GoogleSheetInit _googleSheetInit;
+		public IConfiguration Configuration { get; }
+
 		public HomeController(ILogger<HomeController> logger, GoogleSheetInit googleSheet)
 		{
 			_logger = logger; 
@@ -73,6 +75,7 @@ namespace WebApplication1.Controllers
 						var extractedDoc = _dwgProccessingService.ParseDGW(cadDocument);
 
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
+			
 						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
 						
 						var modelView = new Dictionary<FloorTypes, List<DGWViewModel>>();

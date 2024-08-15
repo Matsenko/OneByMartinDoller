@@ -4,16 +4,19 @@ using OneByMartinDoller.Site.Services;
 using OneByMartinDoller.Site.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var GoogleSheets = builder.Configuration.GetSection("GoogleSheets");
+LibraryParametrs.Initialize(builder.Configuration);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<FailLoadLimits>();
-builder.Services.AddSingleton< GoogleSheetInit>(provider => new GoogleSheetInit(
-	LibraryParametrs.SpreadSheetId,
-	LibraryParametrs.SheetName,
-	LibraryParametrs.CredentialsPath,
-	LibraryParametrs.ProjectName,
-	null,LibraryParametrs.StartCell));
+builder.Services.AddSingleton(provider => new GoogleSheetInit(
+	GoogleSheets.GetValue<string>("SpreadSheetId"),
+	GoogleSheets.GetValue<string>("SheetName"),
+	GoogleSheets.GetValue<string>("CredentialsPath"),
+	GoogleSheets.GetValue<string>("ProjectName"),
+	null,
+	GoogleSheets.GetValue<string>("StartCell")));
+
 
 
 
