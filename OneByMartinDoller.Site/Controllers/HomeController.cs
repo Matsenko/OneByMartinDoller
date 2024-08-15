@@ -123,26 +123,16 @@ namespace WebApplication1.Controllers
 				
 							if (item.MainBlock.StartsWith("L"))
 							{
-
-								var match = Regex.Match(item.MainBlock, @"(\d*)[A-Za-z]+:(\d+)");
-								if (match.Success)
+			
+								string number = Regex.Match(item.SubBlock, @"\d+").Value;
+								var newBlockItem = new BlockItem
 								{
-	
-									int numberBeforeColon = int.Parse(match.Groups[1].Value);
-									int numberAfterColon = int.Parse(match.Groups[2].Value);
+									MainBlock = item.MainBlock,
+									SubBlock = ""
+								};
+								transformedValue = int.Parse(number);
+								return newBlockItem;
 
-		
-									var newBlockItem = new BlockItem
-									{
-										MainBlock = $"{numberBeforeColon}L",
-										SubBlock = item.SubBlock
-									};
-
-						
-									transformedValue = numberAfterColon;
-
-									return newBlockItem;
-								}
 							}
 		
 							return item;
