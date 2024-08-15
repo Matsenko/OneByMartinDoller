@@ -93,24 +93,40 @@ namespace OneByMartinDoller.GoogleSheet
 
 					foreach (var circuit in viewModel.Circuits)
 					{
-						var circuitName = circuit.Name;
+				
 
 						foreach (var blockItem in circuit.CuirtsItems)
 						{
-							var row = new List<object>
+							var circuitName = circuit.Name;
+							if (circuitName.Contains("+"))
+							{
+								circuitName = blockItem.Key.ToString();
+								var row = new List<object>
 					{
-	/*					floorType.ToString(),          
-                        roomName,                      
-                        circuitName,                   
-                        blockItem.Key.ToString(),      
-                        blockItem.Value      */  
+
 						blockItem.Value,
 						circuitName,
 						roomName,
 						floorType.ToString(),
 						blockItem.Key.ToString()
 					};
-							oblist.Add(row);
+								oblist.Add(row);
+							}
+							else
+							{
+								var row = new List<object>
+					{
+
+						blockItem.Value,
+						circuitName,
+						roomName,
+						floorType.ToString(),
+						blockItem.Key.ToString()
+					};
+								oblist.Add(row);
+							}
+
+					
 						}
 					}
 				}
