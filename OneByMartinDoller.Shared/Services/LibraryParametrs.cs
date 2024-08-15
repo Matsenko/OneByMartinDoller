@@ -10,10 +10,10 @@ namespace OneByMartinDoller.Shared.Services
 	{
 		#region GoogleSheetInit
 		// Google Sheet ID
-		private static readonly string _spreadSheetId = "1ICVAFk-VP90By7OZrrykMqql0pdQ0FWT5aCbKYDZMSo";
+		private static readonly string _spreadSheetId = "158bxFX9KO-XBhQhPuEbDP1ij8mrjJzU_4BVKtcJVRL8";
 
 		// Sheet name
-		private static readonly string _sheetName = "Лист2";
+		private static readonly string _sheetName = "NEW COUNTUP";
 
 		// Path to credentials file
 		private static readonly string _credentialsPath = "C:\\OneByMartinDoller\\OneByMartinDoller.Site\\credentials.json";
@@ -21,11 +21,15 @@ namespace OneByMartinDoller.Shared.Services
 		// Project name
 		private static readonly string _projectName = "My Project 39375";
 
+		private static readonly string _startCell = "B13";
+
 		// Properties to access the fields
 		public static string SpreadSheetId => _spreadSheetId;
 		public static string SheetName => _sheetName;
 		public static string CredentialsPath => _credentialsPath;
 		public static string ProjectName => _projectName;
+
+		public static string StartCell => _startCell;
 		#endregion
 
 		#region CsvChanger

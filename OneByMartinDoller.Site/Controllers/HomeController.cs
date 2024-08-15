@@ -74,7 +74,7 @@ namespace WebApplication1.Controllers
 
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
 						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
-
+						
 						var modelView = new Dictionary<FloorTypes, List<DGWViewModel>>();
 						foreach (var room in extractedDoc)
 						{
@@ -144,6 +144,8 @@ namespace WebApplication1.Controllers
 		
 							return item;
 						}
+						_googleSheetInit._processingModels = modelView;
+						_googleSheetInit.WriteToGoogleSheet();
 						return View("ProcessDwgFile", modelView);
 					}
 				}

@@ -52,34 +52,6 @@ namespace OneByMartinDoller.GoogleSheet
 		}
 
 
-		public void WriteToGoogleSheet(List<DwgProcessingModel> models, string spreadsheetId, string sheetName)
-		{
-			var valueRange = new ValueRange();
-			var oblist = new List<IList<object>>();
-
-			var headers = GetHeaders();
-			oblist.Add(headers);
-
-			foreach (var model in models)
-			{
-				foreach (var pblock in model.PBlocks)
-				{
-					var row = new List<object>
-					{
-						model.RoomName,
-						pblock.Key,
-						pblock.Value
-					};
-					oblist.Add(row);
-				}
-			}
-
-			valueRange.Values = oblist;
-
-			var updateRequest = _service.Spreadsheets.Values.Update(valueRange, spreadsheetId, $"{sheetName}!A1");
-			updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
-			updateRequest.Execute();
-		}
 
 		public async Task<string> CopySpreadsheetAsync(string sourceSpreadsheetId, string copyTitle)
 		{
@@ -127,12 +99,17 @@ namespace OneByMartinDoller.GoogleSheet
 						{
 							var row = new List<object>
 					{
-						floorType.ToString(),          
+	/*					floorType.ToString(),          
                         roomName,                      
                         circuitName,                   
                         blockItem.Key.ToString(),      
-                        blockItem.Value             
-                    };
+                        blockItem.Value      */  
+						blockItem.Value,
+						circuitName,
+						roomName,
+						floorType.ToString(),
+						blockItem.Key.ToString()
+					};
 							oblist.Add(row);
 						}
 					}
@@ -150,15 +127,6 @@ namespace OneByMartinDoller.GoogleSheet
 		}
 
 
-		private IList<object> GetHeaders()
-		{
-			var headers = new List<object>
-			{
-				"Room Name",
-				"P-Block Identifier",
-				"Count"
-			};
-			return headers;
-		}
+
 	}
 }

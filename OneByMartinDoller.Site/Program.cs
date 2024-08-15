@@ -13,7 +13,7 @@ builder.Services.AddSingleton< GoogleSheetInit>(provider => new GoogleSheetInit(
 	LibraryParametrs.SheetName,
 	LibraryParametrs.CredentialsPath,
 	LibraryParametrs.ProjectName,
-	null));
+	null,LibraryParametrs.StartCell));
 
 
 
