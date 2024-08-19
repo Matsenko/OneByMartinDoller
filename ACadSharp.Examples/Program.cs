@@ -272,7 +272,10 @@ namespace ACadSharp.Examples
 
 			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
 			{
-				var lumCircEntities = layEntiTypeEntity["E-LUM-CIRC"];
+				var lumCircEntities = layEntiTypeEntity.ContainsKey("E-LUM-CIRC") 
+					? layEntiTypeEntity["E-LUM-CIRC"] 
+					: new Dictionary<ObjectType, List<Entity>>();
+
 				foreach (var outRoom in outRooms)
 				{
 					var pBlockValue = outRoom.Value;

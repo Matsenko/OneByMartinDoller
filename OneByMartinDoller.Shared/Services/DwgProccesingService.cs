@@ -405,13 +405,20 @@ namespace OneByMartinDoller.Shared.Services
 		public List<DGWViewModel> ParseDGW(CadDocument doc)
 		{ 
 			var layouts = GetlayEntiTypeEntity(doc);
-			var circLayout = layouts["E-LUM-CIRC"];
-			var rectangles = circLayout[ObjectType.LWPOLYLINE]
-				.Select(x => x as LwPolyline)
-				.ToList();
+			var circLayout = layouts.ContainsKey("E-LUM-CIRC")
+				?layouts["E-LUM-CIRC"]
+				: new Dictionary<ObjectType, List<Entity>>();
 
-			var arcList = circLayout[ObjectType.ARC].Select(x => x as Arc).ToList();
+			var rectangles = circLayout.ContainsKey(ObjectType.LWPOLYLINE)
+				? circLayout[ObjectType.LWPOLYLINE]
+				.Select(x => x as LwPolyline).ToList()
+				: new List<LwPolyline?>();
 
+			var arcList = circLayout.ContainsKey(ObjectType.ARC)
+				? circLayout[ObjectType.ARC].Select(x => x as Arc).ToList()
+				: new List<Arc>();
+			if (!arcList.Any())
+				throw new FormatException("not valid file format, please check all requiment layouts");
 			//преобразовуем arc в линии
 			var lines = GetLinesListsFromsArcList(arcList);
 
@@ -879,9 +886,9 @@ namespace OneByMartinDoller.Shared.Services
 		public string GetZoneName(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layouts, List<LwPolyline.Vertex> vertices)
 		{
 			var b = layouts.Keys.ToList();
-			var bint = layouts["B-INT"];
-			var bBoh = layouts["B-BOH"];
-			var bFoh= layouts["B-FOH"];
+			var bint = layouts.ContainsKey("B-INT") ? layouts["B-INT"] : null;
+			var bBoh = layouts.ContainsKey("B-BOH")? layouts["B-BOH"] : null;
+			var bFoh= layouts.ContainsKey("B-FOH")? layouts["B-FOH"] : null;
 
 			var bIntPol= bint!=null
 							? bint.Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
