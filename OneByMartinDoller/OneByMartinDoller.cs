@@ -19,7 +19,7 @@ namespace OneByMartinDoller
 		private static string _sheetName = "Лист1";
 		private  static string _credentialsPath = "credentials.json";
 		private  static  string _projectName = "My Project 39375";
-		private GoogleSheetInit _googleSheetInit = new GoogleSheetInit(_spreadSheetId, _sheetName, _credentialsPath, _projectName, DwgProcessingModels);
+		//private GoogleSheetInit _googleSheetInit = new GoogleSheetInit(_spreadSheetId, _sheetName, _credentialsPath, _projectName, DwgProcessingModels);
 		private void OneByMartinDoller_Load(object sender, EventArgs e)
         {
 
@@ -110,8 +110,8 @@ namespace OneByMartinDoller
 				
 
 				}
-				_googleSheetInit._processingModels=DwgProcessingModels;
-				_googleSheetInit.WriteToGoogleSheet();
+				//_googleSheetInit._processingModels=DwgProcessingModels;
+				//_googleSheetInit.WriteToGoogleSheet();
 
 			}
             progressBar.Value = 0;

@@ -17,7 +17,7 @@ namespace OneByMartinDoller.Tests
 	public class DWGProcessingTest
 	{
 		private readonly DwgProccesingService _service = new DwgProccesingService();
-		const string _file = "C:\\Users\\vovam\\Downloads\\Showroom Drafting (4).dwg";
+		const string _file = @"C:\Users\belbo\Downloads\Showroom Drafting (4).dwg";
 
 		[TestMethod]
 		public void ArcToLine_shouldReturn14LinesWhoHasStartOrEndPointWhoNotExsistInRoom()
@@ -348,7 +348,22 @@ namespace OneByMartinDoller.Tests
 			//комнаты
 
 		}
+		[TestMethod]
+		public void GetZoneName_PassRoomVerticals_ReciveZoneName()
+		{
+			var doc = GetDocument();
+			var layouts = _service.GetlayEntiTypeEntity(doc);
+			var rooms = _service.GetRoomVertices(layouts);
 
+			foreach (var room in rooms)
+			{
+				room.Key.ZoneName =_service.GetZoneName(layouts, room.Value);
+				if(!string.IsNullOrEmpty(room.Key.ZoneName))
+				{
+					int a = 0;
+				}
+			}
+		}
 		private CadDocument GetDocument()
 		{
 

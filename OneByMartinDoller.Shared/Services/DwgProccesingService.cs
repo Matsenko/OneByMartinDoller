@@ -13,6 +13,7 @@ using System.Drawing;
 
 using ACadSharp.Blocks;
 using OneByMartinDoller.Shared.Model;
+using System.Reflection;
 
 
 
@@ -439,7 +440,7 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					var roomName = room.Key.RoomName;
 					var vertices = room.Value;
-
+					room.Key.ZoneName = GetZoneName(layouts, vertices);
 					if (IsPointInPolyline(linesForSquar[0].StartPoint, new LwPolyline { Vertices = vertices })
 						|| IsPointInPolyline(linesForSquar[0].EndPoint, new LwPolyline { Vertices = vertices }))
 					{
@@ -507,7 +508,11 @@ namespace OneByMartinDoller.Shared.Services
 			XYZ xYZ2 = new XYZ(point.X - step, point.Y - step, 0);
 
 			XYZ xYZ3 = new XYZ(point.X + step, point.Y, 0);
-			XYZ xYZ4 = new XYZ(point.X, point.Y - step, 0);
+			XYZ xYZ4 = new XYZ(point.X, point.Y + step, 0);
+
+			XYZ xYZ5 = new XYZ(point.X-step, point.Y+step, 0);
+			XYZ xYZ6 = new XYZ(point.X+step, point.Y - step, 0);
+
 
 			var original = IsPointInPolyline(point, polyline);
 			if (original)
@@ -523,6 +528,12 @@ namespace OneByMartinDoller.Shared.Services
 
 			var yAdded = IsPointInPolyline(xYZ4, polyline);
 			if (yAdded) return yAdded;
+
+			var xAdded1 = IsPointInPolyline(xYZ5, polyline);
+			if (xAdded1) return xAdded1;
+
+			var yAdded2 = IsPointInPolyline(xYZ6, polyline);
+			if (yAdded2) return yAdded2;
 
 			return false;
 		}
@@ -598,17 +609,34 @@ namespace OneByMartinDoller.Shared.Services
 
 
 			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
-			var endLine = layEntiTypeEntity["E-LUM-GFIT"]
-				.First()
-				.Value
-				.OfType<Insert>() 
-				.ToList();
-			var ledItems = layEntiTypeEntity["E-LUM-FLMP"]
+
+			List<Insert> endLine;
+			if (layEntiTypeEntity.ContainsKey("E-LUM-GFIT"))
+			{
+				endLine = layEntiTypeEntity["E-LUM-GFIT"]
 				.First()
 				.Value
 				.OfType<Insert>()
 				.ToList();
+			}
+			else
+			{
+				endLine= new List<Insert>();
+			}
 
+			List<Insert> ledItems;
+			if (layEntiTypeEntity.ContainsKey("E-LUM-FLMP"))
+			{
+				ledItems = layEntiTypeEntity["E-LUM-FLMP"]
+					.First()
+					.Value
+					.OfType<Insert>()
+					.ToList();
+			}
+			else
+			{
+				ledItems= new List<Insert>();
+			}
 
 			//endLine.AddRange(endLine1); 
 			foreach (var line in lines)
@@ -635,38 +663,9 @@ namespace OneByMartinDoller.Shared.Services
 							var ledBlock = ledName==null?string.Empty:ledName.Block.Name;
 							result.Add(new BlockItem { MainBlock=mainBlock, SubBlock=ledBlock});
 						}
-					}	
-					//var item2= pBlocks.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
-					//var item3 = pBlocks.OrderBy(p => GetDistance(line.EndPoint, new XYZ(p.InsertPoint.X+p.RectangleWidth,p.InsertPoint.Y,0))).FirstOrDefault();
-					//var item4 = pBlocks.OrderBy(p => GetDistance(line.EndPoint,  new XYZ(p.InsertPoint.X+p.RectangleWidth,p.InsertPoint.Y,0))).FirstOrDefault();
-
-					//var closerPoint12= GetDistance(line.StartPoint, item1.InsertPoint) < GetDistance(line.EndPoint, item2.InsertPoint)
-					//	?item1 : item2;
-					//var closerPoint23= GetDistance(line.StartPoint, item3.InsertPoint) < GetDistance(line.EndPoint, item4.InsertPoint)
-					//	? item3 : item4;
-
-					//if (GetDistance(line.StartPoint, closerPoint12.InsertPoint)<GetDistance(line.EndPoint, closerPoint23.InsertPoint))
-					//{
-					//	result.Add(ExtractLastValue(closerPoint12.Value));
-					//}
-					//else
-					//{
-					//	result.Add(ExtractLastValue(closerPoint23.Value));
-					//} 
-
+					}	 
 				}
-
-				//var item = pBlocks.FirstOrDefault(b =>
-				//CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 20)
-				//|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 20));
-				//if (item != null)
-				//{
-				//	result.Add(ExtractLastValue(item.Value));
-				//}
-				//else
-				//{
-				//	var inserPoint=pBlocks.Select(x=>x.InsertPoint).OrderBy(p=>p.X).ToList();
-				//}
+				 
 			}
 
 			return result;
@@ -783,11 +782,6 @@ namespace OneByMartinDoller.Shared.Services
 			return new Line(startPoint, endPoint);
 		}
 
-
-
-
-
-
 		public Dictionary<string, Dictionary<ObjectType, List<Entity>>> GetlayEntiTypeEntity(CadDocument doc)
 		{
 			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>();
@@ -880,6 +874,94 @@ namespace OneByMartinDoller.Shared.Services
 			}
 
 			return result;
+		}
+
+		public string GetZoneName(Dictionary<string, Dictionary<ObjectType, List<Entity>>> layouts, List<LwPolyline.Vertex> vertices)
+		{
+			var b = layouts.Keys.ToList();
+			var bint = layouts["B-INT"];
+			var bBoh = layouts["B-BOH"];
+			var bFoh= layouts["B-FOH"];
+
+			var bIntPol= bint!=null
+							? bint.Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
+							: new List<LwPolyline>();
+			var bBohPol = bBoh != null
+							? bBoh.Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
+							: new List<LwPolyline>();
+			var bFohPol = bFoh != null
+							? bFoh.Values.SelectMany(e => e.OfType<LwPolyline>()).ToList()
+							: new List<LwPolyline>();
+
+			if (IsRoomInZone(bIntPol, vertices))
+				return "INT";
+			if (IsRoomInZone(bBohPol, vertices))
+				return "BOH";
+			if (IsRoomInZone(bFohPol, vertices))
+				return "FOH";
+			 
+			return string.Empty; 
+		}
+
+		private bool IsRoomInZone(List<LwPolyline> zone,List<LwPolyline.Vertex> room)
+		{
+			foreach (var z in zone)
+			{
+				int enterTime = 0;
+				foreach (var r in room)
+				{
+					if (IsPointInPolyline(r.Location, z, 100))
+					{
+						enterTime++;
+					}
+					if (enterTime == 4)
+						return true;
+				}
+			}
+			return false;
+		}
+
+		public bool SquarInSquar(LwPolyline mainSquar, LwPolyline secondSquar)
+		{
+
+
+			// Получаем все вершины главной полилинии
+			var mainPoints = mainSquar.Vertices.Select(x => new XY(x.Location.X,x.Location.Y<-2740?x.Location.Y-100:x.Location.Y)).ToList(); 
+			
+			// Получаем все вершины дочерней полилинии
+			var childPoints = secondSquar.Vertices.Select(x => x.Location);
+
+			// Проверяем, все ли вершины дочерней полилинии находятся внутри главной полилинии
+			foreach (var childPoint in childPoints)
+			{
+				if (!IsPointInPolyline(mainPoints, childPoint))
+				{
+					return false; // Если хоть одна точка не внутри, возвращаем false
+				}
+			}
+
+			return true; // Все точки дочерней полилинии внутри
+		}
+		 
+
+		private static bool IsPointInPolyline(List<XY> polylinePoints, XY point)
+		{
+			int i, j = polylinePoints.Count - 1;
+			bool inside = false;
+
+			for (i = 0; i < polylinePoints.Count; i++)
+			{
+				if (((polylinePoints[i].Y > point.Y) != (polylinePoints[j].Y > point.Y)) &&
+					(point.X < (polylinePoints[j].X - polylinePoints[i].X) 
+					* (point.Y - polylinePoints[i].Y) / (polylinePoints[j].Y - polylinePoints[i].Y) 
+					+ polylinePoints[i].X))
+				{
+					inside = !inside;
+				}
+				j = i;
+			}
+
+			return inside;
 		}
 	}
 }
