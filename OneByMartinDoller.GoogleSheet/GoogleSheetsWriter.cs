@@ -90,6 +90,7 @@ namespace OneByMartinDoller.GoogleSheet
 				foreach (var viewModel in viewModels)
 				{
 					var roomName = viewModel.RoomName;
+					var zone=viewModel.ZoneName;
 
 					foreach (var circuit in viewModel.Circuits)
 					{
@@ -108,7 +109,7 @@ namespace OneByMartinDoller.GoogleSheet
 						circuitName,
 						roomName,
 						floorType.ToString(),
-						blockItem.Key.ToString()
+						zone
 					};
 								oblist.Add(row);
 							}
@@ -121,7 +122,7 @@ namespace OneByMartinDoller.GoogleSheet
 						circuitName,
 						roomName,
 						floorType.ToString(),
-						blockItem.Key.ToString()
+						zone
 					};
 								oblist.Add(row);
 							}

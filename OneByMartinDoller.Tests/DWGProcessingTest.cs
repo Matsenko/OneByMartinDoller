@@ -321,31 +321,7 @@ namespace OneByMartinDoller.Tests
 
 
 
-			////линиии с буквами
-			//Dictionary<List<Line>, List<string>> tempR = new Dictionary<List<Line>, List<string>>();
-			//foreach (var line in lines)
-			//{
-			//	var r = _service.GetBlocksForLines(line, layouts);
-			//	if (r.Count > 0)
-			//		tempR.Add(line, r);
-			//}
-
-			//линии с светом 
-			//Dictionary<List<Line>, List<bool>> tempR1 = new Dictionary<List<Line>, List<bool>>();
-			//foreach (var line in lines)
-			//{
-			//	var ledIs = new List<bool>();
-			//	foreach (var line2 in line)
-			//	{
-			//		var r = _service.CheckPointConnectToLed(line2, layouts);
-			//		ledIs.Add(r);
-			//	}
-			//	tempR1.Add(line, ledIs);
-			//}
-
-
-
-			//комнаты
+		 
 
 		}
 		[TestMethod]
