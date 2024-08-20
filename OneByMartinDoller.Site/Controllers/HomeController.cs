@@ -83,7 +83,8 @@ namespace WebApplication1.Controllers
 						{
 							if (!modelView.ContainsKey(room.FloorType))
 								modelView.Add(room.FloorType, new List<DGWViewModel>());
-
+							if (room.Circuits == null)
+								continue;
 							foreach (var circuit in room.Circuits)
 							{
 								var transformedItems = new Dictionary<BlockItem, int>();
@@ -137,9 +138,9 @@ namespace WebApplication1.Controllers
 		
 							return item;
 						}
-						_googleSheetInit._processingModels = modelView;
-						_googleSheetInit.WriteToGoogleSheet();
-						return View("ProcessDwgFile", modelView);
+						//_googleSheetInit._processingModels = modelView;
+						//_googleSheetInit.WriteToGoogleSheet();
+						//return View("ProcessDwgFile", modelView);
 					}
 				}
 				catch (Exception ex)

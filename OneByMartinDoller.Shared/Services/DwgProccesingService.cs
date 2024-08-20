@@ -258,6 +258,14 @@ namespace OneByMartinDoller.Shared.Services
 				};
 			}
 
+			if (layEntiTypeEntity.ContainsKey("A-LABEL-LGF"))
+			{
+				var firstFloor = layEntiTypeEntity["A-LABEL-LGF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+			}
 
 			return result;
 		}
@@ -471,13 +479,14 @@ namespace OneByMartinDoller.Shared.Services
 
 			return rooms.Keys.ToList();
 		}
-
+		//TODO: Вова перепиши метод для подсчета площади через полигоны. 
 		public static double CalculateArea(List<LwPolyline.Vertex> vertices)
 		{
-			if (vertices.Count != 4)
-			{
-				throw new ArgumentException("Exactly 4 points are required.");
-			}
+			 
+			//if (vertices.Count != 4)
+			//{
+			//	throw new ArgumentException("Exactly 4 points are required.");
+			//}
 
 			double area = 0;
 			for (int i = 0; i < vertices.Count; i++)
@@ -544,7 +553,7 @@ namespace OneByMartinDoller.Shared.Services
 
 			return false;
 		}
-
+		//TODO: Вова переделать на полигоны. Сейчас работает как боундинг бокс, надо что-бы работало как полигон 
 		public static bool IsPointInPolyline(XYZ point, LwPolyline polyline)
 		{
 			var vertices = polyline.Vertices;
@@ -844,6 +853,7 @@ namespace OneByMartinDoller.Shared.Services
 			return result;
 		}
 
+		//TODO: Not correct work `IsPointInPolyline`
 		public Dictionary<LwPolyline, Circuit> FillCuirc(List<LwPolyline> circRectangle, Dictionary<string, Dictionary<ObjectType, List<Entity>>> layouts)
 		{
 			var result = new Dictionary<LwPolyline, Circuit>();
