@@ -474,9 +474,9 @@ namespace OneByMartinDoller.Shared.Services
 
 		public static double CalculateArea(List<LwPolyline.Vertex> vertices)
 		{
-			if (vertices.Count != 4)
+			if (vertices.Count < 3)
 			{
-				throw new ArgumentException("Exactly 4 points are required.");
+				throw new ArgumentException("At least 3 points are required to form a polygon.");
 			}
 
 			double area = 0;
@@ -490,6 +490,7 @@ namespace OneByMartinDoller.Shared.Services
 			area = Math.Abs(area) / 2.0;
 			return area;
 		}
+
 
 		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
 		{
@@ -550,19 +551,7 @@ namespace OneByMartinDoller.Shared.Services
 			var vertices = polyline.Vertices;
 			bool isInside = false;
 
-			double xMin = vertices.Min(v => v.Location.X);
-			double xMax = vertices.Max(v => v.Location.X);
-			double yMin = vertices.Min(v => v.Location.Y);
-			double yMax = vertices.Max(v => v.Location.Y);
-
-
-
-			if (point.X < xMin || point.X > xMax || point.Y < yMin || point.Y > yMax)
-			{
-
-				return false;
-			}
-
+		
 			for (int i = 0, j = vertices.Count - 1; i < vertices.Count; j = i++)
 			{
 				var xi = vertices[i].Location.X;
@@ -570,16 +559,19 @@ namespace OneByMartinDoller.Shared.Services
 				var xj = vertices[j].Location.X;
 				var yj = vertices[j].Location.Y;
 
-
-
-				if ((yi > point.Y) != (yj > point.Y) && (point.X < (xj - xi) * (point.Y - yi) / (yj - yi) + xi))
+			
+				if ((yi > point.Y) != (yj > point.Y) &&
+					point.X < (xj - xi) * (point.Y - yi) / (yj - yi) + xi)
 				{
+			
 					isInside = !isInside;
 				}
 			}
 
 			return isInside;
 		}
+
+
 		public static int EnterInRoomIndexes(List<List<LwPolyline.Vertex>> vertexs, CSMath.XYZ point)
 		{
 			int result = -1;
