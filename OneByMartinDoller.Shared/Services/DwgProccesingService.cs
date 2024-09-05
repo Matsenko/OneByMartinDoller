@@ -617,7 +617,7 @@ namespace OneByMartinDoller.Shared.Services
 		}
 
 		public List<BlockItem> GetBlocksForLines(List<Line> lines,
-			Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
 			var result = new List<BlockItem>();
 
@@ -626,73 +626,94 @@ namespace OneByMartinDoller.Shared.Services
 				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
 			}
 
-
 			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
+
+	
 			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
 			{
-				var it2 = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
-				pBlocks.AddRange(it2);
+				var circItems = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
+				pBlocks.AddRange(circItems);
 			}
-			List<Insert> endLine;
+
+			List<Insert> endLine = new List<Insert>();
+			List<Insert> ledItems = new List<Insert>();
+
+
 			if (layEntiTypeEntity.ContainsKey("E-LUM-GFIT"))
 			{
-				endLine = layEntiTypeEntity["E-LUM-GFIT"]
-				.First()
-				.Value
-				.OfType<Insert>()
-				.ToList();
-			}
-			else
-			{
-				endLine= new List<Insert>();
+				endLine = layEntiTypeEntity["E-LUM-GFIT"].First().Value.OfType<Insert>().ToList();
 			}
 
-			List<Insert> ledItems;
 			if (layEntiTypeEntity.ContainsKey("E-LUM-FLMP"))
 			{
-				ledItems = layEntiTypeEntity["E-LUM-FLMP"]
-					.First()
-					.Value
-					.OfType<Insert>()
-					.ToList();
-			}
-			else
-			{
-				ledItems= new List<Insert>();
+				ledItems = layEntiTypeEntity["E-LUM-FLMP"].First().Value.OfType<Insert>().ToList();
 			}
 
-			//endLine.AddRange(endLine1); 
+			AddInsertLayerEntities("E-LUM-LED", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-DL", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-SP", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-LL", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-PDT", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-TLMP", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-TRK", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-WL", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-SPK", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-FL", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-UL", layEntiTypeEntity, ledItems);
+
+	
+			AddInsertLayerEntities("E-LUM-DTL", layEntiTypeEntity, ledItems);
+			AddInsertLayerEntities("E-LUM-First Fix", layEntiTypeEntity, ledItems);  
+			AddInsertLayerEntities("E-LUM-SWIT", layEntiTypeEntity, ledItems); 
+			AddInsertLayerEntities("E-LUM-SWTXT", layEntiTypeEntity, ledItems);  
+			//TODO:Artem rename ledItems
+
 			foreach (var line in lines)
 			{
 				var item = endLine.FirstOrDefault(b =>
-			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50)
-			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
+					CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50) ||
+					CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
+
 				if (item != null)
 				{
 					var name = ExtractLastValue(item.Block.Name);
-					result.Add(new BlockItem { MainBlock=name, SubBlock=string.Empty});
+					result.Add(new BlockItem { MainBlock = name, SubBlock = string.Empty });
 				}
 				else
 				{
-					var mainBlockName=pBlocks.OrderBy(p=>GetDistance(line.StartPoint,p.InsertPoint)).FirstOrDefault();
-					if(mainBlockName != null)
+					var mainBlockName = pBlocks.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
+					if (mainBlockName != null)
 					{
-						var ledName= ledItems.FirstOrDefault(b =>
-			CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50)
-			|| CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
-						if(mainBlockName!=null)
+						var ledName = ledItems.FirstOrDefault(b =>
+							CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50) ||
+							CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
+						if (mainBlockName != null)
 						{
 							var mainBlock = ExtractLastValue(mainBlockName.Value);
-							var ledBlock = ledName==null?string.Empty:ledName.Block.Name;
-							result.Add(new BlockItem { MainBlock=mainBlock, SubBlock=ledBlock});
+							var ledBlock = ledName == null ? string.Empty : ledName.Block.Name;
+							result.Add(new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock });
 						}
-					}	 
+					}
 				}
-				 
 			}
 
 			return result;
 		}
+		
+
+		private void AddInsertLayerEntities(string layerName, Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity, List<Insert> targetList)
+		{
+			if (layEntiTypeEntity.ContainsKey(layerName))
+			{
+				var inserts = layEntiTypeEntity[layerName]
+					.First()
+					.Value
+					.OfType<Insert>()
+					.ToList();
+				targetList.AddRange(inserts);
+			}
+		}
+
 
 		static double GetDistance(XYZ point1, XYZ point2)
 		{
