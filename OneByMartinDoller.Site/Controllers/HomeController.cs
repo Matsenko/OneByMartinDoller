@@ -1,14 +1,10 @@
 ﻿using System.Diagnostics;
 using WebApplication1.Models;
 using ACadSharp;
-
-using OneByMartinDoller.GoogleSheet.Shared;
-using OneByMartinDoller.Site.Services;
 using OneByMartinDoller.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
 using OneByMartinDoller.GoogleSheet;
 using OneByMartinDoller.Shared.Model;
-using Google.Apis.Drive.v3;
 using System.Text.RegularExpressions;
 
 namespace WebApplication1.Controllers
@@ -131,7 +127,11 @@ namespace WebApplication1.Controllers
 									MainBlock = item.MainBlock,
 									SubBlock = ""
 								};
-								transformedValue = int.Parse(number);
+								if(!int.TryParse(number, out transformedValue))
+								{
+									int a = 0;
+								}
+								//transformedValue = int.Parse(number);
 								return newBlockItem;
 
 							}
@@ -140,7 +140,7 @@ namespace WebApplication1.Controllers
 						}
 						//_googleSheetInit._processingModels = modelView;
 						//_googleSheetInit.WriteToGoogleSheet();
-						//return View("ProcessDwgFile", modelView);
+						return View("ProcessDwgFile", modelView);
 					}
 				}
 				catch (Exception ex)

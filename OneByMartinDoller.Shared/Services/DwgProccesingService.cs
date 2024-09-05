@@ -257,8 +257,14 @@ namespace OneByMartinDoller.Shared.Services
 					result.Add(item.Key, item.Value);
 				};
 			}
-
-
+			if (layEntiTypeEntity.ContainsKey("A-LABEL-LGF"))
+			{
+				var groundFloor = layEntiTypeEntity["A-LABEL-LGF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+			}
 			return result;
 		}
 
@@ -419,7 +425,7 @@ namespace OneByMartinDoller.Shared.Services
 				: new List<Arc>();
 			if (!arcList.Any())
 				throw new FormatException("not valid file format, please check all requiment layouts");
-			//преобразовуем arc в линии
+			//преобразовуем arc в линии, те которые идут от прямоугольников с буквами
 			var lines = GetLinesListsFromsArcList(arcList);
 
 			//ключ это квадратик, значения это линии 
@@ -608,7 +614,11 @@ namespace OneByMartinDoller.Shared.Services
 
 
 			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
-
+			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
+			{
+				var it2 = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
+				pBlocks.AddRange(it2);
+			}
 			List<Insert> endLine;
 			if (layEntiTypeEntity.ContainsKey("E-LUM-GFIT"))
 			{
@@ -822,8 +832,8 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					foreach (var l in line)
 					{
-						var b1 =IsPointInPolyline(l.StartPoint, rect,50);
-						var b2 = IsPointInPolyline(l.EndPoint, rect,50);
+						var b1 =IsPointInPolyline(l.StartPoint, rect,100);
+						var b2 = IsPointInPolyline(l.EndPoint, rect,100);
 						if (b1 || b2)
 						{
 							result.Add(rect, line);
@@ -845,13 +855,17 @@ namespace OneByMartinDoller.Shared.Services
 				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
 			} 
 			var pBlocks = layouts["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
-
-			foreach(var circ in circRectangle)
+			if (layouts.ContainsKey("E-LUM-CIRC"))
+			{
+				var it2 = layouts["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
+				pBlocks.AddRange(it2);
+			}
+			foreach (var circ in circRectangle)
 			{
 				var circBlcocksItems = new List<MText>();
 				foreach (var block in pBlocks)
 				{
-					if(IsPointInPolyline(block.InsertPoint,circ))
+					if(IsPointInPolyline(block.InsertPoint,circ,30))
 					{ 
 						circBlcocksItems.Add(block);
 					}
@@ -871,6 +885,8 @@ namespace OneByMartinDoller.Shared.Services
 					result.Add(circ, item);	
 				}
 			}
+
+
 
 			return result;
 		}
