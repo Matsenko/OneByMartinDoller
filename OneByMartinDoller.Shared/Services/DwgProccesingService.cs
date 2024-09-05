@@ -249,6 +249,7 @@ namespace OneByMartinDoller.Shared.Services
 					result.Add(item.Key, item.Value);
 				};
 			}
+
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
 			{
 				var firstFloor = layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
@@ -257,6 +258,7 @@ namespace OneByMartinDoller.Shared.Services
 					result.Add(item.Key, item.Value);
 				};
 			}
+
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-LGF"))
 			{
 				var groundFloor = layEntiTypeEntity["A-LABEL-LGF"].Values.SelectMany(e => e.OfType<MText>());
@@ -265,7 +267,19 @@ namespace OneByMartinDoller.Shared.Services
 					result.Add(item.Key, item.Value);
 				};
 			}
+
+			if (layEntiTypeEntity.ContainsKey("D-TEXT"))
+			{
+				var groundFloor = layEntiTypeEntity["D-TEXT"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+			}
 			return result;
+			//TODO: Находишь все слои ответсвенные за этажность и потом добавляешь их в GetRoomVertices
+			//Проверять до первой E
+
 		}
 
 		private  Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis(List<LwPolyline> polygons, IEnumerable<MText> labels, FloorTypes floorType)
