@@ -1,19 +1,11 @@
 ﻿using ACadSharp;
 using ACadSharp.Entities;
 using OneByMartinDoller.Shared.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CSMath;
-using System.Runtime.CompilerServices;
-using System.Security.AccessControl;
-using System.Drawing;
-
-using ACadSharp.Blocks;
 using OneByMartinDoller.Shared.Model;
-using System.Reflection;
+using ACadSharp.Tables;
+using System.Collections.Generic;
 
 
 
@@ -447,7 +439,7 @@ namespace OneByMartinDoller.Shared.Services
 
 			//Квадратики заполненные  
 			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);
-			var rooms = GetRoomVertices(layouts);
+			var rooms = GetRoomVertices(layouts).ToDictionary();
 
 			rooms = rooms
 				.OrderBy(l => CalculateArea(l.Value))
@@ -457,7 +449,7 @@ namespace OneByMartinDoller.Shared.Services
 			{
 				var linesForSquar = squarLines[item.Key];
 				var blocks = GetBlocksForLines(linesForSquar, layouts);
-
+				//var t = GetLedForLines(linesForSquar, layouts);
 				if (item.Value.CuirtsItems == null)
 				{
 					item.Value.CuirtsItems = new Dictionary<BlockItem, int>();
@@ -484,13 +476,22 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					if (!item.Value.CuirtsItems.ContainsKey(block))
 						item.Value.CuirtsItems.Add(block, 0);
-					item.Value.CuirtsItems[block]++;
+					item.Value.CuirtsItems[block]++;				
 				}
+
+				//foreach (var l in t.Keys)
+				//{
+				//	if (!item.Value.CuirtsItems.ContainsKey(l))
+				//		item.Value.CuirtsItems.Add(l, 0);
+				//	item.Value.CuirtsItems[l] += t[l];
+				//}
 
 			}
 
 			return rooms.Keys.ToList();
 		}
+
+	
 
 		public static double CalculateArea(List<LwPolyline.Vertex> vertices)
 		{
@@ -636,7 +637,7 @@ namespace OneByMartinDoller.Shared.Services
 			}
 
 			List<Insert> endLine = new List<Insert>();
-			List<Insert> ledItems = new List<Insert>();
+			List<Insert> cuitrsItems = new List<Insert>();
 
 
 			if (layEntiTypeEntity.ContainsKey("E-LUM-GFIT"))
@@ -646,27 +647,23 @@ namespace OneByMartinDoller.Shared.Services
 
 			if (layEntiTypeEntity.ContainsKey("E-LUM-FLMP"))
 			{
-				ledItems = layEntiTypeEntity["E-LUM-FLMP"].First().Value.OfType<Insert>().ToList();
+				cuitrsItems = layEntiTypeEntity["E-LUM-FLMP"].First().Value.OfType<Insert>().ToList();
 			}
+			AddInsertLayerEntities("E-LUM-DL", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-SP", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-LL", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-PDT", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-TLMP", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-TRK", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-WL", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-SPK", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-FL", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-UL", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-DTL", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-First Fix", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-SWIT", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-SWTXT", layEntiTypeEntity, cuitrsItems);
 
-			AddInsertLayerEntities("E-LUM-LED", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-DL", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-SP", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-LL", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-PDT", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-TLMP", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-TRK", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-WL", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-SPK", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-FL", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-UL", layEntiTypeEntity, ledItems);
-
-	
-			AddInsertLayerEntities("E-LUM-DTL", layEntiTypeEntity, ledItems);
-			AddInsertLayerEntities("E-LUM-First Fix", layEntiTypeEntity, ledItems);  
-			AddInsertLayerEntities("E-LUM-SWIT", layEntiTypeEntity, ledItems); 
-			AddInsertLayerEntities("E-LUM-SWTXT", layEntiTypeEntity, ledItems);  
-			//TODO:Artem rename ledItems
 
 			foreach (var line in lines)
 			{
@@ -684,7 +681,7 @@ namespace OneByMartinDoller.Shared.Services
 					var mainBlockName = pBlocks.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
 					if (mainBlockName != null)
 					{
-						var ledName = ledItems.FirstOrDefault(b =>
+						var ledName = cuitrsItems.FirstOrDefault(b =>
 							CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50) ||
 							CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
 						if (mainBlockName != null)
@@ -699,7 +696,131 @@ namespace OneByMartinDoller.Shared.Services
 
 			return result;
 		}
-		
+
+
+		public Dictionary<BlockItem,int> GetLedForLines(List<Line> lines,
+		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		{
+			var result = new Dictionary<BlockItem, int>();
+
+			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
+			{
+				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			}
+
+			var pBlocks = layEntiTypeEntity["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
+
+
+			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
+			{
+				var circItems = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
+				pBlocks.AddRange(circItems);
+			}
+
+			List<Insert> endLine = new List<Insert>();
+			List<Insert> cuitrsItems = new List<Insert>();
+
+
+			if (layEntiTypeEntity.ContainsKey("E-LUM-GFIT"))
+			{
+				endLine = layEntiTypeEntity["E-LUM-GFIT"].First().Value.OfType<Insert>().ToList();
+			}
+			var insertsForLed=new List<Insert>();
+			var ledPolylines = new List<LwPolyline>();
+			if (layEntiTypeEntity.ContainsKey("E-LUM-LED"))
+			{
+				//in blockWeHaveName
+				var blocksItems = layEntiTypeEntity["E-LUM-LED"][ObjectType.INSERT].OfType<Insert>().ToList();
+				insertsForLed.AddRange(blocksItems);
+
+				var polyLines = layEntiTypeEntity["E-LUM-LED"][ObjectType.LWPOLYLINE].OfType<LwPolyline>().ToList();
+				 
+				ledPolylines.AddRange(polyLines);
+			} 
+
+			foreach(var line in lines)
+			{
+				var insert = insertsForLed.FirstOrDefault(b =>
+							CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 100) ||
+							CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 100));
+				if(insert != null)
+				{
+					var p = ledPolylines.FirstOrDefault(p => p.Vertices.Any(lp =>
+					CompareToPointsWithStep(new XYZ(lp.Location.X, lp.Location.Y, 0), insert.InsertPoint, 10)));
+
+					if (p != null)
+					{ 
+						var length = (int)Math.Ceiling(GetLengthOfVertices(p) / 100);
+
+						BlockItem bi=null;
+						var item = endLine.FirstOrDefault(b =>
+					DoesPointConnectedToLine(b.InsertPoint, line, 100));
+
+						if (item != null)
+						{
+							var name = ExtractLastValue(item.Block.Name);
+							bi=new BlockItem { MainBlock = name, SubBlock = string.Empty };
+						}
+						else
+						{
+							var mainBlockName = pBlocks.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
+							var testBlock= pBlocks.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
+							if (mainBlockName != null)
+							{
+								 
+								if (mainBlockName != null)
+								{
+									var mainBlock = ExtractLastValue(mainBlockName.Value);
+									var ledBlock = insert == null ? string.Empty : insert.Block.Name;
+									bi=new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock };
+								}
+							}
+						}
+						if (bi == null)
+						{
+							int a = 0;
+							continue;
+						}
+						if (result.ContainsKey(bi))
+							result[bi] += length;
+						else
+							result.Add(bi, length);
+						}
+					}
+				else
+				{
+					int a = 0;
+				}
+				}
+					
+			
+			return result;
+		}
+		 
+		public double GetLengthOfVertices(LwPolyline polyline)
+		{
+			if (polyline != null)
+			{
+				// Переменная для хранения общей длины
+				double totalLength = 0;
+
+				// Проходим по всем вершинам полилинии
+				for (int i = 0; i < polyline.Vertices.Count - 1; i++)
+				{
+					var vertex1 = polyline.Vertices[i];
+					var vertex2 = polyline.Vertices[i + 1];
+
+					// Вычисляем длину сегмента между двумя вершинами
+					double length = Math.Sqrt(Math.Pow(vertex2.Location.X - vertex1.Location.X, 2) +
+											  Math.Pow(vertex2.Location.Y - vertex1.Location.Y, 2));
+					 
+					// Добавляем длину сегмента к общей длине
+					totalLength += length;
+				}
+				return totalLength;
+			}
+			return 0;
+		}
 
 		private void AddInsertLayerEntities(string layerName, Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity, List<Insert> targetList)
 		{
@@ -748,20 +869,25 @@ namespace OneByMartinDoller.Shared.Services
 
 		public List<List<Line>> GetLinesListsFromsArcList(IEnumerable<Arc> arcList)
 		{
-			const double SPACE_BETWEEN_LINES = 0.05;
-			
-			var result =new List<List<Line>>();
+			const double SPACE_BETWEEN_LINES = 50;
+
+			var result = new List<List<Line>>();
 			var lines = arcList.Select(x => ArcToLine(x)).ToList();
 
 			//move foward
 			int i = 0;
-
+			var testCorrectArt2Line = lines.Where(
+				x =>
+				(Math.Abs(x.StartPoint.X - 147029) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.X - 146373) <= SPACE_BETWEEN_LINES)
+				&&
+				(Math.Abs(x.StartPoint.Y - 9489) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.Y - 7409) <= SPACE_BETWEEN_LINES));
+			//var index = lines.IndexOf(testCorrectArt2Line);
 			while (i < lines.Count)
 			{
 				var mainLine = lines[i];
 				int j = 0;
 				var linesForMain = new List<Line>();
-				
+
 				if (!result.Any(x => x.Contains(mainLine)))
 					linesForMain.Add(mainLine);
 
@@ -769,13 +895,13 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					var secondLine = lines[j];
 					if (
-						((CompareToPointsWithStep(mainLine.EndPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES)
-						&& !mainLine.Equals(secondLine))
-						|| (CompareToPointsWithStep(mainLine.StartPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
-						&& !mainLine.Equals(secondLine))
-						|| CompareToPointsWithStep(mainLine.EndPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
-						|| CompareToPointsWithStep(mainLine.StartPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES))
-						&& !linesForMain.Contains(secondLine))
+						//((CompareToPointsWithStep(mainLine.EndPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES)
+						//&& !mainLine.Equals(secondLine))
+						//|| (CompareToPointsWithStep(mainLine.StartPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
+						//&& !mainLine.Equals(secondLine))
+						//|| CompareToPointsWithStep(mainLine.EndPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
+						//|| CompareToPointsWithStep(mainLine.StartPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES))
+						DoesLinesIsConnected(mainLine, secondLine, SPACE_BETWEEN_LINES) && !linesForMain.Contains(secondLine))
 					{
 						if (!result.Any(x => x.Contains(secondLine)))
 						{
@@ -786,27 +912,81 @@ namespace OneByMartinDoller.Shared.Services
 					}
 					j++;
 				}
-				if(linesForMain.Count > 0)
+				if (linesForMain.Count > 0)
 				{
 					result.Add(linesForMain);
 				}
 				i++;
 			}
 
-			var itemCount=result.Sum(x=>x.Count);
-			var temp=result.OrderBy(x=>x.Count);
+			var itemCount = result.Sum(x => x.Count);
+			var temp = result.OrderBy(x => x.Count);
+
+			var t2 = result.Where(l => l.Any(
+				x =>
+				((Math.Abs(x.StartPoint.X - 146373) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.X - 146373) <= SPACE_BETWEEN_LINES)
+				&&
+				(Math.Abs(x.StartPoint.Y - 7409) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.Y - 7409) <= SPACE_BETWEEN_LINES))
+			||
+			(Math.Abs(x.StartPoint.X - 147075) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.X - 147075) <= SPACE_BETWEEN_LINES)
+				&&
+				(Math.Abs(x.StartPoint.Y - 7409) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.Y - 7409) <= SPACE_BETWEEN_LINES)
+			||
+			(Math.Abs(x.StartPoint.X - 146384) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.X - 146384) <= SPACE_BETWEEN_LINES)
+				&&
+				(Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.Y - 4089) <= SPACE_BETWEEN_LINES)
+				||
+			(Math.Abs(x.StartPoint.X - 147072) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.X - 147072) <= SPACE_BETWEEN_LINES)
+				&&
+				(Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES))
+			).ToList();
+		 
 			return result;
 
 		}
 
-		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace )
+		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace)
 		{
 			var result = false;
 			result = (point2.X - allowedSpace < point1.X) && (point1.X < point2.X + allowedSpace);
-			if(result )
+			if (result)
 				return (point2.Y - allowedSpace < point1.Y) && (point1.Y < point2.Y + allowedSpace);
 			return result;
 
+		}
+
+		private static bool DoesPointConnectedToLine(XYZ point, Line line, double allowedSpace)
+		{
+			var result=false;
+
+			result=Math.Abs(point.X-line.StartPoint.X) <= allowedSpace && Math.Abs(point.Y-line.StartPoint.Y)<=allowedSpace;
+			if(result) return result;
+
+			result=Math.Abs(point.X- line.EndPoint.X)<=allowedSpace && Math.Abs(point.Y+line.EndPoint.Y)<=allowedSpace;
+
+			return result;
+		}
+
+		private static bool DoesLinesIsConnected(Line line1, Line line2, double allowedSpace)
+		{
+			var result = false;
+
+			result =
+				(Math.Abs(line1.StartPoint.X - line2.StartPoint.X) < allowedSpace)
+				||
+				(Math.Abs(line1.EndPoint.X - line2.EndPoint.X) < allowedSpace)
+				||
+				(Math.Abs(line1.StartPoint.X - line2.EndPoint.X) < allowedSpace);
+			if (result)
+				result= (Math.Abs(line1.StartPoint.Y - line2.StartPoint.Y) < allowedSpace)
+				||
+				(Math.Abs(line1.EndPoint.Y - line2.EndPoint.Y) < allowedSpace)
+				||
+				(Math.Abs(line1.StartPoint.Y - line2.EndPoint.Y) < allowedSpace);
+
+
+
+			return result;
 		}
 
 		private static bool CompareToPointsWithStep(XYZ point1, XY point2, double allowedSpace)
@@ -920,9 +1100,6 @@ namespace OneByMartinDoller.Shared.Services
 					result.Add(circ, item);	
 				}
 			}
-
-
-
 			return result;
 		}
 

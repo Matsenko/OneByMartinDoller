@@ -118,23 +118,23 @@ namespace WebApplication1.Controllers
 							transformedValue = 1; 
 
 				
-							if (item.MainBlock.StartsWith("L"))
-							{
+							//if (item.MainBlock.StartsWith("L"))
+							//{
 			
-								string number = Regex.Match(item.SubBlock, @"\d+").Value;
-								var newBlockItem = new BlockItem
-								{
-									MainBlock = item.MainBlock,
-									SubBlock = ""
-								};
-								if(!int.TryParse(number, out transformedValue))
-								{
-									int a = 0;
-								}
-								//transformedValue = int.Parse(number);
-								return newBlockItem;
+							//	string number = Regex.Match(item.SubBlock, @"\d+").Value;
+							//	var newBlockItem = new BlockItem
+							//	{
+							//		MainBlock = item.MainBlock,
+							//		SubBlock = ""
+							//	};
+							//	if(!int.TryParse(number, out transformedValue))
+							//	{
+							//		int a = 0;
+							//	}
+							//	//transformedValue = int.Parse(number);
+							//	return newBlockItem;
 
-							}
+							//}
 		
 							return item;
 						}

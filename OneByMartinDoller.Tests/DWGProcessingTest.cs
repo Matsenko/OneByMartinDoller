@@ -340,11 +340,21 @@ namespace OneByMartinDoller.Tests
 				}
 			}
 		}
-		private CadDocument GetDocument()
-		{
 
+		[TestMethod]
+		public void ParseDGW_RealDGW_GetCorrectLEDFromReal_CorrectBlocks()
+		{
+			var pathToRelease = @"C:\Users\belbo\Downloads\Drawing2 (1).dwg";
+			var doc = GetDocument(pathToRelease);
+			_service.ParseDGW(doc);
+
+		}
+		private CadDocument GetDocument(string? path=null)
+		{
+			if (path == null)
+				path = _file;
 			CadDocument doc;
-			using (DwgReader reader = new DwgReader(_file))
+			using (DwgReader reader = new DwgReader(path))
 			{
 				doc = reader.Read();
 			}
