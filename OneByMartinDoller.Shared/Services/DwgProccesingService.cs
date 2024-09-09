@@ -6,6 +6,7 @@ using CSMath;
 using OneByMartinDoller.Shared.Model;
 using ACadSharp.Tables;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 
 
@@ -437,8 +438,8 @@ namespace OneByMartinDoller.Shared.Services
 			//ключ это квадратик, значения это линии 
 			var squarLines = GetCuirtisWithRelations(lines, rectangles);
 
-			//Квадратики заполненные  
-			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);
+			//Квадратики заполненные   
+			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts).Where(x => x.Value.Cuirts.Contains("LL.C10"));
 			var rooms = GetRoomVertices(layouts).ToDictionary();
 
 			rooms = rooms
@@ -449,7 +450,7 @@ namespace OneByMartinDoller.Shared.Services
 			{
 				var linesForSquar = squarLines[item.Key];
 				var blocks = GetBlocksForLines(linesForSquar, layouts);
-				//var t = GetLedForLines(linesForSquar, layouts);
+				var t = GetLedForLines(linesForSquar, layouts,lines.SelectMany(x=>x).ToList());
 				if (item.Value.CuirtsItems == null)
 				{
 					item.Value.CuirtsItems = new Dictionary<BlockItem, int>();
@@ -479,12 +480,12 @@ namespace OneByMartinDoller.Shared.Services
 					item.Value.CuirtsItems[block]++;				
 				}
 
-				//foreach (var l in t.Keys)
-				//{
-				//	if (!item.Value.CuirtsItems.ContainsKey(l))
-				//		item.Value.CuirtsItems.Add(l, 0);
-				//	item.Value.CuirtsItems[l] += t[l];
-				//}
+				foreach (var l in t.Keys)
+				{
+					if (!item.Value.CuirtsItems.ContainsKey(l))
+						item.Value.CuirtsItems.Add(l, 0);
+					item.Value.CuirtsItems[l] += t[l];
+				}
 
 			}
 
@@ -699,7 +700,7 @@ namespace OneByMartinDoller.Shared.Services
 
 
 		public Dictionary<BlockItem,int> GetLedForLines(List<Line> lines,
-		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity, List<Line> allLines)
 		{
 			var result = new Dictionary<BlockItem, int>();
 
@@ -708,15 +709,17 @@ namespace OneByMartinDoller.Shared.Services
 				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
 			}
 
-			var pBlocks = layEntiTypeEntity["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
-
+			//var pBlocks = layEntiTypeEntity["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
+			List<MText> circForLedName=null;
 
 			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
 			{
-				var circItems = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
-				pBlocks.AddRange(circItems);
+				circForLedName = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList(); 
 			}
-
+			if(circForLedName==null || !circForLedName.Any())
+			{
+				throw new KeyNotFoundException("The given key 'E-LUM-CIRC' was not present in the dictionary.");
+			}
 			List<Insert> endLine = new List<Insert>();
 			List<Insert> cuitrsItems = new List<Insert>();
 
@@ -737,42 +740,77 @@ namespace OneByMartinDoller.Shared.Services
 				 
 				ledPolylines.AddRange(polyLines);
 			} 
+			var line1=lines.First();
+			var usedLines=new List<Line>();
+			var usedLedPolyline = new List<LwPolyline>();
+			while(line1!=null)
+			{
+				//Сначала ищем линию. Потому-что обозначение может быть на другом конце линии. А потом инсерд
+				var connectedLines = ledPolylines.Where(v => 
+				v.Vertices.Any(ve => 
+				DoesPointConnectedToLine(new XYZ() { X = ve.Location.X, Y = ve.Location.Y, Z = 0 }, line1, 20))).ToList();
 
-			foreach(var line in lines)
+				usedLedPolyline.AddRange(connectedLines);
+				//теперь находим блок
+				var block = insertsForLed.FirstOrDefault(
+					x => connectedLines.Any(ve => 
+					ve.Vertices.Any(v => CompareToPointsWithStepAbs(new XYZ() { X = v.Location.X, Y = v.Location.Y, Z = 0 }, x.InsertPoint, 20))));
+
+				//теперь мы находим лайнсы соеденения
+				var linesConnectedToTheBlock = allLines.Where(x => DoesPointConnectedToLine(block.InsertPoint, x, 50)).ToList();
+				
+				usedLines.Add(line1);
+
+				if (linesConnectedToTheBlock.Count != 2)
+					break;
+				var tewer= linesConnectedToTheBlock.Where(x => x != line1);
+				line1 = linesConnectedToTheBlock.FirstOrDefault(x=>x!=line1);
+
+				//Удаляем что-бы не было повторения в выборке connectedLines
+				ledPolylines.RemoveAll(l=>connectedLines.Contains(l));
+
+				var length = (int)Math.Ceiling(GetLengthOfVertices(p) / 100);
+
+				if (usedLines.Contains(line1))
+					break;
+				 
+			}
+
+			foreach (var line in lines)
 			{
 				var insert = insertsForLed.FirstOrDefault(b =>
 							CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 100) ||
 							CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 100));
-				if(insert != null)
+				if (insert != null)
 				{
 					var p = ledPolylines.FirstOrDefault(p => p.Vertices.Any(lp =>
 					CompareToPointsWithStep(new XYZ(lp.Location.X, lp.Location.Y, 0), insert.InsertPoint, 10)));
 
 					if (p != null)
-					{ 
+					{
 						var length = (int)Math.Ceiling(GetLengthOfVertices(p) / 100);
 
-						BlockItem bi=null;
+						BlockItem bi = null;
 						var item = endLine.FirstOrDefault(b =>
 					DoesPointConnectedToLine(b.InsertPoint, line, 100));
 
 						if (item != null)
 						{
 							var name = ExtractLastValue(item.Block.Name);
-							bi=new BlockItem { MainBlock = name, SubBlock = string.Empty };
+							bi = new BlockItem { MainBlock = name, SubBlock = string.Empty };
 						}
 						else
 						{
-							var mainBlockName = pBlocks.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
-							var testBlock= pBlocks.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
+							var mainBlockName = circForLedName.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
+							var testBlock = circForLedName.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
 							if (mainBlockName != null)
 							{
-								 
+
 								if (mainBlockName != null)
 								{
 									var mainBlock = ExtractLastValue(mainBlockName.Value);
 									var ledBlock = insert == null ? string.Empty : insert.Block.Name;
-									bi=new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock };
+									bi = new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock };
 								}
 							}
 						}
@@ -785,15 +823,15 @@ namespace OneByMartinDoller.Shared.Services
 							result[bi] += length;
 						else
 							result.Add(bi, length);
-						}
 					}
+				}
 				else
 				{
 					int a = 0;
 				}
-				}
-					
-			
+			}
+
+
 			return result;
 		}
 		 
@@ -922,6 +960,7 @@ namespace OneByMartinDoller.Shared.Services
 			var itemCount = result.Sum(x => x.Count);
 			var temp = result.OrderBy(x => x.Count);
 
+			return result;
 			var t2 = result.Where(l => l.Any(
 				x =>
 				((Math.Abs(x.StartPoint.X - 146373) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.X - 146373) <= SPACE_BETWEEN_LINES)
@@ -941,7 +980,7 @@ namespace OneByMartinDoller.Shared.Services
 				(Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES))
 			).ToList();
 		 
-			return result;
+			return t2;
 
 		}
 
@@ -954,15 +993,35 @@ namespace OneByMartinDoller.Shared.Services
 			return result;
 
 		}
-
+		private static bool CompareToPointsWithStepAbs(XYZ point1, XYZ point2, double allowedSpace)
+		{
+			var result = false;
+			result = Math.Abs(point1.X - point2.X) <= allowedSpace;
+			if (result)
+				return Math.Abs(point1.Y - point2.Y) <= allowedSpace;
+			return result;
+		}
 		private static bool DoesPointConnectedToLine(XYZ point, Line line, double allowedSpace)
 		{
-			var result=false;
+			var result = false;
 
-			result=Math.Abs(point.X-line.StartPoint.X) <= allowedSpace && Math.Abs(point.Y-line.StartPoint.Y)<=allowedSpace;
-			if(result) return result;
+			result = Math.Abs(point.X - line.StartPoint.X) <= allowedSpace 
+				&& Math.Abs(point.Y - line.StartPoint.Y) <= allowedSpace;
+			if (result) return result;
 
-			result=Math.Abs(point.X- line.EndPoint.X)<=allowedSpace && Math.Abs(point.Y+line.EndPoint.Y)<=allowedSpace;
+			result = Math.Abs(point.X - line.EndPoint.X) <= allowedSpace 
+				&& Math.Abs(point.Y - line.EndPoint.Y) <= allowedSpace;
+
+			return result;
+		}
+		private static bool DoesPointConnectedToLine(XY point, Line line, double allowedSpace)
+		{
+			var result = false;
+
+			result = Math.Abs(point.X - line.StartPoint.X) <= allowedSpace && Math.Abs(point.Y - line.StartPoint.Y) <= allowedSpace;
+			if (result) return result;
+
+			result = Math.Abs(point.X - line.EndPoint.X) <= allowedSpace && Math.Abs(point.Y - line.EndPoint.Y) <= allowedSpace;
 
 			return result;
 		}

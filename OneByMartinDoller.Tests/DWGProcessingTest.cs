@@ -344,7 +344,7 @@ namespace OneByMartinDoller.Tests
 		[TestMethod]
 		public void ParseDGW_RealDGW_GetCorrectLEDFromReal_CorrectBlocks()
 		{
-			var pathToRelease = @"C:\Users\belbo\Downloads\Drawing2 (1).dwg";
+			var pathToRelease = @"C:\Users\belbo\Downloads\Drawing2 (1) - Copy.dwg";
 			var doc = GetDocument(pathToRelease);
 			_service.ParseDGW(doc);
 
