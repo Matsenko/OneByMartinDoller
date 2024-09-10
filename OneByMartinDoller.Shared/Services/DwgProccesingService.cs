@@ -439,7 +439,7 @@ namespace OneByMartinDoller.Shared.Services
 			var squarLines = GetCuirtisWithRelations(lines, rectangles);
 
 			//Квадратики заполненные   
-			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts).Where(x => x.Value.Cuirts.Contains("LL.C10"));
+			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);
 			var rooms = GetRoomVertices(layouts).ToDictionary();
 
 			rooms = rooms
@@ -450,7 +450,8 @@ namespace OneByMartinDoller.Shared.Services
 			{
 				var linesForSquar = squarLines[item.Key];
 				var blocks = GetBlocksForLines(linesForSquar, layouts);
-				var t = GetLedForLines(linesForSquar, layouts,lines.SelectMany(x=>x).ToList());
+				linesForSquar.Reverse();
+				var t = GetLedForLines(linesForSquar, layouts,lines.SelectMany(x=>x).ToList(),item.Value.Cuirts);
 				if (item.Value.CuirtsItems == null)
 				{
 					item.Value.CuirtsItems = new Dictionary<BlockItem, int>();
@@ -473,6 +474,7 @@ namespace OneByMartinDoller.Shared.Services
 					}
 				}
 
+				blocks = blocks.Where(x => !t.Keys.Contains(x)).ToList();
 				foreach (var block in blocks)
 				{
 					if (!item.Value.CuirtsItems.ContainsKey(block))
@@ -700,7 +702,7 @@ namespace OneByMartinDoller.Shared.Services
 
 
 		public Dictionary<BlockItem,int> GetLedForLines(List<Line> lines,
-		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity, List<Line> allLines)
+		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity, List<Line> allLines,string mainBlockName)
 		{
 			var result = new Dictionary<BlockItem, int>();
 
@@ -750,93 +752,117 @@ namespace OneByMartinDoller.Shared.Services
 				v.Vertices.Any(ve => 
 				DoesPointConnectedToLine(new XYZ() { X = ve.Location.X, Y = ve.Location.Y, Z = 0 }, line1, 20))).ToList();
 
+				if(connectedLines.Count()>1)
+				{
+					throw new Exception("IncorrectNumberOfLwLinesForLED");
+				}
+				if (!connectedLines.Any())
+					break;
+
+				var length = (int)Math.Ceiling(GetLengthOfVertices(connectedLines.First()) / 1000);
 				usedLedPolyline.AddRange(connectedLines);
 				//теперь находим блок
 				var block = insertsForLed.FirstOrDefault(
 					x => connectedLines.Any(ve => 
 					ve.Vertices.Any(v => CompareToPointsWithStepAbs(new XYZ() { X = v.Location.X, Y = v.Location.Y, Z = 0 }, x.InsertPoint, 20))));
 
+				if (block == null)
+					break;
+
 				//теперь мы находим лайнсы соеденения
-				var linesConnectedToTheBlock = allLines.Where(x => DoesPointConnectedToLine(block.InsertPoint, x, 50)).ToList();
+				var linesConnectedToTheBlock = allLines.Where(x => DoesPointConnectedToLine(block.InsertPoint, x, 10)).ToList();
 				
 				usedLines.Add(line1);
 
-				if (linesConnectedToTheBlock.Count != 2)
-					break;
+				//if (linesConnectedToTheBlock.Count != 2)
+				//	break;
 				var tewer= linesConnectedToTheBlock.Where(x => x != line1);
 				line1 = linesConnectedToTheBlock.FirstOrDefault(x=>x!=line1);
 
 				//Удаляем что-бы не было повторения в выборке connectedLines
 				ledPolylines.RemoveAll(l=>connectedLines.Contains(l));
 
-				var length = (int)Math.Ceiling(GetLengthOfVertices(p) / 100);
 
+				var resultItem = new BlockItem()
+				{
+					MainBlock = mainBlockName,
+					SubBlock = block.Block.Name
+				};
+
+				if(result.ContainsKey(resultItem))
+				{
+					result[resultItem] += length;
+				}
+				else
+				{
+					result.Add(resultItem, length);
+				}
 				if (usedLines.Contains(line1))
 					break;
 				 
 			}
+			return result;
+			//foreach (var line in lines)
+			//{
+			//	var insert = insertsForLed.FirstOrDefault(b =>
+			//				CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 100) ||
+			//				CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 100));
+			//	if (insert != null)
+			//	{
+			//		var p = ledPolylines.FirstOrDefault(p => p.Vertices.Any(lp =>
+			//		CompareToPointsWithStep(new XYZ(lp.Location.X, lp.Location.Y, 0), insert.InsertPoint, 10)));
 
-			foreach (var line in lines)
-			{
-				var insert = insertsForLed.FirstOrDefault(b =>
-							CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 100) ||
-							CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 100));
-				if (insert != null)
-				{
-					var p = ledPolylines.FirstOrDefault(p => p.Vertices.Any(lp =>
-					CompareToPointsWithStep(new XYZ(lp.Location.X, lp.Location.Y, 0), insert.InsertPoint, 10)));
+			//		if (p != null)
+			//		{
+			//			var length = (int)Math.Ceiling(GetLengthOfVertices(p) / 100);
 
-					if (p != null)
-					{
-						var length = (int)Math.Ceiling(GetLengthOfVertices(p) / 100);
+			//			BlockItem bi = null;
+			//			var item = endLine.FirstOrDefault(b =>
+			//		DoesPointConnectedToLine(b.InsertPoint, line, 100));
 
-						BlockItem bi = null;
-						var item = endLine.FirstOrDefault(b =>
-					DoesPointConnectedToLine(b.InsertPoint, line, 100));
+			//			if (item != null)
+			//			{
+			//				var name = ExtractLastValue(item.Block.Name);
+			//				bi = new BlockItem { MainBlock = name, SubBlock = string.Empty };
+			//			}
+			//			else
+			//			{
+			//				var mainBlockName = circForLedName.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
+			//				var testBlock = circForLedName.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
+			//				if (mainBlockName != null)
+			//				{
 
-						if (item != null)
-						{
-							var name = ExtractLastValue(item.Block.Name);
-							bi = new BlockItem { MainBlock = name, SubBlock = string.Empty };
-						}
-						else
-						{
-							var mainBlockName = circForLedName.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
-							var testBlock = circForLedName.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
-							if (mainBlockName != null)
-							{
-
-								if (mainBlockName != null)
-								{
-									var mainBlock = ExtractLastValue(mainBlockName.Value);
-									var ledBlock = insert == null ? string.Empty : insert.Block.Name;
-									bi = new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock };
-								}
-							}
-						}
-						if (bi == null)
-						{
-							int a = 0;
-							continue;
-						}
-						if (result.ContainsKey(bi))
-							result[bi] += length;
-						else
-							result.Add(bi, length);
-					}
-				}
-				else
-				{
-					int a = 0;
-				}
-			}
+			//					if (mainBlockName != null)
+			//					{
+			//						var mainBlock = ExtractLastValue(mainBlockName.Value);
+			//						var ledBlock = insert == null ? string.Empty : insert.Block.Name;
+			//						bi = new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock };
+			//					}
+			//				}
+			//			}
+			//			if (bi == null)
+			//			{
+			//				int a = 0;
+			//				continue;
+			//			}
+			//			if (result.ContainsKey(bi))
+			//				result[bi] += length;
+			//			else
+			//				result.Add(bi, length);
+			//		}
+			//	}
+			//	else
+			//	{
+			//		int a = 0;
+			//	}
+			//}
 
 
 			return result;
 		}
 		 
 		public double GetLengthOfVertices(LwPolyline polyline)
-		{
+		{ 
 			if (polyline != null)
 			{
 				// Переменная для хранения общей длины
@@ -848,13 +874,37 @@ namespace OneByMartinDoller.Shared.Services
 					var vertex1 = polyline.Vertices[i];
 					var vertex2 = polyline.Vertices[i + 1];
 
-					// Вычисляем длину сегмента между двумя вершинами
-					double length = Math.Sqrt(Math.Pow(vertex2.Location.X - vertex1.Location.X, 2) +
-											  Math.Pow(vertex2.Location.Y - vertex1.Location.Y, 2));
-					 
-					// Добавляем длину сегмента к общей длине
-					totalLength += length;
+					// Вычисляем разницу по X и Y координатам
+					double deltaX = vertex2.Location.X - vertex1.Location.X;
+					double deltaY = vertex2.Location.Y - vertex1.Location.Y;
+
+					// Вычисляем длину хорды между двумя вершинами
+					double chordLength = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+
+					// Получаем значение Bulge для текущего сегмента
+					double bulge = polyline.Vertices[i].Bulge;
+
+					// Если Bulge = 0, это прямая линия
+					if (bulge == 0)
+					{
+						totalLength += chordLength;  // Добавляем хорду как длину отрезка
+					}
+					else
+					{
+						// Вычисляем угол дуги (theta) в радианах
+						double theta = 4 * Math.Atan(bulge);
+
+						// Вычисляем радиус дуги
+						double radius = (double)(chordLength / (2 * Math.Sin(theta / 2)));
+
+						// Вычисляем длину дуги
+						double arcLength = Math.Abs(radius * theta);
+
+						// Добавляем длину дуги к общей длине
+						totalLength += arcLength;
+					}
 				}
+
 				return totalLength;
 			}
 			return 0;
