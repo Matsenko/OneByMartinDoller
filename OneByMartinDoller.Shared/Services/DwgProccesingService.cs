@@ -4,9 +4,6 @@ using OneByMartinDoller.Shared.Services.IServices;
 using System.Text;
 using CSMath;
 using OneByMartinDoller.Shared.Model;
-using ACadSharp.Tables;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
 
 
 
@@ -246,6 +243,7 @@ namespace OneByMartinDoller.Shared.Services
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-FF"))
 			{
 				var firstFloor = layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
+				firstFloor = firstFloor.Where(x => x.Value != "EN");
 				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
 				{
 					result.Add(item.Key, item.Value);
@@ -439,19 +437,20 @@ namespace OneByMartinDoller.Shared.Services
 			var squarLines = GetCuirtisWithRelations(lines, rectangles);
 
 			//Квадратики заполненные   
-			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);
+			var cuirtises = FillCuirc(squarLines.Keys.ToList(), layouts);//.Where(x=>x.Value.Cuirts=="GF.A6");
 			var rooms = GetRoomVertices(layouts).ToDictionary();
 
 			rooms = rooms
 				.OrderBy(l => CalculateArea(l.Value))
 				.ToDictionary(entry => entry.Key, entry => entry.Value);
 
+			var allLines = lines.SelectMany(x => x).ToList();
 			foreach (var item in cuirtises)
 			{
 				var linesForSquar = squarLines[item.Key];
-				var blocks = GetBlocksForLines(linesForSquar, layouts);
 				linesForSquar.Reverse();
-				var t = GetLedForLines(linesForSquar, layouts,lines.SelectMany(x=>x).ToList(),item.Value.Cuirts);
+				var blocks = GetBlocksForLinesWIthoutLed(linesForSquar, allLines, layouts);				
+				var t = GetLedForLines(linesForSquar, layouts, allLines, item.Value.Cuirts);
 				if (item.Value.CuirtsItems == null)
 				{
 					item.Value.CuirtsItems = new Dictionary<BlockItem, int>();
@@ -479,7 +478,7 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					if (!item.Value.CuirtsItems.ContainsKey(block))
 						item.Value.CuirtsItems.Add(block, 0);
-					item.Value.CuirtsItems[block]++;				
+					item.Value.CuirtsItems[block]++;
 				}
 
 				foreach (var l in t.Keys)
@@ -620,7 +619,7 @@ namespace OneByMartinDoller.Shared.Services
 			return result;
 		}
 
-		public List<BlockItem> GetBlocksForLines(List<Line> lines,
+		public List<BlockItem> GetBlocksForLinesWIthoutLed(List<Line> lines, List<Line> allLines,
 		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
 		{
 			var result = new List<BlockItem>();
@@ -630,7 +629,10 @@ namespace OneByMartinDoller.Shared.Services
 				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
 			}
 
-			var pBlocks = layEntiTypeEntity["P-BLOCK"].First().Value.OfType<MText>().ToList();
+			var pBlocks = layEntiTypeEntity["P-BLOCK"]
+				.First().Value.OfType<MText>()
+				.Where(v => v.Value.StartsWith('L'))
+				.ToList();
 
 	
 			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
@@ -667,35 +669,77 @@ namespace OneByMartinDoller.Shared.Services
 			AddInsertLayerEntities("E-LUM-SWIT", layEntiTypeEntity, cuitrsItems);
 			AddInsertLayerEntities("E-LUM-SWTXT", layEntiTypeEntity, cuitrsItems);
 
+			//может быть такое что прийдет не первая линия, которая к квадратику подсоедененна
+			var lineByCount = lines.Select(l => new { line = l, Points = cuitrsItems.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 10)) });
+			var line1 = lineByCount.OrderBy(x => x.Points.Count()).FirstOrDefault(x => x.Points.Count() == 1)?.line;
 
-			foreach (var line in lines)
+			if (line1 != null)
+				allLines.Remove(line1);
+
+			var usedLines = new List<Line>();
+			var usedLedPolyline = new List<LwPolyline>();
+			while (line1 != null)
 			{
-				var item = endLine.FirstOrDefault(b =>
-					CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50) ||
-					CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
-
-				if (item != null)
+				var currentBlock = cuitrsItems.FirstOrDefault(x =>
+				CompareToPointsWithStepAbs(line1.StartPoint, x.InsertPoint, 10)
+				||
+				CompareToPointsWithStepAbs(line1.EndPoint, x.InsertPoint, 10)
+				);
+				if (currentBlock == null)
 				{
-					var name = ExtractLastValue(item.Block.Name);
-					result.Add(new BlockItem { MainBlock = name, SubBlock = string.Empty });
-				}
-				else
-				{
-					var mainBlockName = pBlocks.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
-					if (mainBlockName != null)
+					throw new Exception("Incorrect line");
+				} 
+				result.Add(
+					new BlockItem
 					{
-						var ledName = cuitrsItems.FirstOrDefault(b =>
-							CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50) ||
-							CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
-						if (mainBlockName != null)
-						{
-							var mainBlock = ExtractLastValue(mainBlockName.Value);
-							var ledBlock = ledName == null ? string.Empty : ledName.Block.Name;
-							result.Add(new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock });
-						}
-					}
+						MainBlock = ExtractLastValue(currentBlock.Block.Name)
+					});
+				//теперь мы находим лайнсы соеденения
+				var linesConnectedToTheBlock = allLines
+					.Where(x => DoesPointConnectedToLine(currentBlock.InsertPoint, x, 10)
+						&& x != line1)
+					.ToList();
+				usedLines.Add(line1);
+				if (linesConnectedToTheBlock.Count > 1)
+				{
+					int a = 0;
 				}
+				if (linesConnectedToTheBlock.Count == 0 
+					|| allLines.All(x=>x.StartPoint==line1.StartPoint))
+				{
+					break;
+				}
+				line1 = linesConnectedToTheBlock.FirstOrDefault();
+				allLines.Remove(line1);
 			}
+			//foreach (var line in lines)
+			//{
+			//	var item = endLine.FirstOrDefault(b =>
+			//		CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50) ||
+			//		CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
+
+			//	if (item != null)
+			//	{
+			//		var name = ExtractLastValue(item.Block.Name);
+			//		result.Add(new BlockItem { MainBlock = name, SubBlock = string.Empty });
+			//	}
+			//	else
+			//	{
+			//		var mainBlockName = pBlocks.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
+			//		if (mainBlockName != null)
+			//		{
+			//			//var ledName = cuitrsItems.FirstOrDefault(b =>
+			//			//	CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 20) ||
+			//			//	CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 20));
+			//			if (mainBlockName != null)
+			//			{
+			//				var mainBlock = ExtractLastValue(mainBlockName.Value);
+			//				var ledBlock = string.Empty;// ledName == null ? string.Empty : ledName.Block.Name;
+			//				result.Add(new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock });
+			//			}
+			//		}
+			//	}
+			//}
 
 			return result;
 		}
@@ -741,8 +785,12 @@ namespace OneByMartinDoller.Shared.Services
 				var polyLines = layEntiTypeEntity["E-LUM-LED"][ObjectType.LWPOLYLINE].OfType<LwPolyline>().ToList();
 				 
 				ledPolylines.AddRange(polyLines);
-			} 
-			var line1=lines.First();
+			}
+
+			//может быть такое что прийдет не первая линия, которая к квадратику подсоедененна
+			var lineByCount = lines.Select(l =>new { line = l, Points = insertsForLed.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 10))});
+			var line1 = lineByCount.OrderBy(x=>x.Points.Count()).FirstOrDefault(x=>x.Points.Count()==1)?.line;
+
 			var usedLines=new List<Line>();
 			var usedLedPolyline = new List<LwPolyline>();
 			while(line1!=null)
@@ -750,11 +798,15 @@ namespace OneByMartinDoller.Shared.Services
 				//Сначала ищем линию. Потому-что обозначение может быть на другом конце линии. А потом инсерд
 				var connectedLines = ledPolylines.Where(v => 
 				v.Vertices.Any(ve => 
-				DoesPointConnectedToLine(new XYZ() { X = ve.Location.X, Y = ve.Location.Y, Z = 0 }, line1, 20))).ToList();
+				DoesPointConnectedToLine(new XYZ() { X = ve.Location.X, Y = ve.Location.Y, Z = 0 }, line1, 10))).ToList();
 
-				if(connectedLines.Count()>1)
+				if (connectedLines.Count() > 1)
 				{
-					throw new Exception("IncorrectNumberOfLwLinesForLED");
+					//иногда на ледовской панели могут быть другие елементы
+					var blocks = insertsForLed.Where(
+						x => DoesPointConnectedToLine(x.InsertPoint,line1,1));
+					if (blocks.Count() > 1)
+						throw new Exception("IncorrectNumberOfLwLinesForLED");
 				}
 				if (!connectedLines.Any())
 					break;
@@ -785,8 +837,8 @@ namespace OneByMartinDoller.Shared.Services
 
 				var resultItem = new BlockItem()
 				{
-					MainBlock = mainBlockName,
-					SubBlock = block.Block.Name
+					MainBlock = block.Block.Name//mainBlockName,
+												//SubBlock = block.Block.Name
 				};
 
 				if(result.ContainsKey(resultItem))
@@ -801,64 +853,7 @@ namespace OneByMartinDoller.Shared.Services
 					break;
 				 
 			}
-			return result;
-			//foreach (var line in lines)
-			//{
-			//	var insert = insertsForLed.FirstOrDefault(b =>
-			//				CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 100) ||
-			//				CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 100));
-			//	if (insert != null)
-			//	{
-			//		var p = ledPolylines.FirstOrDefault(p => p.Vertices.Any(lp =>
-			//		CompareToPointsWithStep(new XYZ(lp.Location.X, lp.Location.Y, 0), insert.InsertPoint, 10)));
-
-			//		if (p != null)
-			//		{
-			//			var length = (int)Math.Ceiling(GetLengthOfVertices(p) / 100);
-
-			//			BlockItem bi = null;
-			//			var item = endLine.FirstOrDefault(b =>
-			//		DoesPointConnectedToLine(b.InsertPoint, line, 100));
-
-			//			if (item != null)
-			//			{
-			//				var name = ExtractLastValue(item.Block.Name);
-			//				bi = new BlockItem { MainBlock = name, SubBlock = string.Empty };
-			//			}
-			//			else
-			//			{
-			//				var mainBlockName = circForLedName.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
-			//				var testBlock = circForLedName.OrderBy(p => GetDistance(line.EndPoint, p.InsertPoint)).FirstOrDefault();
-			//				if (mainBlockName != null)
-			//				{
-
-			//					if (mainBlockName != null)
-			//					{
-			//						var mainBlock = ExtractLastValue(mainBlockName.Value);
-			//						var ledBlock = insert == null ? string.Empty : insert.Block.Name;
-			//						bi = new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock };
-			//					}
-			//				}
-			//			}
-			//			if (bi == null)
-			//			{
-			//				int a = 0;
-			//				continue;
-			//			}
-			//			if (result.ContainsKey(bi))
-			//				result[bi] += length;
-			//			else
-			//				result.Add(bi, length);
-			//		}
-			//	}
-			//	else
-			//	{
-			//		int a = 0;
-			//	}
-			//}
-
-
-			return result;
+			return result; 
 		}
 		 
 		public double GetLengthOfVertices(LwPolyline polyline)

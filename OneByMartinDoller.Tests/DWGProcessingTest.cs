@@ -82,7 +82,7 @@ namespace OneByMartinDoller.Tests
 			var tempR = new Dictionary<List<Line>, List<BlockItem>>();
 			foreach (var line in lines)
 			{
-				var r = _service.GetBlocksForLines(line, layouts);
+				var r = _service.GetBlocksForLinesWIthoutLed(line,new List<Line>(), layouts);
 				if (r.Count > 0)
 					tempR.Add(line, r);
 			}
@@ -282,11 +282,11 @@ namespace OneByMartinDoller.Tests
 			var cuirtises = _service.FillCuirc(squarLines.Keys.ToList(), layouts);
 			var rooms = _service.GetRoomVertices(layouts);
 
-
+			var allLInes = lines.SelectMany(x => x).ToList();
 			foreach (var item in cuirtises)
 			{
 				var linesForSquar = squarLines[item.Key];
-				var blocks = _service.GetBlocksForLines(linesForSquar, layouts);
+				var blocks = _service.GetBlocksForLinesWIthoutLed(linesForSquar, allLInes, layouts);
 
 				if (item.Value.CuirtsItems == null)
 				{
@@ -345,6 +345,14 @@ namespace OneByMartinDoller.Tests
 		public void ParseDGW_RealDGW_GetCorrectLEDFromReal_CorrectBlocks()
 		{
 			var pathToRelease = @"C:\Users\belbo\Downloads\Drawing2 (1) - Copy.dwg";
+			var doc = GetDocument(pathToRelease);
+			_service.ParseDGW(doc);
+
+		}
+		[TestMethod]
+		public void ParseDGW_RealDGW_GetCorrectLEDFromReal2_CorrectBlocks()
+		{
+			var pathToRelease = @"C:\Users\belbo\Downloads\Drawing3 (1).dwg";
 			var doc = GetDocument(pathToRelease);
 			_service.ParseDGW(doc);
 

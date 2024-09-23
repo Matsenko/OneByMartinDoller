@@ -104,7 +104,7 @@ namespace ACadSharp.Tests.IO
 				files.Add(file);
 			}
 
-			if (!files.Any())
+			if (files.Count==0) 
 			{
 				files.Add(string.Empty);
 			}

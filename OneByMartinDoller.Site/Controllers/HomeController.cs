@@ -115,19 +115,19 @@ namespace WebApplication1.Controllers
 
 						BlockItem TransformBlockItem(BlockItem item, out int transformedValue)
 						{
-							transformedValue = 1; 
+							transformedValue = 1;
 
-				
+
 							//if (item.MainBlock.StartsWith("L"))
 							//{
-			
+
 							//	string number = Regex.Match(item.SubBlock, @"\d+").Value;
 							//	var newBlockItem = new BlockItem
 							//	{
 							//		MainBlock = item.MainBlock,
 							//		SubBlock = ""
 							//	};
-							//	if(!int.TryParse(number, out transformedValue))
+							//	if (!int.TryParse(number, out transformedValue))
 							//	{
 							//		int a = 0;
 							//	}
@@ -135,11 +135,11 @@ namespace WebApplication1.Controllers
 							//	return newBlockItem;
 
 							//}
-		
+
 							return item;
 						}
-						//_googleSheetInit._processingModels = modelView;
-						//_googleSheetInit.WriteToGoogleSheet();
+						_googleSheetInit._processingModels = modelView;
+						_googleSheetInit.WriteToGoogleSheet();
 						return View("ProcessDwgFile", modelView);
 					}
 				}
