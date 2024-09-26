@@ -711,36 +711,7 @@ namespace OneByMartinDoller.Shared.Services
 				}
 				line1 = linesConnectedToTheBlock.FirstOrDefault();
 				allLines.Remove(line1);
-			}
-			//foreach (var line in lines)
-			//{
-			//	var item = endLine.FirstOrDefault(b =>
-			//		CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 50) ||
-			//		CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 50));
-
-			//	if (item != null)
-			//	{
-			//		var name = ExtractLastValue(item.Block.Name);
-			//		result.Add(new BlockItem { MainBlock = name, SubBlock = string.Empty });
-			//	}
-			//	else
-			//	{
-			//		var mainBlockName = pBlocks.OrderBy(p => GetDistance(line.StartPoint, p.InsertPoint)).FirstOrDefault();
-			//		if (mainBlockName != null)
-			//		{
-			//			//var ledName = cuitrsItems.FirstOrDefault(b =>
-			//			//	CompareToPointsWithStep(b.InsertPoint, line.StartPoint, 20) ||
-			//			//	CompareToPointsWithStep(b.InsertPoint, line.EndPoint, 20));
-			//			if (mainBlockName != null)
-			//			{
-			//				var mainBlock = ExtractLastValue(mainBlockName.Value);
-			//				var ledBlock = string.Empty;// ledName == null ? string.Empty : ledName.Block.Name;
-			//				result.Add(new BlockItem { MainBlock = mainBlock, SubBlock = ledBlock });
-			//			}
-			//		}
-			//	}
-			//}
-
+			} 
 			return result;
 		}
 
@@ -959,12 +930,7 @@ namespace OneByMartinDoller.Shared.Services
 
 			//move foward
 			int i = 0;
-			var testCorrectArt2Line = lines.Where(
-				x =>
-				(Math.Abs(x.StartPoint.X - 147029) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.X - 146373) <= SPACE_BETWEEN_LINES)
-				&&
-				(Math.Abs(x.StartPoint.Y - 9489) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.Y - 7409) <= SPACE_BETWEEN_LINES));
-			//var index = lines.IndexOf(testCorrectArt2Line);
+ 
 			while (i < lines.Count)
 			{
 				var mainLine = lines[i];
@@ -978,13 +944,7 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					var secondLine = lines[j];
 					if (
-						//((CompareToPointsWithStep(mainLine.EndPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES)
-						//&& !mainLine.Equals(secondLine))
-						//|| (CompareToPointsWithStep(mainLine.StartPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
-						//&& !mainLine.Equals(secondLine))
-						//|| CompareToPointsWithStep(mainLine.EndPoint, secondLine.StartPoint, SPACE_BETWEEN_LINES)
-						//|| CompareToPointsWithStep(mainLine.StartPoint, secondLine.EndPoint, SPACE_BETWEEN_LINES))
-						DoesLinesIsConnected(mainLine, secondLine, SPACE_BETWEEN_LINES) && !linesForMain.Contains(secondLine))
+					 DoesLinesIsConnected(mainLine, secondLine, SPACE_BETWEEN_LINES) && !linesForMain.Contains(secondLine))
 					{
 						if (!result.Any(x => x.Contains(secondLine)))
 						{
@@ -1005,28 +965,7 @@ namespace OneByMartinDoller.Shared.Services
 			var itemCount = result.Sum(x => x.Count);
 			var temp = result.OrderBy(x => x.Count);
 
-			return result;
-			var t2 = result.Where(l => l.Any(
-				x =>
-				((Math.Abs(x.StartPoint.X - 146373) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.X - 146373) <= SPACE_BETWEEN_LINES)
-				&&
-				(Math.Abs(x.StartPoint.Y - 7409) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.Y - 7409) <= SPACE_BETWEEN_LINES))
-			||
-			(Math.Abs(x.StartPoint.X - 147075) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.X - 147075) <= SPACE_BETWEEN_LINES)
-				&&
-				(Math.Abs(x.StartPoint.Y - 7409) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.Y - 7409) <= SPACE_BETWEEN_LINES)
-			||
-			(Math.Abs(x.StartPoint.X - 146384) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.X - 146384) <= SPACE_BETWEEN_LINES)
-				&&
-				(Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES || Math.Abs(x.EndPoint.Y - 4089) <= SPACE_BETWEEN_LINES)
-				||
-			(Math.Abs(x.StartPoint.X - 147072) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.X - 147072) <= SPACE_BETWEEN_LINES)
-				&&
-				(Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES || Math.Abs(x.StartPoint.Y - 4089) <= SPACE_BETWEEN_LINES))
-			).ToList();
-		 
-			return t2;
-
+			return result;  
 		}
 
 		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace)

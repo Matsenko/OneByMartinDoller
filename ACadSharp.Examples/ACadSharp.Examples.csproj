@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ACadSharp\ACadSharp.csproj" />
+    <ProjectReference Include="..\OneByMartinDoller.Shared\OneByMartinDoller.Shared.csproj" />
   </ItemGroup>
 
 </Project>

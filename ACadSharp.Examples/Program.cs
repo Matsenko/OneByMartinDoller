@@ -176,8 +176,8 @@ namespace ACadSharp.Examples
 			var labels = new List<MText>();
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
 			{
-				var groundFloor=layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
-				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor,FloorTypes.GroundFloor))
+				var groundFloor = layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
 				{
 					result.Add(item.Key, item.Value);
 				};
