@@ -3,9 +3,7 @@ using ACadSharp.Entities;
 using OneByMartinDoller.Shared.Services.IServices;
 using System.Text;
 using CSMath;
-using OneByMartinDoller.Shared.Model;
-
-
+using OneByMartinDoller.Shared.Model; 
 
 namespace OneByMartinDoller.Shared.Services
 {

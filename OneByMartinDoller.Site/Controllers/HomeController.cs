@@ -126,7 +126,7 @@ namespace WebApplication1.Controllers
 				}
 				catch (Exception ex)
 				{
-					ViewBag.Message = $"Error processing DWG file: {ex.Message}";
+					ViewBag.Message = $"Error processing DWG file: {ex.Message}, StackTrace {ex.StackTrace}";
 					return View("Index");
 				}
 			}
