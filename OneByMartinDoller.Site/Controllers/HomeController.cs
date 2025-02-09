@@ -67,7 +67,7 @@ namespace WebApplication1.Controllers
 							cadDocument = reader.Read();
 						}
 
-						DwgProccesingService _dwgProccessingService = new DwgProccesingService();
+						var _dwgProccessingService = new DwgProccesingService20();
 						var extractedDoc = _dwgProccessingService.ParseDGW(cadDocument);
 
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";

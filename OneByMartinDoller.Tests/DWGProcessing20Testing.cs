@@ -13,14 +13,14 @@ namespace OneByMartinDoller.Tests
 	public class DWGProcessing20Testing
 	{
 		private readonly DwgProccesingService20 _service = new DwgProccesingService20();
-		const string _file = @"D:\CodeLuxSolutions\UpWork\Kaige Naidoo\OneByMartinDoller\OneByMartinDoller\OneByMartinDoller.Tests\Resources\Drawing4 (2).dwg";
+		const string _file = @"D:\CodeLuxSolutions\UpWork\Kaige Naidoo\OneByMartinDoller\OneByMartinDoller\OneByMartinDoller.Tests\Resources\Drawing4 TEsting.dwg";
 
 		[TestMethod]
 		public void DWGProcessing20_GetLayout()
 		{
 			var layouts = _service.GetlayEntiTypeEntity(GetDocument());
-			//var roomVertices = _service.GetRoomVertices(layouts);
-			//var circLayout = layouts["E-LUM-CIRC"];
+			var roomVertices = _service.GetRoomVertices(layouts); 
+			var circLayout = layouts["E-LUM-CIRC"];
 			//var lines = new List<Line>();
 		}
 
