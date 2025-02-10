@@ -488,7 +488,7 @@ namespace OneByMartinDoller.Shared.Services
 			{
 				var linesForSquar = squarLines[item.Key];
 				linesForSquar.Reverse();
-				var blocks = GetBlocksForLinesWIthoutLed(linesForSquar, allLines, layouts);
+				var blocks = GetBlocksForLinesWIthoutLed(linesForSquar, allLines, layouts,item.Key.Layer.Name);
 				var t = GetLedForLines(linesForSquar, layouts, allLines, item.Value.Cuirts);
 				if (item.Value.CuirtsItems == null)
 				{
@@ -672,26 +672,27 @@ namespace OneByMartinDoller.Shared.Services
 		}
 
 		public List<BlockItem> GetBlocksForLinesWIthoutLed(List<Line> lines, List<Line> allLines,
-		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity)
+		Dictionary<string, Dictionary<ObjectType, List<Entity>>> layEntiTypeEntity, string nameForPBlock)
 		{
+
 			var result = new List<BlockItem>();
 
-			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
+			if (!layEntiTypeEntity.ContainsKey(nameForPBlock))
 			{
-				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+				throw new KeyNotFoundException($"The given key '{nameForPBlock}' was not present in the dictionary.");
 			}
 
-			var pBlocks = layEntiTypeEntity["P-BLOCK"]
+			var pBlocks = layEntiTypeEntity[nameForPBlock]
 				.First().Value.OfType<MText>()
-				.Where(v => v.Value.StartsWith('L'))
+				//.Where(v => v.Value.StartsWith('L'))
 				.ToList();
 
 
-			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
-			{
-				var circItems = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
-				pBlocks.AddRange(circItems);
-			}
+			//if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
+			//{
+			//	var circItems = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
+			//	pBlocks.AddRange(circItems);
+			//}
 
 			List<Insert> endLine = new List<Insert>();
 			List<Insert> cuitrsItems = new List<Insert>();
@@ -722,8 +723,10 @@ namespace OneByMartinDoller.Shared.Services
 			AddInsertLayerEntities("E-LUM-SWTXT", layEntiTypeEntity, cuitrsItems);
 
 			//может быть такое что прийдет не первая линия, которая к квадратику подсоедененна
-			var lineByCount = lines.Select(l => new { line = l, Points = cuitrsItems.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 10)) });
+			var lineByCount = lines.Select(l => new { line = l, Points = cuitrsItems.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 100)) });
+			var lineByCountPBlock = lines.Select(l => new { line = l, Points = pBlocks.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 100)) });
 			var line1 = lineByCount.OrderBy(x => x.Points.Count()).FirstOrDefault(x => x.Points.Count() == 1)?.line;
+			var line1PBlock = lineByCountPBlock.OrderBy(x => x.Points.Count()).FirstOrDefault(x => x.Points.Count() == 1)?.line;
 
 			if (line1 != null)
 				allLines.Remove(line1);
@@ -733,9 +736,9 @@ namespace OneByMartinDoller.Shared.Services
 			while (line1 != null)
 			{
 				var currentBlock = cuitrsItems.FirstOrDefault(x =>
-				CompareToPointsWithStepAbs(line1.StartPoint, x.InsertPoint, 10)
+				CompareToPointsWithStepAbs(line1.StartPoint, x.InsertPoint, 100)
 				||
-				CompareToPointsWithStepAbs(line1.EndPoint, x.InsertPoint, 10)
+				CompareToPointsWithStepAbs(line1.EndPoint, x.InsertPoint, 100)
 				);
 				if (currentBlock == null)
 				{
@@ -748,7 +751,7 @@ namespace OneByMartinDoller.Shared.Services
 					});
 				//теперь мы находим лайнсы соеденения
 				var linesConnectedToTheBlock = allLines
-					.Where(x => DoesPointConnectedToLine(currentBlock.InsertPoint, x, 10)
+					.Where(x => DoesPointConnectedToLine(currentBlock.InsertPoint, x, 100)
 						&& x != line1)
 					.ToList();
 				usedLines.Add(line1);
@@ -942,8 +945,7 @@ namespace OneByMartinDoller.Shared.Services
 		{
 			if (layEntiTypeEntity.ContainsKey(layerName))
 			{
-				var inserts = layEntiTypeEntity[layerName]
-					.First()
+				var inserts = layEntiTypeEntity[layerName].Skip(1).Take(1).First()
 					.Value
 					.OfType<Insert>()
 					.ToList();
@@ -1105,7 +1107,7 @@ namespace OneByMartinDoller.Shared.Services
 		public Dictionary<string, Dictionary<ObjectType, List<Entity>>> GetlayEntiTypeEntity(CadDocument doc)
 		{
 			var layEntiTypeEntity = new Dictionary<string, Dictionary<ObjectType, List<Entity>>>();
-
+			var layers=doc.Entities.Select(x=>x.Layer.Name).Distinct().ToList();
 			foreach (var entity in doc.Entities)
 			{
 				var lName = entity.Layer.Name;

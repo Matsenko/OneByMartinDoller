@@ -119,8 +119,8 @@ namespace WebApplication1.Controllers
 							 
 							return item;
 						}
-						_googleSheetInit._processingModels = modelView;
-						_googleSheetInit.WriteToGoogleSheet();
+						//_googleSheetInit._processingModels = modelView;
+						//_googleSheetInit.WriteToGoogleSheet();
 						return View("ProcessDwgFile", modelView);
 					}
 				}
