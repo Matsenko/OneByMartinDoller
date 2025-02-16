@@ -724,22 +724,54 @@ namespace OneByMartinDoller.Shared.Services
 
 			//может быть такое что прийдет не первая линия, которая к квадратику подсоедененна
 			var lineByCount = lines.Select(l => new { line = l, Points = cuitrsItems.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 100)) });
-			var lineByCountPBlock = lines.Select(l => new { line = l, Points = pBlocks.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 100)) });
-			var line1 = lineByCount.OrderBy(x => x.Points.Count()).FirstOrDefault(x => x.Points.Count() == 1)?.line;
-			var line1PBlock = lineByCountPBlock.OrderBy(x => x.Points.Count()).FirstOrDefault(x => x.Points.Count() == 1)?.line;
 
-			if (line1 != null)
-				allLines.Remove(line1);
+			var minDistance = double.MaxValue;
+			Line line2 = null;
+			var points=new List<XYZ>();
+			var cuirtsName=new List<BlockItem>();
+			foreach(var line in lines)
+			{
+				minDistance = double.MaxValue;
+				Insert closesInsert=null;
+				foreach(var cuirt in cuitrsItems)
+				{
+					var startDistance = GetDistance(cuirt.InsertPoint, line.StartPoint);
+					var endDistance = GetDistance(cuirt.InsertPoint, line.EndPoint);
+					var distance=startDistance<endDistance?startDistance:endDistance;
+					if(distance<minDistance)
+					{
+						minDistance = distance;
+						line2 = line;
+						closesInsert = cuirt;
+					}
+				}
+				//cuirtsName.Add(closesInsert?.Block.Name);
+				cuirtsName.Add(
+					new BlockItem
+					{
+						MainBlock = ExtractLastValue(closesInsert?.Block.Name)
+					});
+				points.Add(line2.StartPoint);
+				points.Add((line2.EndPoint));
+			}
+			return cuirtsName;
+			points =points.Distinct().ToList();
+			var line1 = lineByCount.OrderBy(x => x.Points.Count()).FirstOrDefault(x => x.Points.Count() == 1)?.line;
+			if (line1 == null)
+				line1 = line2;
+			//if (line1 != null)
+			//	allLines.Remove(line1);
 
 			var usedLines = new List<Line>();
 			var usedLedPolyline = new List<LwPolyline>();
 			while (line1 != null)
 			{
-				var currentBlock = cuitrsItems.FirstOrDefault(x =>
-				CompareToPointsWithStepAbs(line1.StartPoint, x.InsertPoint, 100)
-				||
-				CompareToPointsWithStepAbs(line1.EndPoint, x.InsertPoint, 100)
-				);
+				//var currentBlock = cuitrsItems.FirstOrDefault(x =>
+				//CompareToPointsWithStepAbs(line1.StartPoint, x.InsertPoint, 100)
+				//||
+				//CompareToPointsWithStepAbs(line1.EndPoint, x.InsertPoint, 100)
+				//);
+				var currentBlock = GetClosesToPoint(cuitrsItems,line1.StartPoint, line1.EndPoint);
 				if (currentBlock == null)
 				{
 					throw new Exception("Incorrect line");
@@ -945,10 +977,10 @@ namespace OneByMartinDoller.Shared.Services
 		{
 			if (layEntiTypeEntity.ContainsKey(layerName))
 			{
-				var inserts = layEntiTypeEntity[layerName].Skip(1).Take(1).First()
-					.Value
-					.OfType<Insert>()
-					.ToList();
+				var inserts = layEntiTypeEntity[layerName].Where(k => k.Key == ObjectType.INSERT)
+					.Select(x => x.Value.OfType<Insert>())
+					.ToList().SelectMany(i=>i);
+				 
 				targetList.AddRange(inserts);
 			}
 		}
@@ -1021,6 +1053,32 @@ namespace OneByMartinDoller.Shared.Services
 			var temp = result.OrderBy(x => x.Count);
 
 			return result;
+		}
+
+		private static Insert GetClosesToPoint(List<Insert> inserts, XYZ startPoint, XYZ endPoint)
+		{
+			Insert result = null;
+			var minDistance = double.MaxValue;
+			foreach (Insert insert in inserts)
+			{
+				double distanceStart=GetDistance(insert.InsertPoint, startPoint);
+				double distanceEnd= GetDistance(insert.InsertPoint, endPoint);
+				var distance = distanceStart < distanceEnd ? distanceStart : distanceEnd;
+				if (distance < minDistance)
+				{
+					minDistance = distance;
+					result = insert;
+				}
+			}
+
+			return result;
+		}
+
+		private static double GetDistance(XYZ point1, XYZ point2)
+		{ 
+			var xDistance = Math.Abs(point1.X - point2.X);
+			var yDistance = Math.Abs(point1.Y - point2.Y);
+			return Math.Sqrt(Math.Pow(xDistance, 2) + Math.Pow(yDistance, 2));
 		}
 
 		private static bool CompareToPointsWithStep(XYZ point1, XYZ point2, double allowedSpace)
