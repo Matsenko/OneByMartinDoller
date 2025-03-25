@@ -716,15 +716,8 @@ namespace OneByMartinDoller.Shared.Services
 
 			var pBlocks = layEntiTypeEntity[nameForPBlock]
 				.First().Value.OfType<MText>()
-				//.Where(v => v.Value.StartsWith('L'))
 				.ToList();
 
-
-			//if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
-			//{
-			//	var circItems = layEntiTypeEntity["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
-			//	pBlocks.AddRange(circItems);
-			//}
 
 			List<Insert> endLine = new List<Insert>();
 			List<Insert> cuitrsItems = new List<Insert>();
@@ -753,7 +746,11 @@ namespace OneByMartinDoller.Shared.Services
 			AddInsertLayerEntities("E-LUM-DTL", layEntiTypeEntity, cuitrsItems);
 			AddInsertLayerEntities("E-LUM-First Fix", layEntiTypeEntity, cuitrsItems);
 			AddInsertLayerEntities("E-LUM-SWIT", layEntiTypeEntity, cuitrsItems);
-			AddInsertLayerEntities("E-LUM-SWTXT", layEntiTypeEntity, cuitrsItems);
+
+			//Для Led что-бы они не брались в учет.
+			AddInsertLayerEntities("E-LUM-CIRC", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-GFIT", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-LED", layEntiTypeEntity, cuitrsItems); 
 
 			//может быть такое что прийдет не первая линия, которая к квадратику подсоедененна
 			var lineByCount = lines.Select(l => new { line = l, Points = cuitrsItems.Where(x => DoesPointConnectedToLine(x.InsertPoint, l, 100)) });
@@ -778,6 +775,8 @@ namespace OneByMartinDoller.Shared.Services
 						closesInsert = cuirt;
 					}
 				}
+				if ((closesInsert?.Block?.Name.StartsWith("l", StringComparison.CurrentCultureIgnoreCase)).GetValueOrDefault())
+					continue;
 				cuitrsItems.Remove(closesInsert);
 				//cuirtsName.Add(closesInsert?.Block.Name);
 				cuirtsName.Add(
@@ -788,52 +787,7 @@ namespace OneByMartinDoller.Shared.Services
 				points.Add(line2.StartPoint);
 				points.Add((line2.EndPoint));
 			}
-			return cuirtsName;
-			points =points.Distinct().ToList();
-			var line1 = lineByCount.OrderBy(x => x.Points.Count()).FirstOrDefault(x => x.Points.Count() == 1)?.line;
-			if (line1 == null)
-				line1 = line2;
-			//if (line1 != null)
-			//	allLines.Remove(line1);
-
-			var usedLines = new List<Line>();
-			var usedLedPolyline = new List<LwPolyline>();
-			while (line1 != null)
-			{
-				//var currentBlock = cuitrsItems.FirstOrDefault(x =>
-				//CompareToPointsWithStepAbs(line1.StartPoint, x.InsertPoint, 100)
-				//||
-				//CompareToPointsWithStepAbs(line1.EndPoint, x.InsertPoint, 100)
-				//);
-				var currentBlock = GetClosesToPoint(cuitrsItems,line1.StartPoint, line1.EndPoint);
-				if (currentBlock == null)
-				{
-					throw new Exception("Incorrect line");
-				}
-				result.Add(
-					new BlockItem
-					{
-						MainBlock = ExtractLastValue(currentBlock.Block.Name)
-					});
-				//теперь мы находим лайнсы соеденения
-				var linesConnectedToTheBlock = allLines
-					.Where(x => DoesPointConnectedToLine(currentBlock.InsertPoint, x, 100)
-						&& x != line1)
-					.ToList();
-				usedLines.Add(line1);
-				if (linesConnectedToTheBlock.Count > 1)
-				{
-					int a = 0;
-				}
-				if (linesConnectedToTheBlock.Count == 0
-					|| allLines.All(x => x.StartPoint == line1.StartPoint))
-				{
-					break;
-				}
-				line1 = linesConnectedToTheBlock.FirstOrDefault();
-				allLines.Remove(line1);
-			}
-			return result;
+			return cuirtsName; 
 		}
 
 
@@ -842,12 +796,6 @@ namespace OneByMartinDoller.Shared.Services
 		{
 			var result = new Dictionary<BlockItem, int>();
 
-			//if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
-			//{
-			//	throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
-			//}
-
-			//var pBlocks = layEntiTypeEntity["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
 			List<MText> circForLedName = null;
 
 			if (layEntiTypeEntity.ContainsKey("E-LUM-CIRC"))
@@ -905,8 +853,6 @@ namespace OneByMartinDoller.Shared.Services
 					var blocks = insertsForLed.Where(
 						x => DoesPointConnectedToLine(x.InsertPoint, line1, 1)).ToList();
 					blocks.ForEach(x =>insertsForLed.Remove(x));
-					//if (blocks.Count() > 1)
-					//	throw new Exception("IncorrectNumberOfLwLinesForLED");
 				}
 				if (!connectedLines.Any())
 					break;
@@ -921,15 +867,8 @@ namespace OneByMartinDoller.Shared.Services
 				if (block == null)
 					break;
 
-				//теперь мы находим лайнсы соеденения
-				//var linesConnectedToTheBlock = allLines.Where(x => DoesPointConnectedToLine(block.InsertPoint, x, 10)).ToList();
-
 				usedLines.Add(line1);
 
-				//if (linesConnectedToTheBlock.Count != 2)
-				////	break;
-				//var tewer = linesConnectedToTheBlock.Where(x => x != line1);
-				//line1 = linesConnectedToTheBlock.FirstOrDefault(x => x != line1);
 				line1 = lineByCount.Any() ? lineByCount.First().line : null;
 				if (line1 != null)
 					lineByCount.RemoveAll(x => x.line == line1);
