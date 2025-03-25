@@ -17,7 +17,7 @@ namespace OneByMartinDoller.Tests
 	public class DWGProcessingTest
 	{
 		private readonly DwgProccesingService _service = new DwgProccesingService();
-		const string _file = @"C:\Users\belbo\Downloads\Showroom Drafting (4).dwg";
+		const string _file = @"D:\CodeLuxSolutions\UpWork\Kaige Naidoo\OneByMartinDoller\OneByMartinDoller\OneByMartinDoller.Tests\Resources\SIKWILA API TEST V3.dwg";
 
 		[TestMethod]
 		public void ArcToLine_shouldReturn14LinesWhoHasStartOrEndPointWhoNotExsistInRoom()

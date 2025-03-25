@@ -409,7 +409,9 @@ namespace ACadSharp.IO
 			{
 				sreader = this.getSectionStream(DwgSectionDefinition.AcDbObjects);
 			}
-
+			var t = this._builder.HeaderHandles.GetHandles()
+				.Where(o => o.HasValue)
+				.Select(a => a.Value);
 			Queue<ulong> objectHandles = new Queue<ulong>(this._builder.HeaderHandles.GetHandles()
 				.Where(o => o.HasValue)
 				.Select(a => a.Value));

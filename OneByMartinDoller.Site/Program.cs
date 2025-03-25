@@ -17,7 +17,10 @@ builder.Services.AddSingleton(provider => new GoogleSheetInit(
 	null,
 	GoogleSheets.GetValue<string>("StartCell")));
 
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+	options.Limits.MaxRequestBodySize = 102428800; // 100MB+-
+});
 
 
 

@@ -69,7 +69,6 @@ namespace WebApplication1.Controllers
 
 						var _dwgProccessingService = new DwgProccesingService20();
 						var extractedDoc = _dwgProccessingService.ParseDGW(cadDocument);
-
 						ViewBag.Message = "File uploaded successfully and sent to another project for processing.";
 			
 						ViewBag.SpreadSheetId = LibraryParametrs.SpreadSheetId;
@@ -119,7 +118,7 @@ namespace WebApplication1.Controllers
 							 
 							return item;
 						}
-						//_googleSheetInit._processingModels = modelView;
+						_googleSheetInit._processingModels = modelView;
 						//_googleSheetInit.WriteToGoogleSheet();
 						return View("ProcessDwgFile", modelView);
 					}

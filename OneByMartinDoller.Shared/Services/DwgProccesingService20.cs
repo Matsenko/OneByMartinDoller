@@ -5,6 +5,7 @@ using System.Text;
 using CSMath;
 using OneByMartinDoller.Shared.Model;
 using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace OneByMartinDoller.Shared.Services
 {
@@ -71,16 +72,13 @@ namespace OneByMartinDoller.Shared.Services
 									result = input.Substring(0, squareIndex);
 
 									result = ConvertToSuperscript(result);
-								}
-
+								} 
 							}
 							catch (Exception e)
 							{
 								Console.WriteLine(e);
-							}
-
-						}
-
+							} 
+						} 
 					}
 					else
 					{
@@ -206,13 +204,19 @@ namespace OneByMartinDoller.Shared.Services
 				throw new ArgumentNullException(nameof(input), "Input cannot be null.");
 			}
 
-			if (input.Contains(@"\pxqc;"))
-			{
-				string result = input.Replace(@"\pxqc;", string.Empty);
-				return result;
-			}
+			//if (input.Contains(@"\pxqc;"))
+			//{
+			//	string result = input.Replace(@"\pxqc;", string.Empty);
+			//	return result;
+			//}
+			// 1. Удаляем форматирование { ...;ТЕКСТ}
+			string pattern = @"\{[^;]+;([^}]*)\}";
+			string result = Regex.Replace(input, pattern, "$1");
 
-			return input;
+			// 2. Убираем лишние пробелы
+			result = Regex.Replace(result, @"\s+", " ").Trim();
+
+			return result; 
 		}
 		public Dictionary<string, Dictionary<string, int>> GetProccessing(CadDocument doc)
 		{
@@ -233,7 +237,13 @@ namespace OneByMartinDoller.Shared.Services
 			if (layEntiTypeEntity.ContainsKey("A-LABEL-GF"))
 			{
 				var groundFloor = layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<MText>());
+				;
 				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+				var groundFlorLabels = layEntiTypeEntity["A-LABEL-GF"].Values.SelectMany(e => e.OfType<TextEntity>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFlorLabels, FloorTypes.GroundFloor))
 				{
 					result.Add(item.Key, item.Value);
 				};
@@ -243,7 +253,14 @@ namespace OneByMartinDoller.Shared.Services
 			{
 				var firstFloor = layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<MText>());
 				firstFloor = firstFloor.Where(x => x.Value != "EN");
+				
 				foreach (var item in ExtractRoomCuirtis(polygons, firstFloor, FloorTypes.FirstFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+
+				var groundFlorLabels = layEntiTypeEntity["A-LABEL-FF"].Values.SelectMany(e => e.OfType<TextEntity>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFlorLabels, FloorTypes.FirstFloor))
 				{
 					result.Add(item.Key, item.Value);
 				};
@@ -253,6 +270,11 @@ namespace OneByMartinDoller.Shared.Services
 			{
 				var groundFloor = layEntiTypeEntity["A-LABEL-LGF"].Values.SelectMany(e => e.OfType<MText>());
 				foreach (var item in ExtractRoomCuirtis(polygons, groundFloor, FloorTypes.GroundFloor))
+				{
+					result.Add(item.Key, item.Value);
+				};
+				var groundFlorLabels = layEntiTypeEntity["A-LABEL-LGF"].Values.SelectMany(e => e.OfType<TextEntity>());
+				foreach (var item in ExtractRoomCuirtis(polygons, groundFlorLabels, FloorTypes.FirstFloor))
 				{
 					result.Add(item.Key, item.Value);
 				};
@@ -282,6 +304,26 @@ namespace OneByMartinDoller.Shared.Services
 				foreach (var polygon in polygons)
 				{
 					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.RectangleWidth / 2), labelPoint.Y, labelPoint.Z), polygon))
+					{
+						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices);
+						break;
+					}
+				}
+
+			}
+			return result;
+		}
+
+		private Dictionary<DGWViewModel, List<LwPolyline.Vertex>> ExtractRoomCuirtis(List<LwPolyline> polygons, IEnumerable<TextEntity> labels, FloorTypes floorType)
+		{
+			var result = new Dictionary<DGWViewModel, List<LwPolyline.Vertex>>();
+			foreach (var label in labels)
+			{
+				label.Value = CleanRoomName(label.Value);
+				var labelPoint = label.InsertPoint;
+				foreach (var polygon in polygons)
+				{
+					if (IsPointInPolyline(new CSMath.XYZ(labelPoint.X + (label.WidthFactor / 2), labelPoint.Y, labelPoint.Z), polygon))
 					{
 						result.Add(new DGWViewModel() { FloorType = floorType, RoomName = label.Value }, polygon.Vertices);
 						break;
@@ -424,13 +466,6 @@ namespace OneByMartinDoller.Shared.Services
 				.Select(x => x as LwPolyline).Where(x => VerticalIsRectangle(x.Vertices)).ToList()
 				: new List<LwPolyline?>();
 
-			//var arcList =  circLayout.ContainsKey(ObjectType.ARC)
-			//	? circLayout[ObjectType.ARC].Select(x => x as Arc).ToList()
-			//	: new List<Arc>();
-			//if (!arcList.Any())
-			//	throw new FormatException("not valid file format, please check all requiment layouts");
-			////преобразовуем arc в линии, те которые идут от прямоугольников с буквами
-			//var lines = GetLinesListsFromsArcList(arcList);
 			var lines = new List<List<Line>>();
 
 			if (circLayout.ContainsKey(ObjectType.LWPOLYLINE))
@@ -482,8 +517,7 @@ namespace OneByMartinDoller.Shared.Services
 				.ToDictionary(entry => entry.Key, entry => entry.Value);
 
 			var allLines = lines.SelectMany(x => x).ToList();
-			var t1 = allLines.Where(x =>(x.EndPoint.X > 77324 && x.EndPoint.X < 77325));
-			var index=allLines.IndexOf(t1.First()); 
+
 			foreach (var item in cuirtises)
 			{
 				var linesForSquar = squarLines[item.Key];
@@ -525,10 +559,10 @@ namespace OneByMartinDoller.Shared.Services
 					if (!item.Value.CuirtsItems.ContainsKey(l))
 						item.Value.CuirtsItems.Add(l, 0);
 					item.Value.CuirtsItems[l] += t[l];
-				}
-
+				} 
 			}
-
+			var test = rooms
+				.Where(x => x.Key.Circuits.Any(c => c.Name.EndsWith("WL1")));
 			return rooms.Keys.ToList();
 		}
 		/// <summary>
@@ -545,8 +579,7 @@ namespace OneByMartinDoller.Shared.Services
 			result = xs & ys;
 			return result;
 		}
-
-
+		 
 		public static double CalculateArea(List<LwPolyline.Vertex> vertices)
 		{
 			if (vertices.Count < 3)
@@ -565,8 +598,7 @@ namespace OneByMartinDoller.Shared.Services
 			area = Math.Abs(area) / 2.0;
 			return area;
 		}
-
-
+		 
 		public Dictionary<string, List<Line>> GetPolylinesForItem(CadDocument doc)
 		{
 			var layouts = GetlayEntiTypeEntity(doc);
@@ -708,6 +740,7 @@ namespace OneByMartinDoller.Shared.Services
 				cuitrsItems = layEntiTypeEntity["E-LUM-FLMP"].First().Value.OfType<Insert>().ToList();
 			}
 			AddInsertLayerEntities("E-LUM-DL", layEntiTypeEntity, cuitrsItems);
+			AddInsertLayerEntities("E-LUM-WL", layEntiTypeEntity, cuitrsItems);
 			AddInsertLayerEntities("E-LUM-SP", layEntiTypeEntity, cuitrsItems);
 			AddInsertLayerEntities("E-LUM-LL", layEntiTypeEntity, cuitrsItems);
 			AddInsertLayerEntities("E-LUM-PDT", layEntiTypeEntity, cuitrsItems);
@@ -745,6 +778,7 @@ namespace OneByMartinDoller.Shared.Services
 						closesInsert = cuirt;
 					}
 				}
+				cuitrsItems.Remove(closesInsert);
 				//cuirtsName.Add(closesInsert?.Block.Name);
 				cuirtsName.Add(
 					new BlockItem
@@ -808,10 +842,10 @@ namespace OneByMartinDoller.Shared.Services
 		{
 			var result = new Dictionary<BlockItem, int>();
 
-			if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
-			{
-				throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
-			}
+			//if (!layEntiTypeEntity.ContainsKey("P-BLOCK"))
+			//{
+			//	throw new KeyNotFoundException("The given key 'P-BLOCK' was not present in the dictionary.");
+			//}
 
 			//var pBlocks = layEntiTypeEntity["P-BLOCK"][ObjectType.MTEXT].OfType<MText>().ToList();
 			List<MText> circForLedName = null;
@@ -869,9 +903,10 @@ namespace OneByMartinDoller.Shared.Services
 				{
 					//иногда на ледовской панели могут быть другие елементы
 					var blocks = insertsForLed.Where(
-						x => DoesPointConnectedToLine(x.InsertPoint, line1, 1));
-					if (blocks.Count() > 1)
-						throw new Exception("IncorrectNumberOfLwLinesForLED");
+						x => DoesPointConnectedToLine(x.InsertPoint, line1, 1)).ToList();
+					blocks.ForEach(x =>insertsForLed.Remove(x));
+					//if (blocks.Count() > 1)
+					//	throw new Exception("IncorrectNumberOfLwLinesForLED");
 				}
 				if (!connectedLines.Any())
 					break;
@@ -1238,6 +1273,11 @@ namespace OneByMartinDoller.Shared.Services
 			{
 				var it2 = layouts["E-LUM-CIRC"][ObjectType.MTEXT].OfType<MText>().ToList();
 				pBlocks.AddRange(it2);
+			}
+			if (layouts.ContainsKey("E-LUM-DL"))
+			{
+				var it3 = layouts["E-LUM-DL"][ObjectType.MTEXT].OfType<MText>().ToList();
+				pBlocks.AddRange(it3);
 			}
 			foreach (var circ in circRectangle)
 			{

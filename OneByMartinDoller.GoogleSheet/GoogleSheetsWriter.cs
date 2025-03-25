@@ -81,7 +81,10 @@ namespace OneByMartinDoller.GoogleSheet
 	string startCell)
 		{
 			var valueRange = new ValueRange();
+			var ledRange=new ValueRange();
 			var oblist = new List<IList<object>>();
+			var ledList=new List<IList<object>>();
+			var traclList=new List<IList<object>>();
 			foreach (var entry in modelView)
 			{
 				var floorType = entry.Key;
@@ -94,8 +97,6 @@ namespace OneByMartinDoller.GoogleSheet
 
 					foreach (var circuit in viewModel.Circuits)
 					{
-				
-
 						foreach (var blockItem in circuit.CuirtsItems)
 						{
 							var circuitName = circuit.Name;
@@ -124,7 +125,20 @@ namespace OneByMartinDoller.GoogleSheet
 						floorType.ToString(),
 						zone
 					};
-								oblist.Add(row);
+								var firstLetter = circuitName.ToUpper()[0];
+								switch (firstLetter)
+								{
+									case 'L':
+										ledList.Add(row);
+										break;
+									case 'T':
+										traclList.Add(row);
+										break;
+									default:
+										oblist.Add(row);
+										break;
+								}
+							 
 							}
 
 					
@@ -133,12 +147,22 @@ namespace OneByMartinDoller.GoogleSheet
 				}
 			}
 
-			valueRange.Values = oblist;
-
-	
+			valueRange.Values = oblist; 
 			string range = $"{sheetName}!{startCell}";
 
 			var updateRequest = _service.Spreadsheets.Values.Update(valueRange, spreadsheetId, range);
+			updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+			updateRequest.Execute();
+
+			valueRange.Values = traclList;
+			string rangeForTrack = $"{sheetName}!B215";
+			updateRequest = _service.Spreadsheets.Values.Update(valueRange, spreadsheetId, rangeForTrack);
+			updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+			updateRequest.Execute();
+
+			valueRange.Values = ledList;
+			string rangeForLed= $"{sheetName}!B419";
+			updateRequest = _service.Spreadsheets.Values.Update(valueRange, spreadsheetId, rangeForLed);
 			updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
 			updateRequest.Execute();
 		}

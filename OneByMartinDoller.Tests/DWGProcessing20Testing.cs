@@ -13,7 +13,8 @@ namespace OneByMartinDoller.Tests
 	public class DWGProcessing20Testing
 	{
 		private readonly DwgProccesingService20 _service = new DwgProccesingService20();
-		const string _file = @"D:\CodeLuxSolutions\UpWork\Kaige Naidoo\OneByMartinDoller\OneByMartinDoller\OneByMartinDoller.Tests\Resources\Drawing4 TEsting.dwg";
+		//const string _file = @"D:\CodeLuxSolutions\UpWork\Kaige Naidoo\OneByMartinDoller\OneByMartinDoller\OneByMartinDoller.Tests\Resources\Drawing4 TEsting.dwg";
+		const string _file = @"D:\CodeLuxSolutions\UpWork\Kaige Naidoo\OneByMartinDoller\OneByMartinDoller\OneByMartinDoller.Tests\Resources\SIKWILA API TEST.dwg";
 
 		[TestMethod]
 		public void DWGProcessing20_GetLayout()
